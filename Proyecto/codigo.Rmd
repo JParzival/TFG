@@ -15,14 +15,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Lo primero que tengo que hacer es importar el dataset que he creado
-```{r}
+```{r importar_dataset}
 dataset <- read.csv("C:/Users/jorge/Desktop/Documentos Clase/Universidad/4ºCarrera/1er Cuatrimestre/Inteligencia Artificial/Trabajo Fin de Asignatura/datos.txt", header = TRUE)
 ```
 
 
 Ahora lo que hago es pasarlo a una matriz, quitando tanto el nombre (que no me interesa) como la etiqueta (que no la necesito por ahora)
 
-```{r}
+```{r creacion_matrices}
 matriz.pacientes.etiquetas <- dataset[, -1]
 matriz.pacientes.datos <- matriz.pacientes.etiquetas[, -25]
 ```
@@ -31,20 +31,31 @@ matriz.pacientes.datos <- matriz.pacientes.etiquetas[, -25]
 
 Primero compruebo que todos los datos tienen un tipo correcto.
 
-```{r}
+```{r comprobacion_tipo_datos}
 sapply(matriz.pacientes.datos, class)
 ```
 
 Veo la media de la edad de los pacientes y el rango en el que se mueve
 
-```{r}
+```{r datos_edad}
 mean(matriz.pacientes.datos[, 1])
 range(matriz.pacientes.datos[, 1])
 ```
 
+ Voy a ver estos datos gráficamente:
+ 
+```{r grafico_estadistica_edad}
+
+#install.packages("ggplot2")
+library("ggplot2")
+qplot(1, matriz.pacientes.datos[, 1], xlab = "Pacientes", ylab = "Edad", geom="boxplot")
+
+```
+ 
+ 
  Finalmente, veo un resúmen de cada columna
  
-```{r}
+```{r summary_toda_matriz}
 summary(matriz.pacientes.datos)
 ```
  
@@ -53,21 +64,44 @@ Como se puede ver, los datos de los pacientes están muy distanciados, y además
 Así, la media de la edad difiere enormemente del resto de valores de la matriz.
 Debido a ello, debemos de hacer un preprocesado de los datos del problema.
 
-Antes que este preprocesado,voy a hacer la visualización de algunas relaciones entre variables, de tal manera que podamos ver gráficamente algunos aspectos interesantes:
+# Preparación de los datos
+
+Como he comentado antes, Lo que voy a hacer ahora es un centrado y escalado de los datos de la matriz. De esta manera, la red neuronal no tendrá ningún valor que destaque especialmente y con ello no dará de inicio más peso a unos valores que a otros, ya que no lo buscamos.
+
+Lo primero que hacemos es importar la librería caret
+
+```{r import_caret}
+
+#install.packages("caret")
+library(caret)
+
+```
+
+Ahora hacemos un centrado y escalado de los datos, ya que la edad no sigue el rango del resto de valores, y distorsionaría la predicción
+
+```{r centrado_escalado}
+
+preObjeto <- preProcess(matriz.pacientes.datos, method=c("center", "scale"))  # Quiero hacer un centrado y escalado
+matriz.pacientes.datos.centscal <- predict(preObjeto, matriz.pacientes.datos) # Obtengo los valores en la matriz centscal
+
+```
+
+
+Después del preprocesado, aunque con los datos no preprocesados, voy a hacer la visualización de algunas relaciones entre variables, de tal manera que podamos ver gráficamente algunos aspectos interesantes:
 
 ## Visualización de Datos
 
 
 Ahora voy a sacar un plot para ver la relación entre la edad y el sexo de las personas que están en consulta
 
-```{r}
+```{r grafico_edad_sexo}
 plot(matriz.pacientes.datos[,1], matriz.pacientes.datos[,2], xlab="Edad", ylab="Sexo (0 - mujer, 1 - hombre)", main="Edad & Sexo");
 ```
 
 
 Otro plot para ver la correlación entre ser agresivo y ser impulsivo
 
-```{r}
+```{r grafico_agresivo_impulsivo}
 #install.packages("hexbin")
 #install.packages("RColorBrewer")
 
@@ -83,7 +117,7 @@ plot(h, colramp=rf, xlab="Agresivo", ylab="Impulsivo", main="Agresivo Vs Impulsi
 
 Otro plot similar para ver la relación de ser inhibido e impulsivo
 
-```{r}
+```{r grafico_inhibido_impulsivo}
 
 df <- data.frame(matriz.pacientes.datos[, 21], matriz.pacientes.datos[, 24])
 h <- hexbin(df)
@@ -93,7 +127,7 @@ plot(h, colramp=rf, xlab="Inhibido", ylab="Impulsivo", main="Inhibido Vs Impulsi
 
 Voy a ver la relación entre el razonamiento emocional (actuar según tus sentimientos) y la impulsividad
 
-```{r}
+```{r grafico_razEm_Impulsivo}
 
 df <- data.frame(matriz.pacientes.datos[, 20], matriz.pacientes.datos[, 24])
 h <- hexbin(df)
@@ -103,7 +137,7 @@ plot(h, colramp=rf, xlab="Razonamiento Emocional", ylab="Impulsivo", main="Razon
 
 Ahora quiero sacar una relación entre ser agresivo y ver el grupo en el que están
 
-```{r}
+```{r grafico_agresivo_grupo}
 
 rf <- colorRampPalette(rev(brewer.pal(4,'Spectral')))
 df <- data.frame(matriz.pacientes.datos[, 23], matriz.pacientes.etiquetas[, 25])
@@ -114,7 +148,7 @@ plot(h, colramp=rf, xlab="Agresivo", ylab="Grupo", main="Agresivo Y Grupo Real")
 
 Voy a hacer lo mismo con la impulsividad
 
-```{r}
+```{r grafico_impulsivo_grupo}
 
 rf <- colorRampPalette(rev(brewer.pal(4,'Spectral')))
 df <- data.frame(matriz.pacientes.datos[, 24], matriz.pacientes.etiquetas[, 25])
@@ -128,7 +162,7 @@ He preferido hacer gráficas en 2D porque las gráficas en 3D son mucho más dif
 
 Vamos a ver la correlación que tienen mis variables 
 
-```{r}
+```{r calculo_correlacion}
 
 res <- cor(matriz.pacientes.datos[, 1:24], method = "spearman") # Por mi tipo de datos, hacemos la correlación por spearman
 options(width = 100)
@@ -138,7 +172,7 @@ res.round <- round(res, 2)
 
 Como saca una tabla enorme, lo que voy a hacer es usar una librería que me da una función para sacar de una forma bonita las correlaciones entre las variables.
 
-```{r}
+```{r grafico_correlaciones_variables}
 
 #install.packages("corrplot")
 library(corrplot)
@@ -148,28 +182,97 @@ corrplot(res.round, method="circle")
 Como podemos ver, por ejemplo, resiliencia baja y media tienen una correlación de -1, ya que si hay una no hay la otra y viceversa.
 Esto pasa igual con las relaciones entre contexto, ya que buena - trauma, trauma - mala, mala - buena tienen que ser inversas.
 
+Ahora voy a sacar un PCA para ver la importancia de las variables:
 
-Como he comentado antes, Lo que voy a hacer ahora es un centrado y escalado de los datos de la matriz. De esta manera, la red neuronal no tendrá ningún valor que destaque especialmente y con ello no dará de inicio más peso a unos valores que a otros, ya que no lo buscamos.
+```{r PCA_packages}
+
+#install.packages("FactoMineR")
+library("FactoMineR")
+#devtools::install_github("kassambara/factoextra")
+
+```
+Para los cálculos, uso la matriz con el centrado y escalado ya hechos
+
+```{r PCA_Calculations}
+
+resultado.pca <- PCA(matriz.pacientes.datos.centscal, graph = FALSE)
+#Con la siguiente línea podemos ver que podemos hacer con esto calculado
+print(resultado.pca)
+
+```
+Nos interesa ver los eigenvalues, que son los que presentarán la cantidad de varianza que aportan las variables:
+
+```{r table_eigenvalues_PCA}
+
+eigenvalues.PCA <- resultado.pca$eig
+eigenvalues.PCA
+
+```
+Como se puede comprobar, de las 24 variables (componentes) que tenemos, la mitad de la varianza la conseguimos con aproximadamente 5 variables.
+También se puede ver que a parti de las 17 variables prácticamente no hay un aumento de la varianza.
+En el caso de un problema grande, sería interesante la eliminación de algunas de las variables, para dejar un dataset más pequeño con el que poder trabajar. En nuestro caso, nuestro problema es pequeño, y además las variables están escogidas a mano, por lo que no haré una reducción del dataset.
+
+Ahora, para completar este apartado de PCA, lo que voy a hacer es sacar la gráfica de la varianza acumulada con los valores anteriores:
+
+```{r PCA_eigenvalues_graph}
+#install.packages("factoextra")
+library("factoextra")
+
+plotPCA <- fviz_screeplot(resultado.pca, ncp=24)
+plot(plotPCA)
+
+```
+
+Ahora voy a sacar un "Factor Map" de las variables. Esto lo puedo hacer gracias a las coordenadas que me da una de las variables tras hacer el PCA.
+Así, voy primero a ver la tabla y luego voy a sacar el mapa:
+
+```{r PCA_Coordinates}
+
+resultado.pca$var$coord
+
+```
+Como se puede ver, me está poniendo mis 24 variables en 5 dimensiones, con unas coordenadas concretas. Ahora, lo que voy a hacer, es representarlo.
+Con esta representación podré sacar algunas conclusiones:
+
+```{r PCA_Coordinates_Graph}
+
+fviz_pca_var(resultado.pca)
+
+```
+
+Con esto puedo sacar conclusiones al igual que con el gran gráfico de correlaciones de variables, solo que esta representación está intencionada para más de 2 dimensiones.
+
+Puedo ver algunas de las conclusiones fáciles que saqué anteriormente, como que resiliencia media es contraria a baja, o que la relación con el contexto de trauma y mala son contrarias a buena.
+
+Otras relaciones también puedo ver, como que los deberías y el razonamiento emocional parecen ser ciertamente contrarios, o que el filtro mental no depende de prácticamente nada ya que está en todo el centro.
+
+También es importante ver como, mediante dos componentes principales (dos dimensiones), solo estoy explicando un del 30,2% del total, lo que es muy poco. Por unirlo con los gráficos anteriores, estas dos componentes que se han elegido como x e y son las dos variables que más varianza (y por lo tanto, explicación) tenían en el gráfico de barras anterior.
+
+
+Ahora mi siguiente paso es sacar un gráfico de los individuos, para ver donde están colocados en este sistema:
+
+```{r coordenadas_individuos}
+
+head(resultado.pca$ind$coord) # Solo saco los primeros para no ocupar demasiado espacio
+
+```
+
+Ahora, tras ver que todos mis individuos tienen unas ciertas coordenadas, vamos a representarlos gráficamente:
+
+```{r plot_coordendas_individuos}
+
+fviz_pca_ind(resultado.pca)
+
+```
+Se puede ver que la mayoría de los pacientes están en torno al centro, mientras que tenemos un outlayer, que es el número 27.
+
+***
 
 # Modelos de Inteligencia Artificial supervisados
 
-Lo primero que hacemos es importar la librería caret
-
-```{r}
-#install.packages("caret")
-library(caret)
-```
-
-Ahora hacemos un centrado y escalado de los datos, ya que la edad no sigue el rango del resto de valores, y distorsionaría la predicción
-
-```{r}
-preObjeto <- preProcess(matriz.pacientes.datos, method=c("center", "scale"))  # Quiero hacer un centrado y escalado
-matriz.pacientes.datos.centscal <- predict(preObjeto, matriz.pacientes.datos) # Obtengo los valores en la matriz centscal
-```
-
 Ahora vamos a importar la librería nnet, que nos sirve para hacer perceptrones 
 
-```{r}
+```{r import_nnet}
 
 #install.packages("nnet")
 library(nnet)
@@ -178,8 +281,10 @@ library(nnet)
 
 Ahora lo que hago es coger un conjunto muy grande de los datos para hacer el entrenamiento
 
-```{r}
+```{r creación_conjunto_entrenamiento}
+
 conjuntoEntrenamiento <- sample(1:67, 55)
+
 ```
 
 
@@ -194,57 +299,35 @@ Lo que voy a hacer ahora es entrenar la red neuronal con diferente cantidad de n
 
 ###################### SIN SOFTMAX #############################
 
-```{r}
+```{r entrenamiento_1_neurona}
+
 pacientes.1neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1 )
-```
 
+#Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
 
-Lo voy a entrenar también con el SOFTMAX = true. Esto optimiza la verosimilitud, no el error cuadrático medio...
-
-###################### CON SOFTMAX ##############################
-```{r}
-pacientes.1neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, softmax = T )
-```
-
-Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
- 
-```{r}
 pacientes.prediccion.1neu <- predict( pacientes.1neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
-pacientes.prediccion.1neu # Vemos las probabilidades de pertenencia de cada valor
+head(pacientes.prediccion.1neu) # Vemos las probabilidades de pertenencia de cada valor
 
-```
- 
-
-Ahora que los tengo todos entrenados, Determinamos cual es la máxima, es decir, la clase a la que hay que asignar los objetos
-
-```{r}
+# Ahora que los tengo todos entrenados, Determinamos cual es la máxima, es decir, la clase a la que hay que asignar los objetos
 
 pacientes.prediccion.1neu.class <- apply( pacientes.prediccion.1neu, MARGIN=1, FUN='which.is.max')
 pacientes.prediccion.1neu.class
 
-```
-
-
-Lo visualizo en forma de tabla para ir viendo el error
-
-```{r}
+# Lo visualizo en forma de tabla para ir viendo el error
 
 table( pacientes.prediccion.1neu.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
 
-```
+#Calculo el acierto
 
-
-Calculo el acierto
-
-```{r}
 sum( diag( table( pacientes.prediccion.1neu.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
 ```
 
 ##############
 ############## TEST
 ##############
 
-```{r}
+```{r test_1_neurona}
 
 pacientes.prediccion.test.1neu <- predict( pacientes.1neu, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
 pacientes.prediccion.test.1neu
@@ -258,6 +341,50 @@ sum( diag( table( pacientes.prediccion.test.1neu.class, matriz.pacientes.etiquet
 ```
 
 
+Lo voy a entrenar también con el SOFTMAX = true. Esto optimiza la verosimilitud, no el error cuadrático medio...
+###################### CON SOFTMAX ##############################
+
+```{r entrenamiento_1_neurona_SOFTMAX}
+pacientes.1neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, softmax = T )
+
+#Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
+
+pacientes.prediccion.1neu.softmax <- predict( pacientes.1neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+head(pacientes.prediccion.1neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
+
+# Ahora que los tengo todos entrenados, Determinamos cual es la máxima, es decir, la clase a la que hay que asignar los objetos
+
+pacientes.prediccion.1neu.class.softmax <- apply( pacientes.prediccion.1neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.1neu.class.softmax
+
+# Lo visualizo en forma de tabla para ir viendo el error
+
+table( pacientes.prediccion.1neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
+
+#Calculo el acierto
+
+sum( diag( table( pacientes.prediccion.1neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+```
+
+
+##############
+############## TEST
+##############
+
+```{r test_1_neurona_SOFTMAX}
+
+pacientes.prediccion.test.1neu.softmax <- predict( pacientes.1neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+pacientes.prediccion.test.1neu.softmax
+
+pacientes.prediccion.test.1neu.class.softmax <- apply( pacientes.prediccion.test.1neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.1neu.class.softmax
+
+table( pacientes.prediccion.test.1neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum( diag( table( pacientes.prediccion.test.1neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
+
+
 
 ###############################################################
 #################### 2 NEURONAS ###############################
@@ -267,21 +394,12 @@ A partir de ahora voy a hacer exactamente lo mismo, por lo que haré chunks más
 
 ###################### SIN SOFTMAX #############################
 
-```{r}
+```{r entrenamiento_2_neuronas}
+
 pacientes.2neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2 )
-```
 
-###################### CON SOFTMAX ##############################
-
-```{r}
-pacientes.2neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, softmax = T )
-```
-
-######################
-
-```{r}
 pacientes.prediccion.2neu <- predict( pacientes.2neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
-pacientes.prediccion.2neu # Vemos las probabilidades de pertenencia de cada valor
+head(pacientes.prediccion.2neu) # Vemos las probabilidades de pertenencia de cada valor
 
 pacientes.prediccion.2neu.class <- apply( pacientes.prediccion.2neu, MARGIN=1, FUN='which.is.max')
 pacientes.prediccion.2neu.class
@@ -290,13 +408,14 @@ pacientes.prediccion.2neu.class
 table( pacientes.prediccion.2neu.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
 
 sum( diag( table( pacientes.prediccion.2neu.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
 ```
 
 #######
 ####### TEST
 #######
 
-```{r}
+```{r test_2_neuronas}
 pacientes.prediccion.test.2neu <- predict( pacientes.2neu, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
 pacientes.prediccion.test.2neu
 
@@ -308,6 +427,39 @@ sum( diag( table( pacientes.prediccion.test.2neu.class, matriz.pacientes.etiquet
 ```
 
 
+###################### CON SOFTMAX ##############################
+
+```{r entrenamiento_2_neuronas_SOFTMAX}
+
+pacientes.2neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, softmax = T )
+
+pacientes.prediccion.test.2neu.softmax <- predict( pacientes.2neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+head(pacientes.prediccion.test.2neu.softmax)
+
+pacientes.prediccion.test.2neu.class.softmax <- apply( pacientes.prediccion.test.2neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.2neu.class.softmax
+
+table( pacientes.prediccion.test.2neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum( diag( table( pacientes.prediccion.test.2neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
+
+#######
+####### TEST
+#######
+
+```{r test_2_neuronas_SOFTMAX}
+
+pacientes.prediccion.test.2neu.softmax <- predict( pacientes.2neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+pacientes.prediccion.test.2neu.softmax
+
+pacientes.prediccion.test.2neu.class.softmax <- apply( pacientes.prediccion.test.2neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.2neu.class.softmax
+
+table( pacientes.prediccion.test.2neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum(diag(table(pacientes.prediccion.test.2neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
 
 
 ###############################################################
@@ -316,22 +468,12 @@ sum( diag( table( pacientes.prediccion.test.2neu.class, matriz.pacientes.etiquet
 
 ###################### SIN SOFTMAX #############################
 
-```{r}
+```{r prediccion_3_neuronas}
+
 pacientes.3neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3)
-```
-
-###################### CON SOFTMAX ##############################
-
-```{r}
-pacientes.3neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T)
-```
-
-######################
-
-```{r}
 
 pacientes.prediccion.3neu <- predict( pacientes.3neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
-pacientes.prediccion.3neu # Vemos las probabilidades de pertenencia de cada valor
+head(pacientes.prediccion.3neu) # Vemos las probabilidades de pertenencia de cada valor
 
 
 pacientes.prediccion.3neu.class <- apply( pacientes.prediccion.3neu, MARGIN=1, FUN='which.is.max')
@@ -345,12 +487,12 @@ sum( diag( table( pacientes.prediccion.3neu.class, matriz.pacientes.etiquetas[co
 
 ```
 
-
 #######
 ####### TEST
 #######
 
-```{r}
+```{r test_3_neuronas}
+
 pacientes.prediccion.test.3neu <- predict( pacientes.3neu, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
 pacientes.prediccion.test.3neu
 
@@ -359,9 +501,47 @@ pacientes.prediccion.test.3neu.class
 
 table( pacientes.prediccion.test.3neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
 sum( diag( table( pacientes.prediccion.test.3neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
 ```
 
 
+###################### CON SOFTMAX ##############################
+
+```{r prediccion_3_neuronas_SOFTMAX}
+
+pacientes.3neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T)
+
+pacientes.prediccion.3neu.softmax <- predict( pacientes.3neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+head(pacientes.prediccion.3neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
+
+
+pacientes.prediccion.3neu.class.softmax <- apply(pacientes.prediccion.3neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.3neu.class.softmax
+
+
+table( pacientes.prediccion.3neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
+
+
+sum( diag( table( pacientes.prediccion.3neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
+```
+
+#######
+####### TEST
+#######
+
+```{r test_3_neuronas_SOFTMAX}
+
+pacientes.prediccion.test.3neu.softmax <- predict( pacientes.3neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+pacientes.prediccion.test.3neu.softmax
+
+pacientes.prediccion.test.3neu.class.softmax <- apply( pacientes.prediccion.test.3neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.3neu.class.softmax
+
+table( pacientes.prediccion.test.3neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum( diag( table( pacientes.prediccion.test.3neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
 
 
 
@@ -372,21 +552,12 @@ sum( diag( table( pacientes.prediccion.test.3neu.class, matriz.pacientes.etiquet
 
 ###################### SIN SOFTMAX #############################
 
-```{r}
+```{r entrenamiento_3_neuronas_decay}
+
 pacientes.3neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, decay = 0.2)
-```
 
-###################### CON SOFTMAX ##############################
-
-```{r}
-pacientes.3neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, decay = 0.03)
-```
-
-######################
-
-```{r}
 pacientes.prediccion.3neu.decay <- predict( pacientes.3neu.decay, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
-pacientes.prediccion.3neu.decay # Vemos las probabilidades de pertenencia de cada valor
+head(pacientes.prediccion.3neu.decay) # Vemos las probabilidades de pertenencia de cada valor
 
 
 pacientes.prediccion.3neu.class.decay <- apply( pacientes.prediccion.3neu.decay, MARGIN=1, FUN='which.is.max')
@@ -397,13 +568,15 @@ table( pacientes.prediccion.3neu.class.decay, matriz.pacientes.etiquetas[conjunt
 
 
 sum( diag( table( pacientes.prediccion.3neu.class.decay, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
 ```
 
 #######
 ####### TEST
 #######
 
-```{r}
+```{r test_3_neuronas_decay}
+
 pacientes.prediccion.test.3neu.decay <- predict( pacientes.3neu.decay, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
 pacientes.prediccion.test.3neu.decay
 
@@ -412,8 +585,47 @@ pacientes.prediccion.test.3neu.class.decay
 
 table( pacientes.prediccion.test.3neu.class.decay , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
 sum( diag( table( pacientes.prediccion.test.3neu.class.decay, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
 ```
 
+
+###################### CON SOFTMAX ##############################
+
+```{r entrenamiento_3_neuronas_decay_SOFTMAX}
+
+pacientes.3neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, decay = 0.03)
+
+pacientes.prediccion.3neu.decay.softmax <- predict( pacientes.3neu.decay.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+head(pacientes.prediccion.3neu.decay.softmax) # Vemos las probabilidades de pertenencia de cada valor
+
+
+pacientes.prediccion.3neu.class.decay.softmax <- apply( pacientes.prediccion.3neu.decay.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.3neu.class.decay.softmax
+
+
+table( pacientes.prediccion.3neu.class.decay.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
+
+
+sum( diag( table( pacientes.prediccion.3neu.class.decay.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
+```
+
+#######
+####### TEST
+#######
+
+```{r test_3_neuronas_decay_SOFTMAX}
+
+pacientes.prediccion.test.3neu.decay.softmax <- predict( pacientes.3neu.decay.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+pacientes.prediccion.test.3neu.decay.softmax
+
+pacientes.prediccion.test.3neu.class.decay.softmax <- apply( pacientes.prediccion.test.3neu.decay.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.3neu.class.decay.softmax
+
+table( pacientes.prediccion.test.3neu.class.decay.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum( diag( table( pacientes.prediccion.test.3neu.class.decay.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
 
 
 
@@ -423,22 +635,12 @@ sum( diag( table( pacientes.prediccion.test.3neu.class.decay, matriz.pacientes.e
 
 ###################### SIN SOFTMAX #############################
 
-```{r}
+```{r entrenamiento_5_neuronas}
+
 pacientes.5neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5 )
-```
 
-
-###################### CON SOFTMAX ##############################
-
-```{r}
-pacientes.5neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T )
-```
-
-######################
-
-```{r}
 pacientes.prediccion.5neu <- predict( pacientes.5neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
-pacientes.prediccion.5neu # Vemos las probabilidades de pertenencia de cada valor
+head(pacientes.prediccion.5neu) # Vemos las probabilidades de pertenencia de cada valor
 
 pacientes.prediccion.5neu.class <- apply( pacientes.prediccion.5neu, MARGIN=1, FUN='which.is.max')
 pacientes.prediccion.5neu.class
@@ -446,13 +648,15 @@ pacientes.prediccion.5neu.class
 table( pacientes.prediccion.5neu.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
 
 sum( diag( table( pacientes.prediccion.5neu.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
 ```
 
 ########
 ######## TEST
 ########
 
-```{r}
+```{r test_5_neuronas}
+
 pacientes.prediccion.test.5neu <- predict( pacientes.5neu, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
 pacientes.prediccion.test.5neu
 
@@ -461,6 +665,43 @@ pacientes.prediccion.test.5neu.class
 
 table( pacientes.prediccion.test.5neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
 sum( diag( table( pacientes.prediccion.test.5neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
+
+
+###################### CON SOFTMAX ##############################
+
+```{r entrenamiento_5_neuronas_SOFTMAX}
+
+pacientes.5neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T )
+
+pacientes.prediccion.5neu.softmax <- predict( pacientes.5neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+head(pacientes.prediccion.5neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
+
+pacientes.prediccion.5neu.class.softmax <- apply( pacientes.prediccion.5neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.5neu.class.softmax
+
+table( pacientes.prediccion.5neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
+
+sum( diag( table( pacientes.prediccion.5neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
+```
+
+########
+######## TEST
+########
+
+```{r test_5_neuronas_SOFTMAX}
+
+pacientes.prediccion.test.5neu.softmax <- predict( pacientes.5neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+pacientes.prediccion.test.5neu.softmax
+
+pacientes.prediccion.test.5neu.class.softmax <- apply( pacientes.prediccion.test.5neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.5neu.class.softmax
+
+table( pacientes.prediccion.test.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum( diag( table( pacientes.prediccion.test.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
 ```
 
 
@@ -473,21 +714,12 @@ sum( diag( table( pacientes.prediccion.test.5neu.class, matriz.pacientes.etiquet
 
 ###################### SIN SOFTMAX #############################
 
-```{r}
+```{r entrenamiento_5_neuronas_decay}
+
 pacientes.5neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, decay=0.1)
-```
 
-###################### CON SOFTMAX ##############################
-
-```{r}
-pacientes.5neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, decay = 0.05)
-```
-
-######################
-
-```{r}
 pacientes.prediccion.5neu.decay <- predict( pacientes.5neu.decay, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
-pacientes.prediccion.5neu.decay # Vemos las probabilidades de pertenencia de cada valor
+head(pacientes.prediccion.5neu.decay) # Vemos las probabilidades de pertenencia de cada valor
 
 pacientes.prediccion.5neu.decay.class <- apply( pacientes.prediccion.5neu.decay, MARGIN=1, FUN='which.is.max')
 pacientes.prediccion.5neu.decay.class
@@ -495,15 +727,15 @@ pacientes.prediccion.5neu.decay.class
 table( pacientes.prediccion.5neu.decay.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
 
 sum( diag( table( pacientes.prediccion.5neu.decay.class, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
 ```
 
 #######
 ####### TEST
 #######
 
+```{r test_5_neuronas_decay}
 
-
-```{r}
 pacientes.prediccion.test.decay.5neu <- predict( pacientes.5neu.decay, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
 pacientes.prediccion.test.decay.5neu
 
@@ -512,6 +744,43 @@ pacientes.prediccion.test.decay.5neu.class
 
 table( pacientes.prediccion.test.decay.5neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
 sum( diag( table( pacientes.prediccion.test.decay.5neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
+```
+
+
+###################### CON SOFTMAX ##############################
+
+```{r entrenamiento_5_neuronas_decay_SOFTMAX}
+
+pacientes.5neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, decay = 0.05)
+
+pacientes.prediccion.5neu.decay.softmax <- predict( pacientes.5neu.decay.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+head(pacientes.prediccion.5neu.decay.softmax) # Vemos las probabilidades de pertenencia de cada valor
+
+pacientes.prediccion.5neu.decay.class.softmax <- apply( pacientes.prediccion.5neu.decay.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.5neu.decay.class.softmax
+
+table( pacientes.prediccion.5neu.decay.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )  # Lo vemos en forma de tabla.
+
+sum( diag( table( pacientes.prediccion.5neu.decay.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55 # Esta cuenta nos da el índice de acierto
+
+```
+
+#######
+####### TEST
+#######
+
+```{r test_5_neuronas_decay_SOFTMAX}
+
+pacientes.prediccion.test.decay.5neu.softmax <- predict( pacientes.5neu.decay.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+pacientes.prediccion.test.decay.5neu.softmax
+
+pacientes.prediccion.test.decay.5neu.class.softmax <- apply( pacientes.prediccion.test.decay.5neu.softmax, MARGIN=1, FUN='which.is.max')
+pacientes.prediccion.test.decay.5neu.class.softmax
+
+table( pacientes.prediccion.test.decay.5neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+sum( diag( table( pacientes.prediccion.test.decay.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+
 ```
 
 
@@ -520,16 +789,24 @@ sum( diag( table( pacientes.prediccion.test.decay.5neu.class, matriz.pacientes.e
 
 Importo los datos:
 
-```{r}
+```{r importacion_datos_resultados_finales}
+
 dataset.resultados <- read.csv2("C:/Users/jorge/Desktop/Documentos Clase/Universidad/4ºCarrera/1er Cuatrimestre/Inteligencia Artificial/Trabajo Fin de Asignatura/Resultados.txt")
+
 ```
 
-Ahora voy a sacar un gráfico donde comparo los resultados.
+Ahora voy a sacar un gráfico interactivo donde comparo los resultados.
 
+```{r import_plotly}
 
-```{r}
 #install.packages("plotly")
 library("plotly")
+
+```
+
+
+
+```{r grafico_resultados_interactivo}
 
 tipos = dataset.resultados[, 1]
 real = dataset.resultados[, 2]
@@ -542,13 +819,22 @@ p
 
 ```
 
-
+Ahora que hemos sacado los resultados obtenidos con el perceptrón multicapa, vamos con otras técnicas supervisadas:
 
 ## KNN
 
-```{r}
+Instalamos la librería class:
+
+```{r libreria_class}
+
 #install.packages("class")
 library("class")
+
+```
+
+Hacemos nuevos conjuntos:
+
+```{r nuevos_conjuntos_para_KNN}
 
 # Para hacer la predicción con knn, voy a coger los grupos de una manera distinta:
 
@@ -560,7 +846,9 @@ etiquetasEntrenamiento = matriz.pacientes.etiquetas[1:55, 25]
 etiquetasTest = matriz.pacientes.etiquetas[56:67, 25]
 ```
 
-```{r, eval=FALSE}
+Si quisiéramos mostrar los conjuntos de entrenamiento y de test...
+
+```{r conjuntos_knn, eval=FALSE}
 
 conjuntoEntrenamiento
 conjuntoTest
@@ -569,52 +857,67 @@ etiquetasTest
 
 ```
 
-Para K = 8...
+Para sacar los resultados de una manera visual, importamos lo siguiente:
 
-```{r}
-# K = 8
+```{r import_crosstable}
+
+#install.packages("gmodels")
+library("gmodels")
+
+```
+
+Comenzamos las pruebas. Como sabemos, normalmente el mejor valor de K para KNN suele ser el valor que más se acerque a la raíz cuadrada del total de los valores. Por eso, empezaremos por K = 8:
+
+### Para K = 8...
+
+```{r knn_8}
 
 prediccion.knn.8 <- knn(train = conjuntoEntrenamiento, test = conjuntoTest, cl = etiquetasEntrenamiento, k = 8)
 prediccion.knn.8
+
 ```
 
 Sacamos crosstable:
 
-```{r}
-#install.packages("gmodels")
-library("gmodels")
-```
-
-```{r}
+```{r crosstable_8}
 CrossTable(x = etiquetasTest , y = prediccion.knn.8, prop.chisq = FALSE)
 ```
 
 
-Para K = 6
+### Para K = 6
 
 ```{r}
-# K = 6
 
 prediccion.knn.6 <- knn(train = conjuntoEntrenamiento, test = conjuntoTest, cl = etiquetasEntrenamiento, k = 6)
 prediccion.knn.6
 
+```
+
+Obtenemos la crosstable:
+
+```{r crosstable_6}
 
 CrossTable(x = etiquetasTest , y = prediccion.knn.6, prop.chisq = FALSE)
+
 ```
 
 
-Para k = 10
+### Para k = 10
 
-```{r}
-# K = 10
+```{r knn_10}
 
 prediccion.knn.10 <- knn(train = conjuntoEntrenamiento, test = conjuntoTest, cl = etiquetasEntrenamiento, k = 10)
 prediccion.knn.10
 
-
-CrossTable(x = etiquetasTest , y = prediccion.knn.10, prop.chisq = FALSE)
 ```
 
+Obtenemos la crosstable:
+
+```{r crosstable_10}
+
+CrossTable(x = etiquetasTest , y = prediccion.knn.10, prop.chisq = FALSE)
+
+```
 
 ### Como se puede observar, la mejor predicción la hemos hecho con K = 8
 
@@ -627,24 +930,30 @@ Ahora voy a implementar una solución mediante Random Forest:
 
 Lo primero que hacemos es importar el paquete de Random Forest
 
-```{r}
+```{r import_randomforest}
+
 #install.packages("randomForest")
 library(randomForest)
+
 ```
 
 Una vez instalado e importado, lo que tengo que hacer es crear el Random Forest, y ejecutarlo...
 
-```{r}
+```{r randomforest}
+
 model <- randomForest(grupo ~ ., data = dataset[2:26], importance = TRUE)
 model
+
 ```
 
 
 Ahora lo voy a hacer con 10 fold X Validation:
 
-```{r}
+```{r randomforest_10F-XValidation}
+
 result <- rfcv(dataset[2:26], dataset$grupo, cv.fold=10)
-result
+head(result)
+
 ```
 
 Podemos ver el error, bajo la variable $error.cv, y podemos ver las predicciones que se han hecho para cada una de las n.var.
@@ -656,70 +965,89 @@ Lo bueno que tiene SVM es que es muy robusto frente a la dimensión, por lo que 
 
 Lo primero que hay que hacer es importar la librería...
 
-```{r}
+```{r import_SVM}
+
 #install.packages("e1071")
 library("e1071")
+
 ```
 
 Con este método no necesito tener un conjunto de entrenaminento y otro de test, por lo que sigo adelante.
 
 Ahora que hemos instalado la librería, vamos a crear el SVM:
 
-```{r}
+```{r creacion_modelo_svm}
+
 modelo_svm <- svm(grupo ~ ., data=dataset[2:26], kernel="linear")
 summary(modelo_svm)
+
 ```
 
 Ahora que tenemos creado este primer modelo, toca predecir:
 
-```{r}
+```{r prediccion_svm}
+
 prediccion <- predict(modelo_svm,dataset[,2:25])
 prediccion
+
 ```
 El problema que tenemos con estas predicciones es que están siendo contínuas, y no discretas, por lo que las voy a discretizar redondeando:
 
-```{r}
-prediccion <- round(prediccion, digits = 0)
+```{r redondeo_prediccion}
+
+prediccion <- round(prediccion, digits = 0) #No quiero dígitos decimales
 prediccion
+
 ```
 
 Ahora que hemos predicho, tenemos que sacar la matriz de confusión:
 
-```{r}
+```{r matriz_confusion_svm_Acierto}
+
 matriz.conf <- table(prediccion, dataset[,26])
 matriz.conf
 sum(diag(matriz.conf))/67
+
 ```
 
 Obtenemos un porcentaje de acierto medio, pero esto es sin tener en cuenta que los pacientes del grupo 2 pueden pertenecer al 1, lo cual suma alrededor de 10 pacientes más, por lo que obtendríamos valores mucho más altos que rondarían el 65-70% de acierto.
 
 ## SVM de Kernel RBF
 
-```{r}
+```{r creacion_modelo_svm_RBF}
+
 modelo_svm.radial <- svm(grupo ~ ., data=dataset[2:26], kernel="radial")
 summary(modelo_svm.radial)
+
 ```
 
 Ahora que tenemos creado este primer modelo, toca predecir:
 
-```{r}
+```{r prediccion_modelo_svm_RBF}
+
 prediccion.radial <- predict(modelo_svm.radial,dataset[,2:25])
 prediccion.radial
+
 ```
 El problema que tenemos con estas predicciones es que están siendo contínuas, y no discretas, por lo que las voy a discretizar redondeando:
 
-```{r}
+```{r redondeo_prediccion_svm_RBF}
+
 prediccion.radial <- round(prediccion.radial, digits = 0)
 prediccion.radial
+
 ```
 
 Ahora que hemos predicho, tenemos que sacar la matriz de confusión:
 
-```{r}
+```{r matriz_confusion_svm_RBF_Acierto}
+
 matriz.conf.radial <- table(prediccion.radial, dataset[,26])
 matriz.conf.radial
 sum(diag(matriz.conf.radial))/67
+
 ```
+
 Obtenemos un acierto del 60%, al que hay que sumar otros 12 pacientes. 
 ### Si añadimos estos pacientes, nos encontramos con un acierto del 77%
 Por lo tanto, SVM de Kernel radial es una buena técnica para la predicción en este problema.
@@ -736,18 +1064,22 @@ El primer modelo de inteligencia artificial no supervisado que voy a usar es un 
 
 Para esto, lo que voy a hacer es dividirlo en 4 clusters, coincidiendo con los 4 grupos de trastornos que tengo.
 
-```{r}
+```{r import_librería_dendrograma}
+
 #install.packages("ape")
 library(ape)
+
 ```
 
 
-```{r}
+```{r creacion_clusters_dendrograma}
+
 dd <- dist(scale(dataset[,2:25]), method = "euclidean") #Nos basamos en la distancia euclídea
 hier.clust <- hclust(dd, method = "ward.D2")
-colores.dendrograma = c("red", "orange", "green", "black")
-cluster.4 = cutree(hier.clust, 4)
-plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
+colores.dendrograma <- c("red", "orange", "green", "black") # Creamos los colores con los que queremos el cluster
+cluster.4 <- cutree(hier.clust, 4) # Cluster jerárquico de 4...
+plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8) #Lo pintamos
+
 ```
 
 Como vemos, estamos obteniendo el indentificador de cada paciente en el dendrograma, donde los pacientes que mas se parecen estarán más juntos, mientras que los que menos se parecen estarán más separados.
@@ -756,24 +1088,26 @@ Es interesante analizar como los pacientes verdes y los naranjas surgen de la mi
 
 Ahora voy a hacer el mismo dendrograma pero con el DataSet de centrado y escalado, de tal manera que veamos a ver si hay diferencias:
 
-```{r}
-dd <- dist(scale(matriz.pacientes.datos.centscal), method = "euclidean") #Nos basamos en la distancia euclídea
+```{r creacion_clusters_dendrograma_centradoEscalado}
+
+dd <- dist(scale(matriz.pacientes.datos.centscal), method = "euclidean")
 hier.clust <- hclust(dd, method = "ward.D2")
-colores.dendrograma = c("red", "orange", "green", "black")
-cluster.4 = cutree(hier.clust, 4)
+colores.dendrograma <- c("red", "orange", "green", "black")
+cluster.4 <- cutree(hier.clust, 4)
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
+
 ```
 
 Si lo comparamos, vemos que hemos obtenido exactamente el mismo resultado, por lo que en este caso el centrado y escalado no es necesario.
 
 Vamos a analizar algunos pacientes aleatoriamente para ver si ha acertado, o al menos si se ha aproximado:
 
-Paciente 1: Analizado - Rojo --------- Real: 1
-Paciente 2: Analizado - Naranja ------ Real: 2
-Paciente 3: Analizado - Naranja ------ Real: 2
-Paciente 4: Analizado - Verde -------- Real: 4
-Paciente 5: Analizado - Naranja ------ Real: 2
-Paciente 27: Analizado - Negro ------- Real: 4
++ Paciente 1: Analizado - Rojo --------- Real: 1
++ Paciente 2: Analizado - Naranja ------ Real: 2
++ Paciente 3: Analizado - Naranja ------ Real: 2
++ Paciente 4: Analizado - Verde -------- Real: 4
++ Paciente 5: Analizado - Naranja ------ Real: 2
++ Paciente 27: Analizado - Negro ------- Real: 4
 
 Es decir, a la vista de estos resultados, podemos concluir que el grupo 1 es el de los pacientes en rojo, el grupo 2 es el de los pacientes en naranja, y luego entre el grupo 3 y el grupo 4 hay dudas, pero teniendo varios pacientes tanto del grupo 3 como del grupo 4 en nuestro DataSet parece ser que algo de error ha cometido.
 
@@ -781,23 +1115,46 @@ Es decir, a la vista de estos resultados, podemos concluir que el grupo 1 es el 
 
 El algoritmo KMeans en principio no es el algoritmo más adecuado para este trabajo, ya que se basa en círculos para la clasificación de los individuos, cuando en principio en mis datos esto no es así. De todas formas, voy a clasificar a los pacientes siguiendo este algoritmo para comprobar la eficacia que tiene sobre mi problema:
 
-```{r}
-set.seed(76964057) #Seed para reproducibilidad
-k <-kmeans(dataset[,2:25], centers=4) #Creo 4 clusters
-k$centers #Muestro los centros
-table(k$cluster) #Número de puntos en cada cluster
+```{r import_kmeans}
+
+#install.packages("cluster")
+#install.packages("fpc")
+
+library(cluster)
+library(fpc)
+
+```
+
+Hacemos el clustering y vemos algunos resultados:
+
+```{r k-means}
+
+datos.kmeans <- matriz.pacientes.datos # Sin la clasificación dentro del dataset
+
+clusters <- kmeans(datos.kmeans, centers=4)
+clusters$centers
+
+clusters$cluster
+
 ```
 
 Interpretando estos resultados, obtenemos:
 
-El cluster 1 destaca por sexo más hacia masculino que otros, una relación contexto ciertamente buena, una educación permisiva, una resiliencia baja, maximización y minimización, razonamiento emocional, cierta inhibición y poca agresividad.
++ El cluster 1 destaca por sexo más hacia masculino que otros, una relación contexto ciertamente buena, una educación permisiva, una resiliencia baja, maximización y minimización, razonamiento emocional, cierta inhibición y poca agresividad.
 
-El cluster 2 destaca por una edad mayor, es el cluster con mejor relación con el contexto, y suelen tener las personas de este cluster una educación normal. Destaca por una resiliencia media, pensamiento dicotómico, generalización excesiva, etiquetado, conclusiones arbitrarias, deberías, razonamiento emocional e inhibición.
++ El cluster 2 destaca por una edad mayor, es el cluster con mejor relación con el contexto, y suelen tener las personas de este cluster una educación normal. Destaca por una resiliencia media, pensamiento dicotómico, generalización excesiva, etiquetado, conclusiones arbitrarias, deberías, razonamiento emocional e inhibición.
 
-El cluster número 3 destaca por tener una edad aún más elevada, más ratio de personas del sexo femenino que ningún otro cluster, y tienen una relación con el contexto bastante variable. La educación de estas personas es principalmente normal, con una resiliencia que puede ser tanto baja como media. Destacan por el pensamiento dicotómico, generalización excesiva, poco etiquetado, maximización y minimización, filtro mental, conclusiones arbitrarias, pseudoresponsabilidad, deberías, y suelen ser bastante inhibidos e impulsivos.
++ El cluster número 3 destaca por tener una edad aún más elevada, más ratio de personas del sexo femenino que ningún otro cluster, y tienen una relación con el contexto bastante variable. La educación de estas personas es principalmente normal, con una resiliencia que puede ser tanto baja como media. Destacan por el pensamiento dicotómico, generalización excesiva, poco etiquetado, maximización y minimización, filtro mental, conclusiones arbitrarias, pseudoresponsabilidad, deberías, y suelen ser bastante inhibidos e impulsivos.
 
-Finalmente, el cluster 4 destaca por ser el que tiene la edad más elevada y el ratio de sexo más masculino. La relación con el contexto de estos individuos clasificados en este grupo es principalmente de trauma, aunque también hay buenas y malas. La educación de estos individuos es principalmente permisiva, y la resiliciencia tiende a media. Destacan por la poca etiquetación que hacen, pero un gran fitro mental, conclusiones arbitrarias, poca pseudo-responsabilidad, muchos deberías, poco razonamiento emocional, y son principalmente inhibidos e impulsivos.
++ Finalmente, el cluster 4 destaca por ser el que tiene la edad más elevada y el ratio de sexo más masculino. La relación con el contexto de estos individuos clasificados en este grupo es principalmente de trauma, aunque también hay buenas y malas. La educación de estos individuos es principalmente permisiva, y la resiliciencia tiende a media. Destacan por la poca etiquetación que hacen, pero un gran fitro mental, conclusiones arbitrarias, poca pseudo-responsabilidad, muchos deberías, poco razonamiento emocional, y son principalmente inhibidos e impulsivos.
 
-Finalmente, podemos ver como ha introducido a 18 individuos en el cluster 1, 23 en el cluster 2, 17 en el cluster 3 y 9 en el cluster 4.
+
+Ahora sacamos la gráfica para poder ver como los ha clasificado sobre dos componentes principales artificiales:
+
+```{r plot_k-means}
+
+clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = "Representación 2D con Clusplot", labels = 4, xlab = "Componente 1", ylab = "Componente 2") # Con las dos componentes principales que más explicación nos dan
+
+```
 
 
