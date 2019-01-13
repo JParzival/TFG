@@ -1,10 +1,13 @@
 ---
 title: "codigoTFG"
-author: "Jorge de AndrÃ©s"
+author: "Jorge de Andrés"
 date: "12 de enero de 2019"
+always_allow_html: yes
 output:
+  html_document:
+    df_print: paged
   word_document: default
-  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -148,7 +151,7 @@ Esto pasa igual con las relaciones entre contexto, ya que buena - trauma, trauma
 
 Como he comentado antes, Lo que voy a hacer ahora es un centrado y escalado de los datos de la matriz. De esta manera, la red neuronal no tendrá ningún valor que destaque especialmente y con ello no dará de inicio más peso a unos valores que a otros, ya que no lo buscamos.
 
-# Modelos de Inteligencia Artificial
+# Modelos de Inteligencia Artificial supervisados
 
 Lo primero que hacemos es importar la librería caret
 
@@ -541,7 +544,6 @@ p
 
 
 
-
 ## KNN
 
 ```{r}
@@ -615,4 +617,187 @@ CrossTable(x = etiquetasTest , y = prediccion.knn.10, prop.chisq = FALSE)
 
 
 ### Como se puede observar, la mejor predicción la hemos hecho con K = 8
+
+
+
+## Random Forest
+
+Ahora voy a implementar una solución mediante Random Forest:
+
+
+Lo primero que hacemos es importar el paquete de Random Forest
+
+```{r}
+#install.packages("randomForest")
+library(randomForest)
+```
+
+Una vez instalado e importado, lo que tengo que hacer es crear el Random Forest, y ejecutarlo...
+
+```{r}
+model <- randomForest(grupo ~ ., data = dataset[2:26], importance = TRUE)
+model
+```
+
+
+Ahora lo voy a hacer con 10 fold X Validation:
+
+```{r}
+result <- rfcv(dataset[2:26], dataset$grupo, cv.fold=10)
+result
+```
+
+Podemos ver el error, bajo la variable $error.cv, y podemos ver las predicciones que se han hecho para cada una de las n.var.
+
+
+## SVM de Kernel Lineal
+
+Lo bueno que tiene SVM es que es muy robusto frente a la dimensión, por lo que deberíamos de obtener a priori buenos resultados con este método.
+
+Lo primero que hay que hacer es importar la librería...
+
+```{r}
+#install.packages("e1071")
+library("e1071")
+```
+
+Con este método no necesito tener un conjunto de entrenaminento y otro de test, por lo que sigo adelante.
+
+Ahora que hemos instalado la librería, vamos a crear el SVM:
+
+```{r}
+modelo_svm <- svm(grupo ~ ., data=dataset[2:26], kernel="linear")
+summary(modelo_svm)
+```
+
+Ahora que tenemos creado este primer modelo, toca predecir:
+
+```{r}
+prediccion <- predict(modelo_svm,dataset[,2:25])
+prediccion
+```
+El problema que tenemos con estas predicciones es que están siendo contínuas, y no discretas, por lo que las voy a discretizar redondeando:
+
+```{r}
+prediccion <- round(prediccion, digits = 0)
+prediccion
+```
+
+Ahora que hemos predicho, tenemos que sacar la matriz de confusión:
+
+```{r}
+matriz.conf <- table(prediccion, dataset[,26])
+matriz.conf
+sum(diag(matriz.conf))/67
+```
+
+Obtenemos un porcentaje de acierto medio, pero esto es sin tener en cuenta que los pacientes del grupo 2 pueden pertenecer al 1, lo cual suma alrededor de 10 pacientes más, por lo que obtendríamos valores mucho más altos que rondarían el 65-70% de acierto.
+
+## SVM de Kernel RBF
+
+```{r}
+modelo_svm.radial <- svm(grupo ~ ., data=dataset[2:26], kernel="radial")
+summary(modelo_svm.radial)
+```
+
+Ahora que tenemos creado este primer modelo, toca predecir:
+
+```{r}
+prediccion.radial <- predict(modelo_svm.radial,dataset[,2:25])
+prediccion.radial
+```
+El problema que tenemos con estas predicciones es que están siendo contínuas, y no discretas, por lo que las voy a discretizar redondeando:
+
+```{r}
+prediccion.radial <- round(prediccion.radial, digits = 0)
+prediccion.radial
+```
+
+Ahora que hemos predicho, tenemos que sacar la matriz de confusión:
+
+```{r}
+matriz.conf.radial <- table(prediccion.radial, dataset[,26])
+matriz.conf.radial
+sum(diag(matriz.conf.radial))/67
+```
+Obtenemos un acierto del 60%, al que hay que sumar otros 12 pacientes. 
+### Si añadimos estos pacientes, nos encontramos con un acierto del 77%
+Por lo tanto, SVM de Kernel radial es una buena técnica para la predicción en este problema.
+
+***
+
+Ahora pasamos a los modelos de inteligencia artificial no supervisados:
+
+# Modelos de inteligencia artificial no supervisados
+
+El primer modelo de inteligencia artificial no supervisado que voy a usar es un modelo de clustering llamado Dendrograma.
+
+## Dendrograma
+
+Para esto, lo que voy a hacer es dividirlo en 4 clusters, coincidiendo con los 4 grupos de trastornos que tengo.
+
+```{r}
+#install.packages("ape")
+library(ape)
+```
+
+
+```{r}
+dd <- dist(scale(dataset[,2:25]), method = "euclidean") #Nos basamos en la distancia euclídea
+hier.clust <- hclust(dd, method = "ward.D2")
+colores.dendrograma = c("red", "orange", "green", "black")
+cluster.4 = cutree(hier.clust, 4)
+plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
+```
+
+Como vemos, estamos obteniendo el indentificador de cada paciente en el dendrograma, donde los pacientes que mas se parecen estarán más juntos, mientras que los que menos se parecen estarán más separados.
+Es interesante analizar como los pacientes verdes y los naranjas surgen de la misma salida del centro, cosa que no ocurre con los rojos y los negros, lo cual quiere decir que algo tienen en común estos dos tipos de casos.
+
+
+Ahora voy a hacer el mismo dendrograma pero con el DataSet de centrado y escalado, de tal manera que veamos a ver si hay diferencias:
+
+```{r}
+dd <- dist(scale(matriz.pacientes.datos.centscal), method = "euclidean") #Nos basamos en la distancia euclídea
+hier.clust <- hclust(dd, method = "ward.D2")
+colores.dendrograma = c("red", "orange", "green", "black")
+cluster.4 = cutree(hier.clust, 4)
+plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
+```
+
+Si lo comparamos, vemos que hemos obtenido exactamente el mismo resultado, por lo que en este caso el centrado y escalado no es necesario.
+
+Vamos a analizar algunos pacientes aleatoriamente para ver si ha acertado, o al menos si se ha aproximado:
+
+Paciente 1: Analizado - Rojo --------- Real: 1
+Paciente 2: Analizado - Naranja ------ Real: 2
+Paciente 3: Analizado - Naranja ------ Real: 2
+Paciente 4: Analizado - Verde -------- Real: 4
+Paciente 5: Analizado - Naranja ------ Real: 2
+Paciente 27: Analizado - Negro ------- Real: 4
+
+Es decir, a la vista de estos resultados, podemos concluir que el grupo 1 es el de los pacientes en rojo, el grupo 2 es el de los pacientes en naranja, y luego entre el grupo 3 y el grupo 4 hay dudas, pero teniendo varios pacientes tanto del grupo 3 como del grupo 4 en nuestro DataSet parece ser que algo de error ha cometido.
+
+## K-Means
+
+El algoritmo KMeans en principio no es el algoritmo más adecuado para este trabajo, ya que se basa en círculos para la clasificación de los individuos, cuando en principio en mis datos esto no es así. De todas formas, voy a clasificar a los pacientes siguiendo este algoritmo para comprobar la eficacia que tiene sobre mi problema:
+
+```{r}
+set.seed(76964057) #Seed para reproducibilidad
+k <-kmeans(dataset[,2:25], centers=4) #Creo 4 clusters
+k$centers #Muestro los centros
+table(k$cluster) #Número de puntos en cada cluster
+```
+
+Interpretando estos resultados, obtenemos:
+
+El cluster 1 destaca por sexo más hacia masculino que otros, una relación contexto ciertamente buena, una educación permisiva, una resiliencia baja, maximización y minimización, razonamiento emocional, cierta inhibición y poca agresividad.
+
+El cluster 2 destaca por una edad mayor, es el cluster con mejor relación con el contexto, y suelen tener las personas de este cluster una educación normal. Destaca por una resiliencia media, pensamiento dicotómico, generalización excesiva, etiquetado, conclusiones arbitrarias, deberías, razonamiento emocional e inhibición.
+
+El cluster número 3 destaca por tener una edad aún más elevada, más ratio de personas del sexo femenino que ningún otro cluster, y tienen una relación con el contexto bastante variable. La educación de estas personas es principalmente normal, con una resiliencia que puede ser tanto baja como media. Destacan por el pensamiento dicotómico, generalización excesiva, poco etiquetado, maximización y minimización, filtro mental, conclusiones arbitrarias, pseudoresponsabilidad, deberías, y suelen ser bastante inhibidos e impulsivos.
+
+Finalmente, el cluster 4 destaca por ser el que tiene la edad más elevada y el ratio de sexo más masculino. La relación con el contexto de estos individuos clasificados en este grupo es principalmente de trauma, aunque también hay buenas y malas. La educación de estos individuos es principalmente permisiva, y la resiliciencia tiende a media. Destacan por la poca etiquetación que hacen, pero un gran fitro mental, conclusiones arbitrarias, poca pseudo-responsabilidad, muchos deberías, poco razonamiento emocional, y son principalmente inhibidos e impulsivos.
+
+Finalmente, podemos ver como ha introducido a 18 individuos en el cluster 1, 23 en el cluster 2, 17 en el cluster 3 y 9 en el cluster 4.
+
 
