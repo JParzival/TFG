@@ -4,27 +4,33 @@ author: "Jorge de Andrés"
 date: "12 de enero de 2019"
 always_allow_html: yes
 output:
+  pdf_document: default
   html_document:
     df_print: paged
   word_document: default
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
+
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 Lo primero que tengo que hacer es importar el dataset que he creado
 ```{r importar_dataset}
-dataset <- read.csv("C:/Users/jorge/Desktop/Documentos Clase/Universidad/4ºCarrera/1er Cuatrimestre/Inteligencia Artificial/Trabajo Fin de Asignatura/datos.txt", header = TRUE)
+
+dataset <- read.csv("C:/Users/jorge/Desktop/Documentos Clase/Universidad/4ºCarrera/2º Cuatrimestre/TFG/Proyecto/datos.txt", header = TRUE)
+
 ```
 
 
 Ahora lo que hago es pasarlo a una matriz, quitando tanto el nombre (que no me interesa) como la etiqueta (que no la necesito por ahora)
 
 ```{r creacion_matrices}
+
 matriz.pacientes.etiquetas <- dataset[, -1]
 matriz.pacientes.datos <- matriz.pacientes.etiquetas[, -25]
+
 ```
 
 # Análisis Exploratorio
@@ -32,14 +38,18 @@ matriz.pacientes.datos <- matriz.pacientes.etiquetas[, -25]
 Primero compruebo que todos los datos tienen un tipo correcto.
 
 ```{r comprobacion_tipo_datos}
+
 sapply(matriz.pacientes.datos, class)
+
 ```
 
 Veo la media de la edad de los pacientes y el rango en el que se mueve
 
 ```{r datos_edad}
+
 mean(matriz.pacientes.datos[, 1])
 range(matriz.pacientes.datos[, 1])
+
 ```
 
  Voy a ver estos datos gráficamente:
@@ -56,7 +66,9 @@ qplot(1, matriz.pacientes.datos[, 1], xlab = "Pacientes", ylab = "Edad", geom="b
  Finalmente, veo un resúmen de cada columna
  
 ```{r summary_toda_matriz}
+
 summary(matriz.pacientes.datos)
+
 ```
  
 
@@ -91,17 +103,45 @@ Después del preprocesado, aunque con los datos no preprocesados, voy a hacer la
 
 ## Visualización de Datos
 
+Para empezar voy a sacar una nube de palabras para mostrar los nombres más comúnes en los datos facilitados:
+
+```{r wordcloud_nombres_preparacion}
+
+# Lo primero que tengo que hacer es contar la frecuencia de los nombres
+
+#install.packages("plyr")
+library(plyr)
+#install.packages("wordcloud")
+library(wordcloud)
+
+dataNombres <- ddply(dataset,.(nom),nrow)
+dataNombres <- dataNombres[order(dataNombres$V1, decreasing = TRUE), ]
+
+```
+Una vez que tengo los nombres contados y ordenados, es el momento de crear la WordCloud
+
+```{r wordcloud}
+
+set.seed(9999) #Para el mantenimiento del mismo patrón
+
+wordcloud(words = dataNombres$nom, freq = dataNombres$V1, min.freq = 1, random.order=FALSE, rot.per=0.5, colors=c("Orange","Purple","Pink", "Red", "Yellow", "Green", "Blue", "Black"))
+
+```
+
 
 Ahora voy a sacar un plot para ver la relación entre la edad y el sexo de las personas que están en consulta
 
 ```{r grafico_edad_sexo}
-plot(matriz.pacientes.datos[,1], matriz.pacientes.datos[,2], xlab="Edad", ylab="Sexo (0 - mujer, 1 - hombre)", main="Edad & Sexo");
+
+plot(matriz.pacientes.datos[,1], matriz.pacientes.datos[,2], xlab="Edad", ylab="Sexo (0 - mujer, 1 - hombre)", main="Edad & Sexo")
+
 ```
 
 
 Otro plot para ver la correlación entre ser agresivo y ser impulsivo
 
 ```{r grafico_agresivo_impulsivo}
+
 #install.packages("hexbin")
 #install.packages("RColorBrewer")
 
@@ -177,6 +217,7 @@ Como saca una tabla enorme, lo que voy a hacer es usar una librería que me da u
 #install.packages("corrplot")
 library(corrplot)
 corrplot(res.round, method="circle")
+
 ```
 
 Como podemos ver, por ejemplo, resiliencia baja y media tienen una correlación de -1, ya que si hay una no hay la otra y viceversa.
@@ -215,6 +256,7 @@ En el caso de un problema grande, sería interesante la eliminación de algunas 
 Ahora, para completar este apartado de PCA, lo que voy a hacer es sacar la gráfica de la varianza acumulada con los valores anteriores:
 
 ```{r PCA_eigenvalues_graph}
+
 #install.packages("factoextra")
 library("factoextra")
 
@@ -935,14 +977,32 @@ Lo primero que hacemos es importar el paquete de Random Forest
 #install.packages("randomForest")
 library(randomForest)
 
+set.seed(1000) #Pongo una seed para reproducibilidad
+
 ```
 
 Una vez instalado e importado, lo que tengo que hacer es crear el Random Forest, y ejecutarlo...
 
 ```{r randomforest}
 
-model <- randomForest(grupo ~ ., data = dataset[2:26], importance = TRUE)
+model <- randomForest(grupo ~ ., data = dataset[, 2:26], importance = TRUE, ntree = 450)
 model
+
+```
+Ahora obtenemos el número de árboles que necesitamos realmente, y la importancia de las variables en este modelo:
+
+```{r importance_graphs_RF}
+
+plot(model)
+
+varImpPlot(model) # Gracias a importance = true
+
+```
+Ahora voy a buscar los valores óptimos:
+
+```{r}
+
+which.min(model$mse) # Esta función me dice con qué cantidad de árboles tengo el mínimo MSE
 
 ```
 
@@ -951,7 +1011,7 @@ Ahora lo voy a hacer con 10 fold X Validation:
 
 ```{r randomforest_10F-XValidation}
 
-result <- rfcv(dataset[2:26], dataset$grupo, cv.fold=10)
+result <- rfcv(dataset[, 2:26], dataset$grupo, cv.fold=10)
 head(result)
 
 ```
@@ -978,8 +1038,8 @@ Ahora que hemos instalado la librería, vamos a crear el SVM:
 
 ```{r creacion_modelo_svm}
 
-modelo_svm <- svm(grupo ~ ., data=dataset[2:26], kernel="linear")
-summary(modelo_svm)
+modelo.svm <- svm(matriz.pacientes.datos.centscal, dataset[, 26])
+summary(modelo.svm)
 
 ```
 
@@ -987,7 +1047,7 @@ Ahora que tenemos creado este primer modelo, toca predecir:
 
 ```{r prediccion_svm}
 
-prediccion <- predict(modelo_svm,dataset[,2:25])
+prediccion <- predict(modelo.svm, matriz.pacientes.datos.centscal)
 prediccion
 
 ```
@@ -1004,7 +1064,7 @@ Ahora que hemos predicho, tenemos que sacar la matriz de confusión:
 
 ```{r matriz_confusion_svm_Acierto}
 
-matriz.conf <- table(prediccion, dataset[,26])
+matriz.conf <- table(prediccion, dataset[ ,26])
 matriz.conf
 sum(diag(matriz.conf))/67
 
