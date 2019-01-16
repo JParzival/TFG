@@ -1,0 +1,5 @@
+"0","tipos = dataset.resultados[, 1]"
+"0","real = dataset.resultados[, 2]"
+"0","practico = dataset.resultados[, 3]"
+"0","p <- plot_ly(dataset.resultados, x = ~tipos, y = ~real, type = 'bar', name = 'Real') %>% add_trace(y = ~practico, name = 'Práctico') %>% layout(yaxis = list(title = 'Porcentaje'), barmode = 'group')"
+"0","p "

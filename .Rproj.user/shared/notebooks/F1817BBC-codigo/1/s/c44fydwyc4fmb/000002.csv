@@ -1,0 +1,3 @@
+"0","#install.packages(""e1071"")"
+"0","library(""e1071"")"
+"2","package ‘e1071’ was built under R version 3.5.2"

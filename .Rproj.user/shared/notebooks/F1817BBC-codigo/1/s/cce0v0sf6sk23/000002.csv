@@ -1,0 +1,3 @@
+"0","#install.packages(""randomForest"")"
+"0","library(randomForest)"
+"0","set.seed(1000) #Pongo una seed para reproducibilidad"

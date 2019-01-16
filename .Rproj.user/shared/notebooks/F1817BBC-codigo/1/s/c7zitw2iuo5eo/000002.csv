@@ -1,0 +1,3 @@
+"0","res <- cor(matriz.pacientes.datos[, 1:24], method = ""spearman"") # Por mi tipo de datos, hacemos la correlación por spearman"
+"0","options(width = 100)"
+"0","res.round <- round(res, 2)"
