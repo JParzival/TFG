@@ -1,2 +1,3 @@
 "0","#install.packages(""class"")"
 "0","library(""class"")"
+"2","package ‘class’ was built under R version 3.5.2"

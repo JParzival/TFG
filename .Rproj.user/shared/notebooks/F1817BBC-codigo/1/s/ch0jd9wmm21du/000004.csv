@@ -1,4 +1,0 @@
-"0","#install.packages(""factoextra"")"
-"0","library(""factoextra"")"
-"0","plotPCA <- fviz_screeplot(resultado.pca, ncp=24)"
-"0","plot(plotPCA)"

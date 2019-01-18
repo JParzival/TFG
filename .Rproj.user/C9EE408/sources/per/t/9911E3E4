@@ -12,9 +12,9 @@
     "path" : null,
     "project_path" : null,
     "properties" : {
-        "cacheKey" : "AA0D10F6",
+        "cacheKey" : "3708A637",
         "caption" : "dataset",
-        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dataset&cache_key=AA0D10F6",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dataset&cache_key=3708A637",
         "displayedObservations" : "67",
         "environment" : "",
         "object" : "dataset",

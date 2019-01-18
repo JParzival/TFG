@@ -1,2 +1,26 @@
 "0","#install.packages(""plotly"")"
 "0","library(""plotly"")"
+"2","
+Attaching package: ‘plotly’
+
+"
+"2","The following objects are masked from ‘package:plyr’:
+
+    arrange, mutate, rename, summarise
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"

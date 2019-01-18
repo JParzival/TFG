@@ -5,16 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3668583382",
+    "hash" : "1347851429",
     "id" : "9AC28518",
-    "lastKnownWriteTime" : 1547657866,
-    "last_content_update" : 1547657866118,
+    "lastKnownWriteTime" : 1547822203,
+    "last_content_update" : 1547822203445,
     "path" : "C:/Users/jorge/Desktop/Documentos Clase/Universidad/4ºCarrera/2º Cuatrimestre/TFG/Proyecto/codigo.Rmd",
     "project_path" : "Proyecto/codigo.Rmd",
     "properties" : {
-        "cursorPosition" : "1091,0",
-        "last_setup_crc32" : "D2F4D1E51e57d56e",
-        "scrollLine" : "1068"
+        "cursorPosition" : "1097,200",
+        "last_setup_crc32" : "FABAC82C1e57d56e",
+        "scrollLine" : "1087"
     },
     "relative_order" : 1,
     "source_on_save" : false,

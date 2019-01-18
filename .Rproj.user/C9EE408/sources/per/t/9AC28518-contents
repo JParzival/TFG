@@ -16,6 +16,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
+Borramos el environment lo primero para siempre tenerlo limpio en la ejecución:
+
+```{r clean_environment}
+
+rm(list=ls())
+
+```
+
+
 Lo primero que tengo que hacer es importar el dataset que he creado
 ```{r importar_dataset}
 
@@ -991,15 +1000,102 @@ model
 ```
 Aquí podemos ver la matriz de confusión, de la que obtenemos también el fallo por clases.
 
+El Out-Of-Bag es un método de estimación de error que se usa en algunos algoritmos como Random Forest, y usa el modelo de Bagging para hacer muestras de submuestras usadas para el entrenamiento.
+El OOB es el error de predidcción medio de cada una de las muestras de entrenamiento.
+
+Bagging es un meta-algoritmo usado para aumentar la estabilidad y precisión de algoritmos de Machine Learning de clasificación y regresión.
+
+Vemos que el valor OOB (Out-Of-the-Bag) es una valor muy alto, de alrededor del 50%, por lo que nuestro modelo no está prediciendo bien.
+
 Ahora obtenemos el número de árboles que necesitamos realmente, y la importancia de las variables en este modelo:
 
 ```{r importance_graphs_RF}
 
-plot(model)
+plot(model, main="Random Forest")
 
-varImpPlot(model) # Gracias a importance = true
+varImpPlot(model, main = "Random Forest - MDA y Gini") # Gracias a importance = true
 
 ```
+
+Vamos a interpretar estos datos del modelo:
+
++ MeanDecreaseAccuracy se refiere al decremento de la exactitud del modelo si se permutan los valores en cada característica. En otras palabras, MDA nos muestra la media de valores que se clasificarían mal si se quitara esa característica de la predicción. Por ello, eliminar elementos coo la impulsividad o la pseudo-resiliencia sería fatal para el modelo, mientras que la eliminación de relación con el contexto mala, pensamiento dicotómico o generalización excesiva parece ser que mejorarían el sistema.
+
++ MeanDecreaseGini se refiere a la medida de la ganancia media de pureza mediante la división de cierta variable. Cuanto más importante sea la variable, habrá un mayor descenso en el Gini. La importancia de este está íntimamente relacionada a la función de decisión local, que Random Forest usa para seleccionar cual es la mejor separación.
+Debido a esto, estamos viendo que la edad, la impulsividad y la pseudo-responsabilidad son valores que tienen un gran descenso en Gini, lo cual significa que Random Forest ha determinado que eran de gran importancia.
+
+Un elemento que me gustaría destacar es que el modelo está bastante regularizado y es bastante robusto, ya que casi todas las variables son bastante resistentes a las permutaciones, y por lo tanto no tienen un peso extremo a la hora de tomar decisiones, a excepción de la impulsividad.
+
+
+
+
+Ahora, para probar a ver si hay diferencia, en vez del dataset normal voy a usar el dataset centrado y escalado, para ver si el OOB desciende:
+
+```{r creacion_df_centscal_grupo_randomforest}
+
+# primero añado el grupo a la matriz, creando una nueva
+
+matriz.pacientes.datos.centscal.grupo <- cbind(matriz.pacientes.datos.centscal, dataset$grupo)
+colnames(matriz.pacientes.datos.centscal.grupo)[25] <- "grupo"
+
+```
+
+Ahora entrenamos el nuevo modelo:
+
+```{r randomforest_centscal}
+
+model_centscal <- randomForest(as.factor(grupo) ~ ., data = matriz.pacientes.datos.centscal.grupo, importance = TRUE, ntree = 450)
+model_centscal
+
+```
+
+Podemos ver que obtenemos lo mismo.
+Vamos a ver si también obtenemos lo mismo en los grafos de importancia:
+
+```{r importance_graphs_RF_centscal}
+
+plot(model_centscal, main="Random Forest Con Centrado y Escalado")
+
+varImpPlot(model_centscal, main="Random Forest con Centrado y Escalado - MDA y Gini") # Gracias a importance = true
+
+```
+
+En este caso, el MDA me dice que el sexo es la gran lacra de este modelo, mientras que la impulsividad sigue siendo el factor más determinante para acertar.
+Del Gini obtengo resultados similares.
+
+Ahora, ya que hemos visto que cambiando el dataset no mejoramos el modelo, lo que vamos a hacer es, con el primer dataset, quitar las columnas que en el MDA tengan un valor negativo, de tal manera que la precisión del modelo debería de aumentar.
+
+
+```{r improving_dataset_rf}
+
+# Las columnas que son una mayor lacra son las siguientes: Relación Contexto Mala, Pensamiento dicotómico, generalización excesiva, sexo, razonamiento emocional, deberías, asertivo, relación-contexto buena, etiquetado, relación contexto trauma.
+
+dataset.randomforest <- dataset[ , c(-1, -3, -4, -5, -6, -13, -14, -15, -20, -23)]
+head(dataset.randomforest)
+
+```
+
+Ahora que tenemos el dataset creado, vamos a hacer la predicción de nuevo:
+
+```{r randomforest_new_dataset}
+
+model_new <- randomForest(as.factor(grupo) ~ ., data = dataset.randomforest, importance = TRUE, ntree = 450)
+model_new
+
+```
+
+Vamos a ver ahora ls gráficos...
+
+```{r importance_graphs_RF_new}
+
+plot(model_new, main="Random Forest Nuevo")
+
+varImpPlot(model_new, main = "Random Forest Nuevo - MDA y Gini") 
+
+```
+
+Como se puede observar, ahora hay nuevas variables que "lastran" el resultado del Random Forest.
+De todas maneras, hemos conseguido una bajada del 50% de media en OOB Error al 45% de media en OOB Error (entrenando), lo cual es una disminución menos notable de lo esperado, pero es una disminución.
 
 
 Ahora lo voy a hacer con 10 fold X Validation:

@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1547821949784.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3764AB53",
+    "lastKnownWriteTime" : 30399585249656947,
+    "last_content_update" : 1547821949784,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "F7575742",
+        "caption" : "dataset.randomforest",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dataset.randomforest&cache_key=F7575742",
+        "displayedObservations" : "67",
+        "environment" : "",
+        "object" : "dataset.randomforest",
+        "preview" : "0",
+        "totalObservations" : "67",
+        "variables" : "16"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
