@@ -994,7 +994,7 @@ Una vez instalado e importado, lo que tengo que hacer es crear el Random Forest,
 
 ```{r randomforest}
 
-model <- randomForest(as.factor(grupo) ~ ., data = dataset[, 2:26], importance = TRUE, ntree = 450)
+model <- randomForest(as.factor(grupo) ~ ., data = dataset[, 2:26], importance = TRUE, ntree = 300)
 model
 
 ```
@@ -1044,7 +1044,7 @@ Ahora entrenamos el nuevo modelo:
 
 ```{r randomforest_centscal}
 
-model_centscal <- randomForest(as.factor(grupo) ~ ., data = matriz.pacientes.datos.centscal.grupo, importance = TRUE, ntree = 450)
+model_centscal <- randomForest(as.factor(grupo) ~ ., data = matriz.pacientes.datos.centscal.grupo, importance = TRUE, ntree = 200)
 model_centscal
 
 ```
@@ -1079,7 +1079,7 @@ Ahora que tenemos el dataset creado, vamos a hacer la predicción de nuevo:
 
 ```{r randomforest_new_dataset}
 
-model_new <- randomForest(as.factor(grupo) ~ ., data = dataset.randomforest, importance = TRUE, ntree = 450)
+model_new <- randomForest(as.factor(grupo) ~ ., data = dataset.randomforest, importance = TRUE, ntree = 200)
 model_new
 
 ```
