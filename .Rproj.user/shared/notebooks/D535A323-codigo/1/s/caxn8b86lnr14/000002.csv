@@ -1,0 +1,2 @@
+"0","# Representado sobre las dos componentes principales que más explicación nos dan de las variables"
+"0","clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = ""Representación 2D con Clusplot"", labels = 4, xlab = ""Comp 1"", ylab = ""Comp 2"") "

@@ -4,9 +4,9 @@ author: "Jorge de Andrés"
 date: "12 de enero de 2019"
 output:
   pdf_document: default
-  word_document: default
   html_document:
     df_print: paged
+  word_document: default
 always_allow_html: yes
 ---
 
@@ -1340,7 +1340,10 @@ dd <- dist(scale(matriz.pacientes.datos.centscal), method = "euclidean")
 hier.clust <- hclust(dd, method = "ward.D2")
 colores.dendrograma <- c("red", "orange", "green", "black")
 cluster.4 <- cutree(hier.clust, 4)
-png("dedrograma_pacientes.png")
+plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
+
+# Ahora la exporto a pdf
+pdf("dendrograma_pacientes.pdf")
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
 dev.off()
 

@@ -1,0 +1,3 @@
+"0","df <- data.frame(matriz.pacientes.datos[, 21], matriz.pacientes.datos[, 24])"
+"0","h <- hexbin(df)"
+"0","plot(h, colramp=rf, xlab=""Inhibido"", ylab=""Impulsivo"", main=""Inhibido Vs Impulsivo"")"

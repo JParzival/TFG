@@ -1,0 +1,5 @@
+"0","# Para hacer la predicción con knn, voy a coger los grupos de una manera distinta:"
+"0","conjuntoEntrenamiento = matriz.pacientes.datos.centscal[1:55, 1:24]"
+"0","conjuntoTest = matriz.pacientes.datos.centscal[56:67, 1:24] # Utilizo por supuesto la matriz de centrado y escalado"
+"0","etiquetasEntrenamiento = matriz.pacientes.etiquetas[1:55, 25]"
+"0","etiquetasTest = matriz.pacientes.etiquetas[56:67, 25]"

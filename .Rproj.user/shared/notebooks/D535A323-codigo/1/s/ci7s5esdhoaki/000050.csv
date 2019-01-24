@@ -1,0 +1,1 @@
+"0","head(dataframe.resultados.perceptron[order(dataframe.resultados.perceptron$Test_5neu_decay_sf, decreasing = T), 23:24])"

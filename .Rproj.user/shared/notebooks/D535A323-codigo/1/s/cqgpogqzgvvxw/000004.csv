@@ -1,0 +1,6 @@
+"0","dd <- dist(scale(matriz.pacientes.datos.centscal), method = ""euclidean"")"
+"0","hier.clust <- hclust(dd, method = ""ward.D2"")"
+"0","colores.dendrograma <- c(""red"", ""orange"", ""green"", ""black"")"
+"0","cluster.4 <- cutree(hier.clust, 4)"
+"0","pdf(""dedrograma_pacientes.pdf"")"
+"0","plot(as.phylo(hier.clust), type = ""fan"", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)"
