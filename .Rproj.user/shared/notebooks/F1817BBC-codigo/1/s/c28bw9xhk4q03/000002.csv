@@ -1,2 +1,0 @@
-"0","matriz.pacientes.etiquetas <- dataset[, -1]"
-"0","matriz.pacientes.datos <- matriz.pacientes.etiquetas[, -25]"

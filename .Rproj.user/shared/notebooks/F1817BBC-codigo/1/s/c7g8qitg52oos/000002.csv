@@ -1,2 +1,0 @@
-"0","preObjeto <- preProcess(matriz.pacientes.datos, method=c(""center"", ""scale""))  # Quiero hacer un centrado y escalado"
-"0","matriz.pacientes.datos.centscal <- predict(preObjeto, matriz.pacientes.datos) # Obtengo los valores en la matriz centscal"

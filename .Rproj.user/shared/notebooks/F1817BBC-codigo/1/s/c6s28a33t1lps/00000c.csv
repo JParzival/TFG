@@ -1,3 +1,0 @@
-"0","# primero añado el grupo a la matriz, creando una nueva"
-"0","matriz.pacientes.datos.centscal.grupo <- cbind(matriz.pacientes.datos.centscal, dataset$grupo)"
-"0","colnames(matriz.pacientes.datos.centscal.grupo)[25] <- ""grupo"""
