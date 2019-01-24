@@ -1,0 +1,2 @@
+"0","set.seed(9999) # Para el mantenimiento del mismo patrón"
+"0","wordcloud(words = dataNombres$nom, freq = dataNombres$V1, min.freq = 1, random.order=FALSE, rot.per=0.5, colors=c(""Orange"",""Purple"",""Pink"", ""Red"", ""Yellow"", ""Green"", ""Blue"", ""Black""))"

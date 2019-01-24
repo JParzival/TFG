@@ -1,0 +1,2 @@
+"0","plotPCA <- fviz_screeplot(resultado.pca, ncp=24)"
+"0","plot(plotPCA)"
