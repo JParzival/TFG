@@ -1434,7 +1434,7 @@ cluster.4 <- cutree(hier.clust, 4)
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
 
 # Ahora la exporto a pdf
-pdf("dendrograma_pacientes.pdf")
+pdf("Imágenes Obtenidas/dendrograma_pacientes.pdf")
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
 dev.off()
 
