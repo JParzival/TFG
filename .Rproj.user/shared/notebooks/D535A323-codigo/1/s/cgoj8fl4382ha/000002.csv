@@ -1,3 +1,4 @@
+"0","set.seed(2)"
 "0","prediccion.knn.8 <- knn(train = conjuntoEntrenamiento, test = conjuntoTest, cl = etiquetasEntrenamiento, k = 8)"
 "0","prediccion.knn.8"
 "1"," [1]"
@@ -9,7 +10,7 @@
 "1"," 1"
 "1"," 2"
 "1"," 2"
-"1"," 4"
+"1"," 2"
 "1"," 1"
 "1"," 2"
 "1"," 2"

@@ -1,3 +1,4 @@
+"0","set.seed(5)"
 "0","modelo.svm <- svm(matriz.pacientes.datos.centscal, as.factor(dataset[, 26]), kernel = ""linear"") # Al poner los grupos como factor, estoy consiguiendo que no sean continuos para el modelo, sino ""discretos"", ya que los factor no son valores que puedan ser continuos. Con esto consigo una clasificación."
 "0","summary(modelo.svm)"
 "1","

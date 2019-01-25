@@ -1,3 +1,4 @@
+"0","set.seed(1)"
 "0","dataframe.resultados.5neu <- data.frame(Ent_5Neu = numeric(),"
 "0","                                        Test_5Neu = numeric())"
 "0","for(i in 1:20)"
@@ -37,58 +38,23 @@
 "1","149"
 "1","
 "
-"1","initial  value 63.810250 
+"1","initial  value 54.482532 
 "
-"1","iter  10 value 31.342594
+"1","iter  10 value 23.709484
 "
-"1","iter  20 value 31.000976
+"1","iter  20 value 11.876044
 "
-"1","iter  30 value 30.999405
+"1","iter  30 value 9.820762
 "
-"1","iter  40 value 30.999234
+"1","iter  40 value 9.413410
 "
-"1","iter  50 value 30.999228
+"1","iter  50 value 9.019837
 "
-"1","iter  60 value 30.999221
+"1","iter  60 value 9.000079
 "
-"1","iter  70 value 30.999215
+"1","iter  70 value 9.000003
 "
-"1","iter  80 value 30.999209
-"
-"1","iter  90 value 30.999202
-"
-"1","iter 100 value 30.999196
-"
-"1","final  value 30.999196 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 52.474972 
-"
-"1","iter  10 value 30.502353
-"
-"1","iter  20 value 29.676877
-"
-"1","iter  30 value 29.492068
-"
-"1","iter  40 value 29.025390
-"
-"1","iter  50 value 29.002676
-"
-"1","iter  60 value 29.001070
-"
-"1","iter  70 value 29.000211
-"
-"1","iter  80 value 29.000143
-"
-"1","iter  90 value 29.000071
-"
-"1","final  value 29.000030 
+"1","final  value 9.000003 
 "
 "1","converged
 "
@@ -97,15 +63,46 @@
 "1","149"
 "1","
 "
-"1","initial  value 71.839996 
+"1","initial  value 53.328488 
 "
-"1","iter  10 value 33.610763
+"1","iter  10 value 16.882324
 "
-"1","iter  20 value 29.025797
+"1","iter  20 value 10.384527
 "
-"1","iter  30 value 29.000449
+"1","iter  30 value 7.071117
 "
-"1","final  value 29.000003 
+"1","iter  40 value 6.015071
+"
+"1","iter  50 value 5.031585
+"
+"1","iter  60 value 5.004760
+"
+"1","iter  70 value 5.000889
+"
+"1","iter  80 value 5.000517
+"
+"1","iter  90 value 5.000412
+"
+"1","iter 100 value 5.000390
+"
+"1","final  value 5.000390 
+"
+"1","stopped after 100 iterations
+"
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
+"
+"1","initial  value 65.480698 
+"
+"1","iter  10 value 31.964306
+"
+"1","iter  20 value 30.145333
+"
+"1","iter  30 value 30.000139
+"
+"1","final  value 29.999978 
 "
 "1","converged
 "
@@ -114,60 +111,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 58.852325 
+"1","initial  value 54.461099 
 "
-"1","iter  10 value 36.213192
+"1","iter  10 value 31.042009
 "
-"1","iter  20 value 24.921844
+"1","iter  20 value 31.000925
 "
-"1","iter  30 value 21.374566
+"1","iter  30 value 30.999998
 "
-"1","iter  40 value 19.197357
+"1","iter  40 value 30.999912
 "
-"1","iter  50 value 18.522089
+"1","iter  50 value 30.999344
 "
-"1","iter  60 value 18.503702
+"1","iter  60 value 30.999139
 "
-"1","iter  70 value 18.500939
+"1","iter  70 value 30.994130
 "
-"1","iter  80 value 18.500211
+"1","iter  80 value 30.993348
 "
-"1","iter  90 value 18.500101
+"1","iter  90 value 30.992327
 "
-"1","iter 100 value 18.500073
+"1","iter 100 value 30.990941
 "
-"1","final  value 18.500073 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 62.830938 
-"
-"1","iter  10 value 35.331834
-"
-"1","iter  20 value 32.267997
-"
-"1","iter  30 value 31.008478
-"
-"1","iter  40 value 30.997881
-"
-"1","iter  50 value 30.907791
-"
-"1","iter  60 value 30.085164
-"
-"1","iter  70 value 30.004401
-"
-"1","iter  80 value 30.000152
-"
-"1","iter  90 value 29.997228
-"
-"1","iter 100 value 29.995354
-"
-"1","final  value 29.995354 
+"1","final  value 30.990941 
 "
 "1","stopped after 100 iterations
 "
@@ -176,60 +142,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 56.928738 
+"1","initial  value 62.138028 
 "
-"1","iter  10 value 31.529967
+"1","iter  10 value 30.852714
 "
-"1","iter  20 value 29.264881
+"1","iter  20 value 30.003380
 "
-"1","iter  30 value 28.993458
+"1","iter  30 value 29.402802
 "
-"1","iter  40 value 28.976969
+"1","iter  40 value 29.038415
 "
-"1","iter  50 value 28.958314
+"1","iter  50 value 29.008630
 "
-"1","iter  60 value 28.825330
+"1","iter  60 value 29.000065
 "
-"1","iter  70 value 25.119319
+"1","iter  70 value 28.996019
 "
-"1","iter  80 value 24.068330
+"1","iter  80 value 28.781209
 "
-"1","iter  90 value 23.066222
+"1","iter  90 value 23.958875
 "
-"1","iter 100 value 22.671506
+"1","iter 100 value 22.017835
 "
-"1","final  value 22.671506 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 55.263484 
-"
-"1","iter  10 value 26.315937
-"
-"1","iter  20 value 21.727676
-"
-"1","iter  30 value 20.068272
-"
-"1","iter  40 value 19.757445
-"
-"1","iter  50 value 19.722517
-"
-"1","iter  60 value 19.705837
-"
-"1","iter  70 value 19.651774
-"
-"1","iter  80 value 19.648387
-"
-"1","iter  90 value 19.644093
-"
-"1","iter 100 value 19.637457
-"
-"1","final  value 19.637457 
+"1","final  value 22.017835 
 "
 "1","stopped after 100 iterations
 "
@@ -238,60 +173,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 64.722437 
+"1","initial  value 69.911910 
 "
-"1","iter  10 value 39.559332
+"1","iter  10 value 57.993083
 "
-"1","iter  20 value 30.785951
+"1","iter  20 value 57.990679
 "
-"1","iter  30 value 30.003773
+"1","iter  30 value 57.978439
 "
-"1","iter  40 value 29.999708
+"1","iter  40 value 41.924509
 "
-"1","iter  50 value 29.999317
+"1","iter  50 value 32.850307
 "
-"1","iter  60 value 29.999312
+"1","iter  60 value 31.423703
 "
-"1","iter  70 value 29.999307
+"1","iter  70 value 29.388085
 "
-"1","iter  80 value 29.999302
+"1","iter  80 value 29.016502
 "
-"1","iter  90 value 29.999297
+"1","iter  90 value 29.001595
 "
-"1","iter 100 value 29.999292
+"1","iter 100 value 28.997036
 "
-"1","final  value 29.999292 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 63.170115 
-"
-"1","iter  10 value 31.217146
-"
-"1","iter  20 value 30.005444
-"
-"1","iter  30 value 30.000068
-"
-"1","iter  40 value 29.999587
-"
-"1","iter  50 value 26.807928
-"
-"1","iter  60 value 24.983590
-"
-"1","iter  70 value 24.961843
-"
-"1","iter  80 value 24.775618
-"
-"1","iter  90 value 24.762803
-"
-"1","iter 100 value 23.134010
-"
-"1","final  value 23.134010 
+"1","final  value 28.997036 
 "
 "1","stopped after 100 iterations
 "
@@ -300,29 +204,75 @@
 "1","149"
 "1","
 "
-"1","initial  value 71.407241 
+"1","initial  value 60.428256 
 "
-"1","iter  10 value 30.443481
+"1","iter  10 value 31.341909
 "
-"1","iter  20 value 26.752549
+"1","iter  20 value 31.001125
 "
-"1","iter  30 value 20.284943
+"1","iter  30 value 30.999980
 "
-"1","iter  40 value 19.642999
+"1","final  value 30.999953 
 "
-"1","iter  50 value 19.424333
+"1","converged
 "
-"1","iter  60 value 19.123283
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
 "
-"1","iter  70 value 17.761219
+"1","initial  value 56.359219 
 "
-"1","iter  80 value 17.576214
+"1","iter  10 value 21.418851
 "
-"1","iter  90 value 16.952846
+"1","iter  20 value 12.319500
 "
-"1","iter 100 value 16.781755
+"1","iter  30 value 7.868254
 "
-"1","final  value 16.781755 
+"1","iter  40 value 6.551627
+"
+"1","iter  50 value 5.542068
+"
+"1","iter  60 value 5.502887
+"
+"1","iter  70 value 5.500501
+"
+"1","iter  80 value 5.500198
+"
+"1","iter  90 value 5.500010
+"
+"1","final  value 5.500006 
+"
+"1","converged
+"
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
+"
+"1","initial  value 64.230232 
+"
+"1","iter  10 value 31.217457
+"
+"1","iter  20 value 31.000388
+"
+"1","iter  30 value 30.998883
+"
+"1","iter  40 value 30.998847
+"
+"1","iter  50 value 30.998808
+"
+"1","iter  60 value 30.998766
+"
+"1","iter  70 value 30.998720
+"
+"1","iter  80 value 30.998671
+"
+"1","iter  90 value 30.998617
+"
+"1","iter 100 value 30.998558
+"
+"1","final  value 30.998558 
 "
 "1","stopped after 100 iterations
 "
@@ -331,29 +281,48 @@
 "1","149"
 "1","
 "
-"1","initial  value 69.020197 
+"1","initial  value 78.141374 
 "
-"1","iter  10 value 33.639537
+"1","iter  10 value 38.147129
 "
-"1","iter  20 value 30.167583
+"1","iter  20 value 30.141769
 "
-"1","iter  30 value 30.015780
+"1","iter  30 value 30.001641
 "
-"1","iter  40 value 30.002104
+"1","iter  40 value 30.000022
 "
-"1","iter  50 value 30.000246
+"1","final  value 30.000008 
 "
-"1","iter  60 value 29.999294
+"1","converged
 "
-"1","iter  70 value 29.992320
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
 "
-"1","iter  80 value 29.781039
+"1","initial  value 63.613105 
 "
-"1","iter  90 value 22.569895
+"1","iter  10 value 32.259191
 "
-"1","iter 100 value 20.345276
+"1","iter  20 value 21.725609
 "
-"1","final  value 20.345276 
+"1","iter  30 value 19.123470
+"
+"1","iter  40 value 18.787073
+"
+"1","iter  50 value 18.628186
+"
+"1","iter  60 value 18.268765
+"
+"1","iter  70 value 18.263224
+"
+"1","iter  80 value 18.248349
+"
+"1","iter  90 value 18.230711
+"
+"1","iter 100 value 18.208278
+"
+"1","final  value 18.208278 
 "
 "1","stopped after 100 iterations
 "
@@ -362,60 +331,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 45.548288 
+"1","initial  value 76.208352 
 "
-"1","iter  10 value 18.301461
+"1","iter  10 value 54.875241
 "
-"1","iter  20 value 11.476229
+"1","iter  20 value 52.565805
 "
-"1","iter  30 value 10.321321
+"1","iter  30 value 36.021655
 "
-"1","iter  40 value 10.254473
+"1","iter  40 value 21.555206
 "
-"1","iter  50 value 9.998479
+"1","iter  50 value 19.482605
 "
-"1","iter  60 value 9.763466
+"1","iter  60 value 19.292026
 "
-"1","iter  70 value 9.344909
+"1","iter  70 value 19.135945
 "
-"1","iter  80 value 9.245195
+"1","iter  80 value 18.986940
 "
-"1","iter  90 value 9.185888
+"1","iter  90 value 18.974190
 "
-"1","iter 100 value 9.175144
+"1","iter 100 value 18.968584
 "
-"1","final  value 9.175144 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 55.544664 
-"
-"1","iter  10 value 32.072804
-"
-"1","iter  20 value 31.861428
-"
-"1","iter  30 value 31.038042
-"
-"1","iter  40 value 30.393398
-"
-"1","iter  50 value 29.575664
-"
-"1","iter  60 value 29.516844
-"
-"1","iter  70 value 29.503621
-"
-"1","iter  80 value 29.501798
-"
-"1","iter  90 value 29.500579
-"
-"1","iter 100 value 29.500167
-"
-"1","final  value 29.500167 
+"1","final  value 18.968584 
 "
 "1","stopped after 100 iterations
 "
@@ -424,60 +362,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 63.298859 
+"1","initial  value 63.410474 
 "
-"1","iter  10 value 43.361566
+"1","iter  10 value 31.073959
 "
-"1","iter  20 value 43.000077
+"1","iter  20 value 30.311712
 "
-"1","iter  30 value 42.986074
+"1","iter  30 value 29.931003
 "
-"1","iter  40 value 42.973399
+"1","iter  40 value 29.541573
 "
-"1","iter  50 value 42.938828
+"1","iter  50 value 29.510865
 "
-"1","iter  60 value 40.878728
+"1","iter  60 value 29.503695
 "
-"1","iter  70 value 25.750391
+"1","iter  70 value 29.501985
 "
-"1","iter  80 value 21.490898
+"1","iter  80 value 29.500561
 "
-"1","iter  90 value 20.579592
+"1","iter  90 value 29.500029
 "
-"1","iter 100 value 20.506450
+"1","iter 100 value 29.499887
 "
-"1","final  value 20.506450 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 68.402490 
-"
-"1","iter  10 value 36.368658
-"
-"1","iter  20 value 25.643640
-"
-"1","iter  30 value 20.939283
-"
-"1","iter  40 value 19.985629
-"
-"1","iter  50 value 19.559577
-"
-"1","iter  60 value 18.873465
-"
-"1","iter  70 value 18.840104
-"
-"1","iter  80 value 18.834607
-"
-"1","iter  90 value 18.827211
-"
-"1","iter 100 value 18.702184
-"
-"1","final  value 18.702184 
+"1","final  value 29.499887 
 "
 "1","stopped after 100 iterations
 "
@@ -486,29 +393,75 @@
 "1","149"
 "1","
 "
-"1","initial  value 61.372242 
+"1","initial  value 48.586816 
 "
-"1","iter  10 value 31.194698
+"1","iter  10 value 16.846645
 "
-"1","iter  20 value 30.491413
+"1","iter  20 value 11.042896
 "
-"1","iter  30 value 30.002197
+"1","iter  30 value 7.957511
 "
-"1","iter  40 value 29.998718
+"1","iter  40 value 7.104279
 "
-"1","iter  50 value 29.995300
+"1","iter  50 value 7.004841
 "
-"1","iter  60 value 29.995066
+"1","iter  60 value 7.000224
 "
-"1","iter  70 value 29.994809
+"1","iter  70 value 7.000009
 "
-"1","iter  80 value 29.994523
+"1","iter  80 value 7.000002
 "
-"1","iter  90 value 29.994205
+"1","final  value 7.000001 
 "
-"1","iter 100 value 29.993847
+"1","converged
 "
-"1","final  value 29.993847 
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
+"
+"1","initial  value 67.764396 
+"
+"1","iter  10 value 54.584553
+"
+"1","iter  20 value 32.091063
+"
+"1","iter  30 value 30.025164
+"
+"1","iter  40 value 29.999989
+"
+"1","final  value 29.999922 
+"
+"1","converged
+"
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
+"
+"1","initial  value 57.283762 
+"
+"1","iter  10 value 34.866375
+"
+"1","iter  20 value 30.998570
+"
+"1","iter  30 value 30.035917
+"
+"1","iter  40 value 30.004032
+"
+"1","iter  50 value 30.000533
+"
+"1","iter  60 value 30.000230
+"
+"1","iter  70 value 30.000178
+"
+"1","iter  80 value 29.999052
+"
+"1","iter  90 value 29.996944
+"
+"1","iter 100 value 29.996759
+"
+"1","final  value 29.996759 
 "
 "1","stopped after 100 iterations
 "
@@ -517,60 +470,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 46.985978 
+"1","initial  value 51.998303 
 "
-"1","iter  10 value 21.672206
+"1","iter  10 value 23.124842
 "
-"1","iter  20 value 8.994575
+"1","iter  20 value 12.488382
 "
-"1","iter  30 value 7.403237
+"1","iter  30 value 9.933731
 "
-"1","iter  40 value 6.925787
+"1","iter  40 value 8.986846
 "
-"1","iter  50 value 6.746570
+"1","iter  50 value 8.685787
 "
-"1","iter  60 value 6.623256
+"1","iter  60 value 8.666098
 "
-"1","iter  70 value 6.562463
+"1","iter  70 value 8.639526
 "
-"1","iter  80 value 6.545398
+"1","iter  80 value 8.597572
 "
-"1","iter  90 value 6.534996
+"1","iter  90 value 8.589526
 "
-"1","iter 100 value 6.524243
+"1","iter 100 value 8.245047
 "
-"1","final  value 6.524243 
-"
-"1","stopped after 100 iterations
-"
-"1","# weights: "
-"1"," "
-"1","149"
-"1","
-"
-"1","initial  value 76.407923 
-"
-"1","iter  10 value 57.905271
-"
-"1","iter  20 value 44.170051
-"
-"1","iter  30 value 31.096688
-"
-"1","iter  40 value 29.684672
-"
-"1","iter  50 value 29.666407
-"
-"1","iter  60 value 29.545783
-"
-"1","iter  70 value 29.051275
-"
-"1","iter  80 value 29.011772
-"
-"1","iter  90 value 29.004067
-"
-"1","iter 100 value 29.000849
-"
-"1","final  value 29.000849 
+"1","final  value 8.245047 
 "
 "1","stopped after 100 iterations
 "
@@ -579,29 +501,29 @@
 "1","149"
 "1","
 "
-"1","initial  value 49.561721 
+"1","initial  value 53.199071 
 "
-"1","iter  10 value 19.804957
+"1","iter  10 value 31.730175
 "
-"1","iter  20 value 8.518569
+"1","iter  20 value 30.311828
 "
-"1","iter  30 value 5.429740
+"1","iter  30 value 24.327227
 "
-"1","iter  40 value 5.073764
+"1","iter  40 value 21.845373
 "
-"1","iter  50 value 4.881884
+"1","iter  50 value 21.050591
 "
-"1","iter  60 value 4.859456
+"1","iter  60 value 21.005432
 "
-"1","iter  70 value 4.563371
+"1","iter  70 value 21.002417
 "
-"1","iter  80 value 3.540721
+"1","iter  80 value 20.999986
 "
-"1","iter  90 value 3.522400
+"1","iter  90 value 20.999119
 "
-"1","iter 100 value 3.514416
+"1","iter 100 value 20.898663
 "
-"1","final  value 3.514416 
+"1","final  value 20.898663 
 "
 "1","stopped after 100 iterations
 "
@@ -610,29 +532,50 @@
 "1","149"
 "1","
 "
-"1","initial  value 69.891936 
+"1","initial  value 73.215010 
 "
-"1","iter  10 value 29.154376
+"1","iter  10 value 31.719162
 "
-"1","iter  20 value 21.598842
+"1","iter  20 value 30.982087
 "
-"1","iter  30 value 19.674283
+"1","iter  30 value 30.075790
 "
-"1","iter  40 value 19.328099
+"1","iter  40 value 30.000321
 "
-"1","iter  50 value 19.309179
+"1","iter  50 value 30.000102
 "
-"1","iter  60 value 19.303647
+"1","final  value 30.000101 
 "
-"1","iter  70 value 19.301965
+"1","converged
 "
-"1","iter  80 value 19.300185
+"1","# weights: "
+"1"," "
+"1","149"
+"1","
 "
-"1","iter  90 value 19.043367
+"1","initial  value 61.774773 
 "
-"1","iter 100 value 18.519353
+"1","iter  10 value 35.035591
 "
-"1","final  value 18.519353 
+"1","iter  20 value 25.203330
+"
+"1","iter  30 value 21.528353
+"
+"1","iter  40 value 21.000349
+"
+"1","iter  50 value 20.762079
+"
+"1","iter  60 value 20.744443
+"
+"1","iter  70 value 20.678006
+"
+"1","iter  80 value 20.668177
+"
+"1","iter  90 value 20.667337
+"
+"1","iter 100 value 20.667222
+"
+"1","final  value 20.667222 
 "
 "1","stopped after 100 iterations
 "

@@ -1,3 +1,4 @@
+"0","set.seed(5)"
 "0","modelo_svm.radial <- svm(matriz.pacientes.datos.centscal, as.factor(dataset[, 26]), kernel=""radial"")"
 "0","summary(modelo_svm.radial)"
 "1","

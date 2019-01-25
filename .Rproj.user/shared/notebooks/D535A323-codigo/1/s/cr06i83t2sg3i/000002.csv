@@ -1,3 +1,4 @@
+"0","set.seed(5)"
 "0","prediccion.radial <- predict(modelo_svm.radial, matriz.pacientes.datos.centscal)"
 "0","prediccion.radial"
 "1"," 1 "
