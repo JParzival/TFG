@@ -1,5 +1,0 @@
-"0","#install.packages(""caret"")"
-"0","library(caret)"
-"2","package ‘caret’ was built under R version 3.5.2"
-"2","Loading required package: lattice
-"

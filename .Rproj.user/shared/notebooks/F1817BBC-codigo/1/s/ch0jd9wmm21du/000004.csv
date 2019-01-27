@@ -1,7 +1,0 @@
-"0","#install.packages(""factoextra"")"
-"0","library(""factoextra"")"
-"2","package ‘factoextra’ was built under R version 3.5.2"
-"2","Welcome! Related Books: `Practical Guide To Cluster Analysis in R` at https://goo.gl/13EFCZ
-"
-"0","plotPCA <- fviz_screeplot(resultado.pca, ncp=24)"
-"0","plot(plotPCA)"

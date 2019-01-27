@@ -1,4 +1,0 @@
-"0","#install.packages(""FactoMineR"")"
-"0","library(""FactoMineR"")"
-"2","package ‘FactoMineR’ was built under R version 3.5.2"
-"0","#devtools::install_github(""kassambara/factoextra"")"

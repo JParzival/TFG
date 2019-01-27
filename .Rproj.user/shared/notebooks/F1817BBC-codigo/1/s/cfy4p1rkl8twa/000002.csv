@@ -1,5 +1,0 @@
-"0","#install.packages(""cluster"")"
-"0","#install.packages(""fpc"")"
-"0","library(cluster)"
-"0","library(fpc)"
-"2","package ‘fpc’ was built under R version 3.5.2"

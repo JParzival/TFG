@@ -1,4 +1,0 @@
-"0","#install.packages(""ggplot2"")"
-"0","library(""ggplot2"")"
-"2","package ‘ggplot2’ was built under R version 3.5.2"
-"0","qplot(1, matriz.pacientes.datos[, 1], xlab = ""Pacientes"", ylab = ""Edad"", geom=""boxplot"")"
