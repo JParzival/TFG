@@ -1,4 +1,0 @@
-"0","rf <- colorRampPalette(rev(brewer.pal(4,'Spectral')))"
-"0","df <- data.frame(matriz.pacientes.datos[, 23], matriz.pacientes.etiquetas[, 25])"
-"0","h <- hexbin(df)"
-"0","plot(h, colramp=rf, xlab=""Agresivo"", ylab=""Grupo"", main=""Agresivo Y Grupo Real"")"

@@ -1,1 +1,0 @@
-"0","clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = ""Representación 2D con Clusplot"", labels = 4, xlab = ""Comp 1"", ylab = ""Comp 2"") "

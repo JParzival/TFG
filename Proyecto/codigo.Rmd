@@ -47,6 +47,7 @@ Importamos todas las librerías que vamos a ir necesitando:
 #install.packages("ape")
 #install.packages("cluster")
 #install.packages("fpc")
+#install.packages("RWeka")
 
 library("ggplot2")
 library("caret")
@@ -66,12 +67,14 @@ library("e1071")
 library("ape")
 library("cluster")
 library("fpc")
+library("RWeka")
 
 
 ```
 
 
-Lo primero que tengo que hacer es importar el dataset que he creado
+Lo primero que tengo que hacer es importar el dataset que he creado:
+
 ```{r importar_dataset}
 
 dataset <- read.csv("Datos/datos.txt", header = TRUE)
@@ -79,7 +82,7 @@ dataset <- read.csv("Datos/datos.txt", header = TRUE)
 ```
 
 
-Ahora lo que hago es pasarlo a una matriz, quitando tanto el nombre (que no me interesa) como la etiqueta (que no la necesito por ahora)
+Ahora lo que hago es pasarlo a una matriz, quitando tanto el nombre (que no me interesa) como la etiqueta (que no la necesito por ahora):
 
 ```{r creacion_matrices}
 
@@ -112,6 +115,11 @@ range(matriz.pacientes.datos[, 1])
 ```{r grafico_estadistica_edad}
 
 qplot(1, matriz.pacientes.datos[, 1], xlab = "Pacientes", ylab = "Edad", geom="boxplot")
+
+```
+ Pasamos el qplot a PDF:
+ 
+```{r qplot_edad_PDF}
 
 pdf("Imágenes Obtenidas/boxplotEdadPacientes.pdf")
 
@@ -171,6 +179,14 @@ set.seed(9999) # Para el mantenimiento del mismo patrón
 
 wordcloud(words = dataNombres$nom, freq = dataNombres$V1, min.freq = 1, random.order=FALSE, rot.per=0.5, colors=c("Orange","Purple","Pink", "Red", "Yellow", "Green", "Blue", "Black"))
 
+```
+
+Lo pasamos a PDF:
+
+```{r wordcloud_nombresPacientes_PDF}
+
+set.seed(9999)
+
 pdf("Imágenes Obtenidas/wordcloudNombresPacientes.pdf")
 
 wordcloud(words = dataNombres$nom, freq = dataNombres$V1, min.freq = 1, random.order=FALSE, rot.per=0.5, colors=c("Orange","Purple","Pink", "Red", "Yellow", "Green", "Blue", "Black"))
@@ -185,6 +201,12 @@ Ahora voy a sacar un plot para ver la relación entre la edad y el sexo de las p
 ```{r grafico_edad_sexo}
 
 plot(matriz.pacientes.datos[,1], matriz.pacientes.datos[,2], xlab="Edad", ylab="Sexo (0 - mujer, 1 - hombre)", main="Edad & Sexo")
+
+```
+
+Lo pasamos a PDF:
+
+```{r grafico_edad-sexo_PDF}
 
 pdf("Imágenes Obtenidas/GráficoEdad-Sexo.pdf")
 
@@ -202,7 +224,14 @@ Otro plot para ver la correlación entre ser agresivo y ser impulsivo
 rf <- colorRampPalette(rev(brewer.pal(4,'Spectral')))
 df <- data.frame(matriz.pacientes.datos[, 23], matriz.pacientes.datos[, 24])
 h <- hexbin(df)
+
 plot(h, colramp=rf, xlab="Agresivo", ylab="Impulsivo", main="Agresivo Vs Impulsivo")
+
+```
+
+Lo pasamos a PDF:
+
+```{r grafico_agresivo-impulsivo_PDF}
 
 pdf("Imágenes Obtenidas/GraficoAgresivoVsImpulsivo.pdf")
 
@@ -212,13 +241,21 @@ dev.off
 
 ```
 
+
 Otro plot similar para ver la relación de ser inhibido e impulsivo
 
 ```{r grafico_inhibido_impulsivo}
 
 df <- data.frame(matriz.pacientes.datos[, 21], matriz.pacientes.datos[, 24])
 h <- hexbin(df)
+
 plot(h, colramp=rf, xlab="Inhibido", ylab="Impulsivo", main="Inhibido Vs Impulsivo")
+
+```
+
+Lo guardo en PDF:
+
+```{r grafico_inhibido_impulsivo_PDF}
 
 pdf("Imágenes Obtenidas/GraficoInhibidoVsImpulsivo.pdf")
 
@@ -228,13 +265,21 @@ dev.off
 
 ```
 
+
 Voy a ver la relación entre el razonamiento emocional (actuar según tus sentimientos) y la impulsividad
 
 ```{r grafico_razEm_Impulsivo}
 
 df <- data.frame(matriz.pacientes.datos[, 20], matriz.pacientes.datos[, 24])
 h <- hexbin(df)
+
 plot(h, colramp=rf, xlab="Razonamiento Emocional", ylab="Impulsivo", main="Razonamiento Emocional Vs Impulsivo")
+
+```
+
+Lo guardo en PDF:
+
+```{r grafico_razEM-Impulsivo_PDF}
 
 pdf("Imágenes Obtenidas/GraficoRazonamientoEmocionalVsImpulsivo.pdf")
 
@@ -251,7 +296,15 @@ Ahora quiero sacar una relación entre ser agresivo y ver el grupo en el que est
 rf <- colorRampPalette(rev(brewer.pal(4,'Spectral')))
 df <- data.frame(matriz.pacientes.datos[, 23], matriz.pacientes.etiquetas[, 25])
 h <- hexbin(df)
+
 plot(h, colramp=rf, xlab="Agresivo", ylab="Grupo", main="Agresivo Y Grupo Real")
+
+
+```
+
+Lo guardo en PDF:
+
+```{r grafico_agresivo-grupo_PDF}
 
 pdf("Imágenes Obtenidas/GraficoAgresivoVsGrupo.pdf")
 
@@ -261,6 +314,7 @@ dev.off
 
 ```
 
+
 Voy a hacer lo mismo con la impulsividad
 
 ```{r grafico_impulsivo_grupo}
@@ -268,7 +322,14 @@ Voy a hacer lo mismo con la impulsividad
 rf <- colorRampPalette(rev(brewer.pal(4,'Spectral')))
 df <- data.frame(matriz.pacientes.datos[, 24], matriz.pacientes.etiquetas[, 25])
 h <- hexbin(df)
+
 plot(h, colramp=rf, xlab="Impulsivo", ylab="Grupo", main="Impulsivo y Grupo Real")
+
+```
+
+Lo guardo en PDF:
+
+```{r grafico_impulsivo-grupo_PDF}
 
 pdf("Imágenes Obtenidas/GraficoImpulsivoVsGrupo.pdf")
 
@@ -277,6 +338,7 @@ plot(h, colramp=rf, xlab="Impulsivo", ylab="Grupo", main="Impulsivo y Grupo Real
 dev.off
 
 ```
+
 
 De estas gráficas estamos obteniendo información realmente interesante antes de la predicción de los datos.
 He preferido hacer gráficas en 2D porque las gráficas en 3D son mucho más difíciles de interpretar que estas bonitas gráficas en 2D
@@ -297,13 +359,20 @@ Como saca una tabla enorme, lo que voy a hacer es usar una librería que me da u
 
 corrplot(res.round, method="circle")
 
-# Lo exporto a PDF para que se pueda ver mejor
+```
+
+Guardamos la matriz de correlación en PDF para tener mejor visualización:
+
+```{r matriz_correlacion_PDF}
 
 pdf("Imágenes Obtenidas/Corrplot.pdf")
+
 corrplot(res.round, method="circle")
+
 dev.off
 
 ```
+
 
 Como podemos ver, por ejemplo, resiliencia baja y media tienen una correlación de -1, ya que si hay una no hay la otra y viceversa.
 Esto pasa igual con las relaciones entre contexto, ya que buena - trauma, trauma - mala, mala - buena tienen que ser inversas.
@@ -315,6 +384,7 @@ Para los cálculos, uso la matriz con el centrado y escalado ya hechos
 ```{r PCA_Calculations}
 
 resultado.pca <- PCA(matriz.pacientes.datos.centscal, graph = FALSE)
+
 #Con la siguiente línea podemos ver que podemos hacer con esto calculado
 print(resultado.pca)
 
@@ -338,11 +408,20 @@ Ahora, para completar este apartado de PCA, lo que voy a hacer es sacar la gráf
 plotPCA <- fviz_screeplot(resultado.pca, ncp=24)
 plot(plotPCA)
 
+```
+
+Obtengo este gráfico en PDF para tener una mejor visualización:
+
+```{r eigenvalues_graph_PDF}
+
 pdf("Imágenes Obtenidas/GraficoEigenvalues.pdf")
+
 plot(plotPCA)
+
 dev.off
 
 ```
+
 
 Ahora voy a sacar un "Factor Map" de las variables. Esto lo puedo hacer gracias a las coordenadas que me da una de las variables tras hacer el PCA.
 Así, voy primero a ver la tabla y luego voy a sacar el mapa:
@@ -359,13 +438,20 @@ Con esta representación podré sacar algunas conclusiones:
 
 fviz_pca_var(resultado.pca)
 
-# Lo exporto a PDF para mejor visualización
+```
+
+Exporto a PDF este gráfico de coordenadas:
+
+```{r coordinates_graph_PDF}
 
 pdf("Imágenes Obtenidas/GraficoVectoresVariablesPCA.pdf")
+
 fviz_pca_var(resultado.pca)
+
 dev.off
 
 ```
+
 
 Con esto puedo sacar conclusiones al igual que con el gran gráfico de correlaciones de variables, solo que esta representación está intencionada para más de 2 dimensiones.
 
@@ -390,11 +476,22 @@ Ahora, tras ver que todos mis individuos tienen unas ciertas coordenadas, vamos 
 
 fviz_pca_ind(resultado.pca)
 
+```
+
+Exporto a PDF las coordenadas de los individuos:
+
+```{r coordenadas_individuos_PDF}
+
 pdf("Imágenes Obtenidas/GraficoIndividuosPCA.pdf")
+
 fviz_pca_ind(resultado.pca)
+
 dev.off
 
 ```
+
+
+
 Se puede ver que la mayoría de los pacientes están en torno al centro, mientras que tenemos un outlayer, que es el número 27.
 
 ***
@@ -1104,9 +1201,14 @@ barplot(array.maximos.perceptron,
                       "5 Neu", "5 Neu Soft", "5 Neu Decay", "5 Neu Soft Decay")
       )
 
-# Lo exporto a PDF
+```
+
+Exporto a PDF este barplot:
+
+```{r export_PDF_barplot_perceptrones}
 
 pdf("Imágenes Obtenidas/BarplotResultadosPerceptron.pdf")
+
 barplot(array.maximos.perceptron,
         main = "Mejores Resultados en Test con Perceptrones",
         xlab = "Tipo de Perceptrón",
@@ -1147,6 +1249,7 @@ p
 #Mostramos el gráfico interactivo
 
 ```
+
 
 Ahora que hemos sacado los resultados obtenidos con el perceptrón multicapa, vamos con otras técnicas supervisadas:
 
@@ -1278,15 +1381,21 @@ plot(model, main="Random Forest")
 
 varImpPlot(model, main = "Random Forest - MDA y Gini") # Gracias a importance = true
 
-# Lo exporto a PDF para mejor visualización
+```
+
+Exporto a PDF los gráficos obtenidos:
+
+```{r export_PDF_RF}
 
 pdf("Imágenes Obtenidas/ResultadosRandomForest.pdf")
+
 plot(model, main="Random Forest")
 varImpPlot(model, main = "Random Forest - MDA y Gini")
+
 dev.off
 
-
 ```
+
 
 Vamos a interpretar estos datos del modelo:
 
@@ -1329,14 +1438,23 @@ plot(model_centscal, main="Random Forest Con Centrado y Escalado")
 
 varImpPlot(model_centscal, main="Random Forest con Centrado y Escalado - MDA y Gini") # Gracias a importance = true
 
+```
+
+Exporto a PDF estos resultados:
+
+```{r export_PDF_resultados_RF_centscal}
+
 # Lo exporto de nuevo a PDF
 
 pdf("Imágenes Obtenidas/ResultadosRandomForestCentScal.pdf")
+
 plot(model_centscal, main="Random Forest Con Centrado y Escalado")
 varImpPlot(model_centscal, main="Random Forest con Centrado y Escalado - MDA y Gini")
+
 dev.off
 
 ```
+
 
 En este caso, el MDA me dice que el sexo es la gran lacra de este modelo, mientras que la impulsividad sigue siendo el factor más determinante para acertar.
 Del Gini obtengo resultados similares.
@@ -1372,15 +1490,21 @@ plot(model_new, main="Random Forest Nuevo")
 
 varImpPlot(model_new, main = "Random Forest Nuevo - MDA y Gini") 
 
-# Lo volvemos a exportar
+```
+
+Exporto a PDF estos resultados del Random Forest corregido:
+
+```{r export_PDF_results_RF_Corrected}
 
 pdf("Imágenes Obtenidas/ResultadosRandomForestMejorado.pdf")
+
 plot(model_new, main="Random Forest Nuevo")
 varImpPlot(model_new, main = "Random Forest Nuevo - MDA y Gini") 
+
 dev.off
 
-
 ```
+
 
 Como se puede observar, ahora hay nuevas variables que "lastran" el resultado del Random Forest.
 De todas maneras, hemos conseguido una bajada del 50% de media en OOB Error al 45% de media en OOB Error (entrenando), lo cual es una disminución menos notable de lo esperado, pero es una disminución.
@@ -1499,11 +1623,20 @@ hier.clust <- hclust(dd, method = "ward.D2")
 colores.dendrograma <- c("red", "orange", "green", "black") # Creamos los colores con los que queremos el cluster
 cluster.4 <- cutree(hier.clust, 4) # Cluster jerárquico de 4...
 
-png("dendrograma_pacientes.png")
+```
+
+Exporto a PDF el dendrograma obtenido:
+
+```{r export_PDF_dendrogram}
+
+pdf("Imágenes Obtenidas/dendrograma_pacientes.pdf")
+
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8) #Lo pintamos
+
 dev.off()
 
 ```
+
 
 Como vemos, estamos obteniendo el indentificador de cada paciente en el dendrograma, donde los pacientes que mas se parecen estarán más juntos, mientras que los que menos se parecen estarán más separados.
 Es interesante analizar como los pacientes verdes y los naranjas surgen de la misma salida del centro, cosa que no ocurre con los rojos y los negros, lo cual quiere decir que algo tienen en común estos dos tipos de casos.
@@ -1521,12 +1654,20 @@ colores.dendrograma <- c("red", "orange", "green", "black")
 cluster.4 <- cutree(hier.clust, 4)
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
 
-# Ahora la exporto a pdf
-pdf("Imágenes Obtenidas/dendrograma_pacientes.pdf")
+```
+
+Lo exportamos a PDF tras la creación:
+
+```{r export_PDF_dendrograma_centscal}
+
+pdf("Imágenes Obtenidas/dendrograma_pacientes_centscal.pdf")
+
 plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
+
 dev.off()
 
 ```
+
 
 Si lo comparamos, vemos que hemos obtenido exactamente el mismo resultado, por lo que en este caso el centrado y escalado no es necesario.
 
@@ -1545,7 +1686,8 @@ datos.kmeans <- matriz.pacientes.datos # Sin la clasificación dentro del datase
 clusters <- kmeans(datos.kmeans, centers=4)
 clusters$centers
 
-clusters$cluster
+prediccion.kmeans <- clusters$cluster
+prediccion.kmeans
 
 ```
 
@@ -1572,14 +1714,144 @@ clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = "Representación 2
 
 plotcluster(datos.kmeans, clusters$cluster)
 
+```
 
-# Ahora lo voy a exportar a pdf para una mejor visualización
+Exportamos a PDF los gráficos obtenidos del KMeans:
+
+```{r export_PDF_kmeans}
 
 pdf("Imágenes Obtenidas/ResultadosKmeans.pdf")
+
 clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = "Representación 2D con Clusplot", labels = 4, xlab = "Comp 1", ylab = "Comp 2") 
 plotcluster(datos.kmeans, clusters$cluster)
+
 dev.off
 
 ```
 
+
+## Minería de Reglas - Rules
+
+Para esto usaremos la librería RWeka, que es la implementación en R de Weka.
+Como matriz de inicio, usaremos la matriz.pacientes.datos, que está ya limpia.
+
+### Reglas de Sexo
+
+```{r rule_mining_sexo}
+
+# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es
+
+matriz.pacientes.datos.rm = matriz.pacientes.datos
+
+matriz.pacientes.datos.rm$sex <- as.factor(matriz.pacientes.datos.rm$sex)
+
+part_sex <- PART(sex~., data = matriz.pacientes.datos.rm)
+oneR_sex <- OneR(sex~., data = matriz.pacientes.datos.rm)
+jrip_sex <- JRip(sex~., data = matriz.pacientes.datos.rm)
+
+print("Reglas sexo PART")
+
+part_sex
+
+print("Regla sexo OneR")
+
+oneR_sex
+
+print("Reglas sexo JRip")
+
+jrip_sex
+
+```
+
+Como podemos ver, del sexo no podemos sacar ninguna regla demasiado fiable, por lo que no podemos predecirlo demasiado bien.
+
+### Reglas de impulsividad
+
+```{r rule_mining_imp}
+
+# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es
+
+matriz.pacientes.datos.rm = matriz.pacientes.datos
+
+matriz.pacientes.datos.rm$impuls <- as.factor(matriz.pacientes.datos.rm$impuls)
+
+part_imp <- PART(impuls~., data = matriz.pacientes.datos.rm)
+oneR_imp <- OneR(impuls~., data = matriz.pacientes.datos.rm)
+jrip_imp <- JRip(impuls~., data = matriz.pacientes.datos.rm)
+
+print("Reglas impulsividad PART")
+
+part_imp
+
+print("Regla impulsividad OneR")
+
+oneR_imp
+
+print("Reglas impulsividad JRip")
+
+jrip_imp
+
+```
+
+De la impulsividad vemos que es un poco más predecible, pero tampoco obtenemos numerosas reglas generales.
+
+### Reglas de agresividad
+
+```{r rule_mining_agres}
+
+# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es
+
+matriz.pacientes.datos.rm = matriz.pacientes.datos
+
+matriz.pacientes.datos.rm$agres <- as.factor(matriz.pacientes.datos.rm$agres)
+
+part_agr <- PART(agres~., data = matriz.pacientes.datos.rm)
+oneR_agr <- OneR(agres~., data = matriz.pacientes.datos.rm)
+jrip_agr <- JRip(agres~., data = matriz.pacientes.datos.rm)
+
+print("Reglas agresividad PART")
+
+part_agr
+
+print("Regla Agresividad OneR")
+
+oneR_agr
+
+print("Reglas agresividad JRip")
+
+jrip_agr
+
+```
+
+
+### Reglas de grupo
+
+Las más importantes:
+
+```{r rule_mining_grupo}
+
+# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es
+
+matriz.pacientes.datos.rm = matriz.pacientes.datos
+matriz.pacientes.datos.rm <- cbind(matriz.pacientes.datos.rm, dataset$grupo)
+
+matriz.pacientes.datos.rm$`dataset$grupo` <- as.factor(matriz.pacientes.datos.rm$`dataset$grupo`)
+
+part_gru <- PART(`dataset$grupo`~., data = matriz.pacientes.datos.rm)
+oneR_gru <- OneR(`dataset$grupo`~., data = matriz.pacientes.datos.rm)
+jrip_gru <- JRip(`dataset$grupo`~., data = matriz.pacientes.datos.rm)
+
+print("Reglas grupo PART")
+
+part_gru
+
+print("Regla grupo OneR")
+
+oneR_gru
+
+print("Reglas grupo JRip")
+
+jrip_gru
+
+```
 

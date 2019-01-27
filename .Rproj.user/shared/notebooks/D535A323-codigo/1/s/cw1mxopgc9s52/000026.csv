@@ -1,19 +1,2 @@
-"0","dev.off"
-"1","function (which = dev.cur()) 
-"
-"1","{
-"
-"1","    if (which == 1) 
-"
-"1","        stop(""cannot shut down device 1 (the null device)"")
-"
-"1","    .External(C_devoff, as.integer(which))
-"
-"1","    dev.cur()
-"
-"1","}
-"
-"1","<bytecode: 0x00000000150af510>
-"
-"1","<environment: namespace:grDevices>
-"
+"0","set.seed(9999) # Para el mantenimiento del mismo patrón"
+"0","wordcloud(words = dataNombres$nom, freq = dataNombres$V1, min.freq = 1, random.order=FALSE, rot.per=0.5, colors=c(""Orange"",""Purple"",""Pink"", ""Red"", ""Yellow"", ""Green"", ""Blue"", ""Black""))"

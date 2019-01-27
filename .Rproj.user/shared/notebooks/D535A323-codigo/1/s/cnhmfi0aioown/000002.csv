@@ -1,0 +1,5 @@
+"0","pdf(""Imágenes Obtenidas/BarplotResultadosPerceptronTotales.pdf"")"
+"0","p <- plot_ly(dataset.resultados, x = ~tipos, y = ~real, type = 'bar', name = 'Real') "
+"0","%>% add_trace(y = ~practico, name = 'Práctico') "
+"2","Error: unexpected SPECIAL in ""%>%""
+"

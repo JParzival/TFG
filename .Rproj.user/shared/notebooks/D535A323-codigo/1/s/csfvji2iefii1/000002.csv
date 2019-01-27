@@ -1,0 +1,68 @@
+"0","# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es"
+"0","matriz.pacientes.datos.rm = matriz.pacientes.datos"
+"0","matriz.pacientes.datos.rm$sex <- as.factor(matriz.pacientes.datos.rm$sex)"
+"0","part_sex <- PART(sex~., data = matriz.pacientes.datos.rm)"
+"0","oneR_sex <- OneR(sex~., data = matriz.pacientes.datos.rm)"
+"0","jrip_sex <- JRip(sex~., data = matriz.pacientes.datos.rm)"
+"0","print(""Reglas sexo PART"")"
+"1","[1]"
+"1"," ""Reglas sexo PART"""
+"1","
+"
+"0","part_sex"
+"1","PART decision list
+------------------
+
+agres <= 0 AND
+pen_dic > 0 AND
+rel_ctxo_trauma <= 0: 0 (34.0/4.0)
+
+gen_ex > 0 AND
+pen_dic > 0 AND
+ed_estr <= 0 AND
+edad <= 32 AND
+impuls > 0 AND
+raz_emo > 0 AND
+edad > 15: 0 (9.0/2.0)
+
+gen_ex > 0 AND
+agres <= 0 AND
+ed_norm <= 0: 0 (8.0)
+
+gen_ex > 0 AND
+pen_dic > 0 AND
+pseu_res <= 0: 1 (6.0/1.0)
+
+resil_ba <= 0: 0 (8.0/1.0)
+
+: 1 (2.0)
+
+Number of Rules  : 	6
+
+"
+"0","print(""Regla sexo OneR"")"
+"1","[1]"
+"1"," ""Regla sexo OneR"""
+"1","
+"
+"0","oneR_sex"
+"1","edad:
+	< 49.5	-> 0
+	>= 49.5	-> 1
+(54/67 instances correct)
+
+"
+"0","print(""Reglas sexo JRip"")"
+"1","[1]"
+"1"," ""Reglas sexo JRip"""
+"1","
+"
+"0","jrip_sex"
+"1","JRIP rules:
+===========
+
+ => sex=0 (67.0/14.0)
+
+Number of Rules : 1
+
+"

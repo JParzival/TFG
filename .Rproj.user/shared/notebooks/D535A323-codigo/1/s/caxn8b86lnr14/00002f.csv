@@ -1,6 +1,0 @@
-"0","clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = ""Representación 2D con Clusplot"", labels = 4, xlab = ""Comp 1"", ylab = ""Comp 2"") 
-# Ahora la siguiente representación será con componentes discriminantes, que son las dos dimensiones sobre las que la representación de datos es más linealmente separable respecto a la predicción de grupos que ha hecho KMeans
-plotcluster(datos.kmeans, clusters$cluster)
-"
-"0","# Ahora lo voy a exportar a pdf para una mejor visualización"
-"0","pdf(""Imágenes Obtenidas/ResultadosKmeans.pdf"")"

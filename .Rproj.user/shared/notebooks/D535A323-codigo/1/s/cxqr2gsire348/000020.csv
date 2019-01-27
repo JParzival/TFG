@@ -1,3 +1,0 @@
-"0","df <- data.frame(matriz.pacientes.datos[, 20], matriz.pacientes.datos[, 24])"
-"0","h <- hexbin(df)"
-"0","plot(h, colramp=rf, xlab=""Razonamiento Emocional"", ylab=""Impulsivo"", main=""Razonamiento Emocional Vs Impulsivo"")"

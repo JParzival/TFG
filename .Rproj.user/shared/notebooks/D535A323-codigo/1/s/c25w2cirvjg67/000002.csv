@@ -1,0 +1,2 @@
+"0","pdf(""Imágenes Obtenidas/dendrograma_pacientes.pdf"")"
+"0","plot(as.phylo(hier.clust), type = ""fan"", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8) #Lo pintamos"

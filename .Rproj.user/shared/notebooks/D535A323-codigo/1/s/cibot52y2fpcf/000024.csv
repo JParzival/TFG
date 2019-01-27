@@ -1,1 +1,0 @@
-"0","plot(matriz.pacientes.datos[,1], matriz.pacientes.datos[,2], xlab=""Edad"", ylab=""Sexo (0 - mujer, 1 - hombre)"", main=""Edad & Sexo"")"

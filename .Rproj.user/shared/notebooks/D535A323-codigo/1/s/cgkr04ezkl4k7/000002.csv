@@ -1,0 +1,51 @@
+"0","# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es"
+"0","matriz.pacientes.datos.rm = matriz.pacientes.datos"
+"0","matriz.pacientes.datos.rm$agres <- as.factor(matriz.pacientes.datos.rm$agres)"
+"0","part_agr <- PART(agres~., data = matriz.pacientes.datos.rm)"
+"0","oneR_agr <- OneR(agres~., data = matriz.pacientes.datos.rm)"
+"0","jrip_agr <- JRip(agres~., data = matriz.pacientes.datos.rm)"
+"0","print(""Reglas agresividad PART"")"
+"1","[1]"
+"1"," ""Reglas agresividad PART"""
+"1","
+"
+"0","part_agr"
+"1","PART decision list
+------------------
+
+inhib > 0: 0 (44.0)
+
+asert <= 0: 1 (14.0/1.0)
+
+: 0 (9.0/1.0)
+
+Number of Rules  : 	3
+
+"
+"0","print(""Regla Agresividad OneR"")"
+"1","[1]"
+"1"," ""Regla Agresividad OneR"""
+"1","
+"
+"0","oneR_agr"
+"1","inhib:
+	< 0.5	-> 1
+	>= 0.5	-> 0
+(58/67 instances correct)
+
+"
+"0","print(""Reglas agresividad JRip"")"
+"1","[1]"
+"1"," ""Reglas agresividad JRip"""
+"1","
+"
+"0","jrip_agr"
+"1","JRIP rules:
+===========
+
+(inhib <= 0) and (asert <= 0) => agres=1 (14.0/1.0)
+ => agres=0 (53.0/1.0)
+
+Number of Rules : 2
+
+"
