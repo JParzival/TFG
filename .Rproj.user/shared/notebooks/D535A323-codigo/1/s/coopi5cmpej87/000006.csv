@@ -1,3 +1,0 @@
-"0","# Lo exporto de nuevo a PDF"
-"0","pdf(""Imágenes Obtenidas/ResultadosRandomForestCentScal.pdf"")"
-"0","plot(model_centscal, main=""Random Forest Con Centrado y Escalado"")"

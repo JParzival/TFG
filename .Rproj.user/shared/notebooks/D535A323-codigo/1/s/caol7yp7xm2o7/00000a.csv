@@ -1,19 +1,2 @@
-"0","dev.off"
-"1","function (which = dev.cur()) 
-"
-"1","{
-"
-"1","    if (which == 1) 
-"
-"1","        stop(""cannot shut down device 1 (the null device)"")
-"
-"1","    .External(C_devoff, as.integer(which))
-"
-"1","    dev.cur()
-"
-"1","}
-"
-"1","<bytecode: 0x00000000501aa790>
-"
-"1","<environment: namespace:grDevices>
-"
+"0","pdf(""Imágenes Obtenidas/ResultadosKmeans.pdf"")"
+"0","clusplot(datos.kmeans, clusters$cluster, color = TRUE, main = ""Representación 2D con Clusplot"", labels = 4, xlab = ""Comp 1"", ylab = ""Comp 2"") "

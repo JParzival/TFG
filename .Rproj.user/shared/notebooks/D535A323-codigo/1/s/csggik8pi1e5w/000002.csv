@@ -13,16 +13,15 @@
 "1","PART decision list
 ------------------
 
-agres > 0: 1 (14.0)
+agres > 0: 1 (15.0)
 
 rel_ctxo_rel_mala <= 0 AND
 pen_dic > 0 AND
 ed_perm > 0: 0 (7.0/1.0)
 
-pen_dic > 0 AND
-rel_ctxo_rel_mala > 0: 1 (6.0)
-
 pen_dic <= 0: 0 (5.0)
+
+rel_ctxo_rel_mala > 0: 1 (5.0)
 
 sex > 0 AND
 pseu_res <= 0: 0 (3.0)

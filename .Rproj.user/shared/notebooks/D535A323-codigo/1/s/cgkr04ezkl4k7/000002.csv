@@ -15,7 +15,7 @@
 
 inhib > 0: 0 (44.0)
 
-asert <= 0: 1 (14.0/1.0)
+asert <= 0: 1 (14.0)
 
 : 0 (9.0/1.0)
 
@@ -31,7 +31,7 @@ Number of Rules  : 	3
 "1","inhib:
 	< 0.5	-> 1
 	>= 0.5	-> 0
-(58/67 instances correct)
+(59/67 instances correct)
 
 "
 "0","print(""Reglas agresividad JRip"")"
@@ -43,7 +43,7 @@ Number of Rules  : 	3
 "1","JRIP rules:
 ===========
 
-(inhib <= 0) and (asert <= 0) => agres=1 (14.0/1.0)
+(inhib <= 0) and (asert <= 0) => agres=1 (14.0/0.0)
  => agres=0 (53.0/1.0)
 
 Number of Rules : 2
