@@ -1,19 +1,10 @@
-"0","dev.off"
-"1","function (which = dev.cur()) 
-"
-"1","{
-"
-"1","    if (which == 1) 
-"
-"1","        stop(""cannot shut down device 1 (the null device)"")
-"
-"1","    .External(C_devoff, as.integer(which))
-"
-"1","    dev.cur()
-"
-"1","}
-"
-"1","<bytecode: 0x00000000139eea50>
-"
-"1","<environment: namespace:grDevices>
-"
+"0","pdf(""Imágenes Obtenidas/BarplotResultadosPerceptron.pdf"")"
+"0","barplot(array.maximos.perceptron,"
+"0","        main = ""Mejores Resultados en Test con Perceptrones"","
+"0","        xlab = ""Tipo de Perceptrón"","
+"0","        ylab = ""Acierto (Tanto por 1)"","
+"0","        names.arg = c(""1 Neu"", ""1 Neu Soft"", "
+"0","                      ""2 Neu"", ""2 Neu Soft"", "
+"0","                      ""3 Neu"", ""3 Neu Soft"", ""3 Neu Decay"", ""3 Neu Soft Decay"", "
+"0","                      ""5 Neu"", ""5 Neu Soft"", ""5 Neu Decay"", ""5 Neu Soft Decay"")"
+"0","      )"

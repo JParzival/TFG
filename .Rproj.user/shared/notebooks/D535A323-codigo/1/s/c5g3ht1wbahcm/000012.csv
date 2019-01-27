@@ -1,0 +1,1 @@
+"0","ggbiplot(resultado.pca, ellipse=TRUE, labels=rownames(dataset), groups=dataset$grupo)"

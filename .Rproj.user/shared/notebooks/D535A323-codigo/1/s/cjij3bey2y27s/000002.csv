@@ -1,2 +1,0 @@
-"0","pdf(""Imágenes Obtenidas/boxplotEdadPacientes.pdf"")"
-"0","qplot(1, matriz.pacientes.datos[, 1], xlab = ""Pacientes"", ylab = ""Edad"", geom=""boxplot"")"

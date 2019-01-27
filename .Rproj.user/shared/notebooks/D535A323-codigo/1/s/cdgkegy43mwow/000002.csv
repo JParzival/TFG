@@ -1,0 +1,2 @@
+"0","pdf(""Imágenes Obtenidas/optimalClusters.pdf"")"
+"0","fviz_nbclust(datos.kmeans, kmeans, method = ""wss"")"

@@ -1,19 +1,2 @@
-"0","dev.off"
-"1","function (which = dev.cur()) 
-"
-"1","{
-"
-"1","    if (which == 1) 
-"
-"1","        stop(""cannot shut down device 1 (the null device)"")
-"
-"1","    .External(C_devoff, as.integer(which))
-"
-"1","    dev.cur()
-"
-"1","}
-"
-"1","<bytecode: 0x00000000139eea50>
-"
-"1","<environment: namespace:grDevices>
-"
+"0","pdf(""Imágenes Obtenidas/boxplotEdadPacientes.pdf"")"
+"0","qplot(1, matriz.pacientes.datos[, 1], xlab = ""Pacientes"", ylab = ""Edad"", geom=""boxplot"")"

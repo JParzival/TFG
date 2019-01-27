@@ -1,0 +1,2 @@
+"0","# Saco este gráfico para ver los individuos de una forma más clara"
+"0","fviz_pca_ind(resultado.pca, repel = T)"

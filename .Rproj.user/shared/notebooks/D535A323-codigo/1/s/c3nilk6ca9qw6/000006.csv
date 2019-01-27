@@ -1,0 +1,92 @@
+"0","#install.packages(""ggplot2"")"
+"0","#install.packages(""caret"")"
+"0","#install.packages(""plyr"")"
+"0","#install.packages(""wordcloud"")"
+"0","#install.packages(""hexbin"")"
+"0","#install.packages(""RColorBrewer"")"
+"0","#install.packages(""corrplot"")"
+"0","#install.packages(""FactoMineR"")"
+"0","#devtools::install_github(""kassambara/factoextra"")"
+"0","#install.packages(""factoextra"")"
+"0","#install.packages(""nnet"")"
+"0","#install.packages(""plotly"")"
+"0","#install.packages(""class"")"
+"0","#install.packages(""gmodels"")"
+"0","#install.packages(""randomForest"")"
+"0","#install.packages(""e1071"")"
+"0","#install.packages(""ape"")"
+"0","#install.packages(""cluster"")"
+"0","#install.packages(""fpc"")"
+"0","#install.packages(""RWeka"")"
+"0","#install.packages(""devtools"")"
+"0","#devtools::install_github(""vqv/ggbiplot"")"
+"0","library(""ggplot2"")"
+"0","library(""caret"")"
+"2","Loading required package: lattice
+"
+"0","library(""plyr"")"
+"0","library(""wordcloud"")"
+"2","Loading required package: RColorBrewer
+"
+"0","library(""hexbin"")"
+"0","library(""RColorBrewer"")"
+"0","library(""corrplot"")"
+"2","corrplot 0.84 loaded
+"
+"0","library(""FactoMineR"")"
+"0","library(""factoextra"")"
+"2","Welcome! Related Books: `Practical Guide To Cluster Analysis in R` at https://goo.gl/13EFCZ
+"
+"0","library(""nnet"")"
+"0","library(""plotly"")"
+"2","
+Attaching package: ‘plotly’
+
+"
+"2","The following objects are masked from ‘package:plyr’:
+
+    arrange, mutate, rename, summarise
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    last_plot
+
+"
+"2","The following object is masked from ‘package:stats’:
+
+    filter
+
+"
+"2","The following object is masked from ‘package:graphics’:
+
+    layout
+
+"
+"0","library(""class"")"
+"0","library(""gmodels"")"
+"0","library(""randomForest"")"
+"2","randomForest 4.6-14
+"
+"2","Type rfNews() to see new features/changes/bug fixes.
+"
+"2","
+Attaching package: ‘randomForest’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+"
+"0","library(""e1071"")"
+"0","library(""ape"")"
+"0","library(""cluster"")"
+"0","library(""fpc"")"
+"0","library(""RWeka"")"
+"0","library(""devtools"")"
+"0","library(""ggbiplot"")"
+"2","Loading required package: scales
+"
+"2","Loading required package: grid
+"
