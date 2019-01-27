@@ -160,6 +160,7 @@ Importamos todas las librerías que vamos a ir necesitando:
 \CommentTok{#install.packages("ape")}
 \CommentTok{#install.packages("cluster")}
 \CommentTok{#install.packages("fpc")}
+\CommentTok{#install.packages("RWeka")}
 
 \KeywordTok{library}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
 \KeywordTok{library}\NormalTok{(}\StringTok{"caret"}\NormalTok{)}
@@ -273,19 +274,20 @@ Importamos todas las librerías que vamos a ir necesitando:
 \KeywordTok{library}\NormalTok{(}\StringTok{"ape"}\NormalTok{)}
 \KeywordTok{library}\NormalTok{(}\StringTok{"cluster"}\NormalTok{)}
 \KeywordTok{library}\NormalTok{(}\StringTok{"fpc"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"RWeka"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-Lo primero que tengo que hacer es importar el dataset que he creado
+Lo primero que tengo que hacer es importar el dataset que he creado:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{dataset <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"datos.txt"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{dataset <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Datos/datos.txt"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 Ahora lo que hago es pasarlo a una matriz, quitando tanto el nombre (que
-no me interesa) como la etiqueta (que no la necesito por ahora)
+no me interesa) como la etiqueta (que no la necesito por ahora):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -350,6 +352,29 @@ Voy a ver estos datos gráficamente:
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/grafico_estadistica_edad-1.pdf}
+Pasamos el qplot a PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/boxplotEdadPacientes.pdf"}\NormalTok{)}
+
+\KeywordTok{qplot}\NormalTok{(}\DecValTok{1}\NormalTok{, matriz.pacientes.datos[, }\DecValTok{1}\NormalTok{], }\DataTypeTok{xlab =} \StringTok{"Pacientes"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"Edad"}\NormalTok{, }\DataTypeTok{geom=}\StringTok{"boxplot"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 Finalmente, veo un resúmen de cada columna
 
@@ -457,6 +482,32 @@ crear la WordCloud
 
 \includegraphics{codigo_files/figure-latex/wordcloud-1.pdf}
 
+Lo pasamos a PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{9999}\NormalTok{)}
+
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/wordcloudNombresPacientes.pdf"}\NormalTok{)}
+
+\KeywordTok{wordcloud}\NormalTok{(}\DataTypeTok{words =}\NormalTok{ dataNombres}\OperatorTok{$}\NormalTok{nom, }\DataTypeTok{freq =}\NormalTok{ dataNombres}\OperatorTok{$}\NormalTok{V1, }\DataTypeTok{min.freq =} \DecValTok{1}\NormalTok{, }\DataTypeTok{random.order=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{rot.per=}\FloatTok{0.5}\NormalTok{, }\DataTypeTok{colors=}\KeywordTok{c}\NormalTok{(}\StringTok{"Orange"}\NormalTok{,}\StringTok{"Purple"}\NormalTok{,}\StringTok{"Pink"}\NormalTok{, }\StringTok{"Red"}\NormalTok{, }\StringTok{"Yellow"}\NormalTok{, }\StringTok{"Green"}\NormalTok{, }\StringTok{"Blue"}\NormalTok{, }\StringTok{"Black"}\NormalTok{))}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Ahora voy a sacar un plot para ver la relación entre la edad y el sexo
 de las personas que están en consulta
 
@@ -468,6 +519,30 @@ de las personas que están en consulta
 
 \includegraphics{codigo_files/figure-latex/grafico_edad_sexo-1.pdf}
 
+Lo pasamos a PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GráficoEdad-Sexo.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(matriz.pacientes.datos[,}\DecValTok{1}\NormalTok{], matriz.pacientes.datos[,}\DecValTok{2}\NormalTok{], }\DataTypeTok{xlab=}\StringTok{"Edad"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Sexo (0 - mujer, 1 - hombre)"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Edad & Sexo"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Otro plot para ver la correlación entre ser agresivo y ser impulsivo
 
 \begin{Shaded}
@@ -475,11 +550,36 @@ Otro plot para ver la correlación entre ser agresivo y ser impulsivo
 \NormalTok{rf <-}\StringTok{ }\KeywordTok{colorRampPalette}\NormalTok{(}\KeywordTok{rev}\NormalTok{(}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{4}\NormalTok{,}\StringTok{'Spectral'}\NormalTok{)))}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(matriz.pacientes.datos[, }\DecValTok{23}\NormalTok{], matriz.pacientes.datos[, }\DecValTok{24}\NormalTok{])}
 \NormalTok{h <-}\StringTok{ }\KeywordTok{hexbin}\NormalTok{(df)}
+
 \KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Agresivo"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Agresivo Vs Impulsivo"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/grafico_agresivo_impulsivo-1.pdf}
+
+Lo pasamos a PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoAgresivoVsImpulsivo.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Agresivo"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Agresivo Vs Impulsivo"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 Otro plot similar para ver la relación de ser inhibido e impulsivo
 
@@ -487,11 +587,36 @@ Otro plot similar para ver la relación de ser inhibido e impulsivo
 \begin{Highlighting}[]
 \NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(matriz.pacientes.datos[, }\DecValTok{21}\NormalTok{], matriz.pacientes.datos[, }\DecValTok{24}\NormalTok{])}
 \NormalTok{h <-}\StringTok{ }\KeywordTok{hexbin}\NormalTok{(df)}
+
 \KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Inhibido"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Inhibido Vs Impulsivo"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/grafico_inhibido_impulsivo-1.pdf}
+
+Lo guardo en PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoInhibidoVsImpulsivo.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Inhibido"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Inhibido Vs Impulsivo"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 Voy a ver la relación entre el razonamiento emocional (actuar según tus
 sentimientos) y la impulsividad
@@ -500,11 +625,36 @@ sentimientos) y la impulsividad
 \begin{Highlighting}[]
 \NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(matriz.pacientes.datos[, }\DecValTok{20}\NormalTok{], matriz.pacientes.datos[, }\DecValTok{24}\NormalTok{])}
 \NormalTok{h <-}\StringTok{ }\KeywordTok{hexbin}\NormalTok{(df)}
+
 \KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Razonamiento Emocional"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Razonamiento Emocional Vs Impulsivo"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/grafico_razEm_Impulsivo-1.pdf}
+
+Lo guardo en PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoRazonamientoEmocionalVsImpulsivo.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Razonamiento Emocional"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Razonamiento Emocional Vs Impulsivo"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 Ahora quiero sacar una relación entre ser agresivo y ver el grupo en el
 que están
@@ -514,11 +664,36 @@ que están
 \NormalTok{rf <-}\StringTok{ }\KeywordTok{colorRampPalette}\NormalTok{(}\KeywordTok{rev}\NormalTok{(}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{4}\NormalTok{,}\StringTok{'Spectral'}\NormalTok{)))}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(matriz.pacientes.datos[, }\DecValTok{23}\NormalTok{], matriz.pacientes.etiquetas[, }\DecValTok{25}\NormalTok{])}
 \NormalTok{h <-}\StringTok{ }\KeywordTok{hexbin}\NormalTok{(df)}
+
 \KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Agresivo"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Grupo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Agresivo Y Grupo Real"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/grafico_agresivo_grupo-1.pdf}
+
+Lo guardo en PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoAgresivoVsGrupo.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Agresivo"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Grupo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Agresivo Y Grupo Real"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 Voy a hacer lo mismo con la impulsividad
 
@@ -527,11 +702,36 @@ Voy a hacer lo mismo con la impulsividad
 \NormalTok{rf <-}\StringTok{ }\KeywordTok{colorRampPalette}\NormalTok{(}\KeywordTok{rev}\NormalTok{(}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{4}\NormalTok{,}\StringTok{'Spectral'}\NormalTok{)))}
 \NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(matriz.pacientes.datos[, }\DecValTok{24}\NormalTok{], matriz.pacientes.etiquetas[, }\DecValTok{25}\NormalTok{])}
 \NormalTok{h <-}\StringTok{ }\KeywordTok{hexbin}\NormalTok{(df)}
+
 \KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Grupo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Impulsivo y Grupo Real"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/grafico_impulsivo_grupo-1.pdf}
+
+Lo guardo en PDF:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoImpulsivoVsGrupo.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(h, }\DataTypeTok{colramp=}\NormalTok{rf, }\DataTypeTok{xlab=}\StringTok{"Impulsivo"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"Grupo"}\NormalTok{, }\DataTypeTok{main=}\StringTok{"Impulsivo y Grupo Real"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 De estas gráficas estamos obteniendo información realmente interesante
 antes de la predicción de los datos. He preferido hacer gráficas en 2D
@@ -560,6 +760,31 @@ las variables.
 
 \includegraphics{codigo_files/figure-latex/grafico_correlaciones_variables-1.pdf}
 
+Guardamos la matriz de correlación en PDF para tener mejor
+visualización:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/Corrplot.pdf"}\NormalTok{)}
+
+\KeywordTok{corrplot}\NormalTok{(res.round, }\DataTypeTok{method=}\StringTok{"circle"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Como podemos ver, por ejemplo, resiliencia baja y media tienen una
 correlación de -1, ya que si hay una no hay la otra y viceversa. Esto
 pasa igual con las relaciones entre contexto, ya que buena - trauma,
@@ -572,6 +797,7 @@ Para los cálculos, uso la matriz con el centrado y escalado ya hechos
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{resultado.pca <-}\StringTok{ }\KeywordTok{PCA}\NormalTok{(matriz.pacientes.datos.centscal, }\DataTypeTok{graph =} \OtherTok{FALSE}\NormalTok{)}
+
 \CommentTok{#Con la siguiente línea podemos ver que podemos hacer con esto calculado}
 \KeywordTok{print}\NormalTok{(resultado.pca)}
 \end{Highlighting}
@@ -659,6 +885,30 @@ la gráfica de la varianza acumulada con los valores anteriores:
 
 \includegraphics{codigo_files/figure-latex/PCA_eigenvalues_graph-1.pdf}
 
+Obtengo este gráfico en PDF para tener una mejor visualización:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoEigenvalues.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(plotPCA)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Ahora voy a sacar un ``Factor Map'' de las variables. Esto lo puedo
 hacer gracias a las coordenadas que me da una de las variables tras
 hacer el PCA. Así, voy primero a ver la tabla y luego voy a sacar el
@@ -710,6 +960,30 @@ representarlo. Con esta representación podré sacar algunas conclusiones:
 
 \includegraphics{codigo_files/figure-latex/PCA_Coordinates_Graph-1.pdf}
 
+Exporto a PDF este gráfico de coordenadas:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoVectoresVariablesPCA.pdf"}\NormalTok{)}
+
+\KeywordTok{fviz_pca_var}\NormalTok{(resultado.pca)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Con esto puedo sacar conclusiones al igual que con el gran gráfico de
 correlaciones de variables, solo que esta representación está
 intencionada para más de 2 dimensiones.
@@ -759,6 +1033,31 @@ coordenadas, vamos a representarlos gráficamente:
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/plot_coordendas_individuos-1.pdf}
+
+Exporto a PDF las coordenadas de los individuos:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/GraficoIndividuosPCA.pdf"}\NormalTok{)}
+
+\KeywordTok{fviz_pca_ind}\NormalTok{(resultado.pca)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Se puede ver que la mayoría de los pacientes están en torno al centro,
 mientras que tenemos un outlayer, que es el número 27.
 
@@ -785,6 +1084,8 @@ SIN SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.1neu <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_1Neu =} \KeywordTok{numeric}\NormalTok{(),}
                                         \DataTypeTok{Test_1Neu =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -837,6 +1138,8 @@ verosimilitud, no el error cuadrático medio\ldots{}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.1neu.soft <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_1Neu_soft =} \KeywordTok{numeric}\NormalTok{(),}
                                              \DataTypeTok{Test_1Neu_soft =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -892,6 +1195,8 @@ SIN SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.2neu <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_2Neu =} \KeywordTok{numeric}\NormalTok{(),}
                                         \DataTypeTok{Test_2Neu =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -937,6 +1242,8 @@ CON SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.2neu.soft <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_2Neu_soft =} \KeywordTok{numeric}\NormalTok{(),}
                                              \DataTypeTok{Test_2Neu_soft =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -980,6 +1287,8 @@ SIN SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.3neu <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_3Neu =} \KeywordTok{numeric}\NormalTok{(),}
                                         \DataTypeTok{Test_3Neu =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1025,6 +1334,8 @@ CON SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.3neu.soft <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_3Neu_soft =} \KeywordTok{numeric}\NormalTok{(),}
                                              \DataTypeTok{Test_3Neu_soft =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1074,6 +1385,8 @@ SIN SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.3neu.decay <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_3Neu_decay =} \KeywordTok{numeric}\NormalTok{(),}
                                               \DataTypeTok{Test_3Neu_decay =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1120,6 +1433,8 @@ CON SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.3neu.decay.softmax <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_3Neu_decay_sf =} \KeywordTok{numeric}\NormalTok{(),}
                                                       \DataTypeTok{Test_3Neu_decay_sf =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1167,6 +1482,8 @@ SIN SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.5neu <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_5Neu =} \KeywordTok{numeric}\NormalTok{(),}
                                         \DataTypeTok{Test_5Neu =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1210,6 +1527,8 @@ CON SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.5neu.soft <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_5Neu_soft =} \KeywordTok{numeric}\NormalTok{(),}
                                              \DataTypeTok{Test_5Neu_soft =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1256,6 +1575,8 @@ SIN SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.5neu.decay <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_5Neu_decay =} \KeywordTok{numeric}\NormalTok{(),}
                                               \DataTypeTok{Test_5Neu_decay =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1299,6 +1620,8 @@ CON SOFTMAX
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+
 \NormalTok{dataframe.resultados.5neu.decay.softmax <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Ent_5Neu_decay_sf =} \KeywordTok{numeric}\NormalTok{(),}
                                                       \DataTypeTok{Test_5Neu_decay_sf =} \KeywordTok{numeric}\NormalTok{())}
 
@@ -1375,194 +1698,78 @@ Ahora visualizamos los mejores resultados de cada entrenamiento:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_1Neu,          }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{])}
+\CommentTok{# Obtenemos los máximos de cada columna de test y guardamos:}
+
+\NormalTok{max.1neu <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{2}\NormalTok{])}
+\NormalTok{max.1neu.s <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{4}\NormalTok{])}
+\NormalTok{max.2neu <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{6}\NormalTok{])}
+\NormalTok{max.2neu.s <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{8}\NormalTok{])}
+\NormalTok{max.3neu <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{10}\NormalTok{])}
+\NormalTok{max.3neu.s <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{12}\NormalTok{])}
+\NormalTok{max.3neu.d <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{14}\NormalTok{])}
+\NormalTok{max.3neu.d.s <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{16}\NormalTok{])}
+\NormalTok{max.5neu <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{18}\NormalTok{])}
+\NormalTok{max.5neu.s <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{20}\NormalTok{])}
+\NormalTok{max.5neu.d <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{22}\NormalTok{])}
+\NormalTok{max.5neu.d.s <-}\StringTok{ }\KeywordTok{max}\NormalTok{(dataframe.resultados.perceptron[, }\DecValTok{24}\NormalTok{])}
+
+\NormalTok{array.maximos.perceptron <-}\StringTok{ }\KeywordTok{c}\NormalTok{(max.1neu, }
+\NormalTok{                              max.1neu.s, }
+\NormalTok{                              max.2neu,}
+\NormalTok{                              max.2neu.s,}
+\NormalTok{                              max.3neu,}
+\NormalTok{                              max.3neu.s,}
+\NormalTok{                              max.3neu.d, }
+\NormalTok{                              max.3neu.d.s, }
+\NormalTok{                              max.5neu, }
+\NormalTok{                              max.5neu.s, }
+\NormalTok{                              max.5neu.d, }
+\NormalTok{                              max.5neu.d.s)}
+
+\KeywordTok{barplot}\NormalTok{(array.maximos.perceptron,}
+        \DataTypeTok{main =} \StringTok{"Mejores Resultados en Test con Perceptrones"}\NormalTok{,}
+        \DataTypeTok{xlab =} \StringTok{"Tipo de Perceptrón",}
+\StringTok{        ylab = "}\KeywordTok{Acierto}\NormalTok{ (Tanto por }\DecValTok{1}\NormalTok{)}\StringTok{",}
+\StringTok{        names.arg = c("}\DecValTok{1}\NormalTok{ Neu}\StringTok{", "}\DecValTok{1}\NormalTok{ Neu Soft}\StringTok{", }
+\StringTok{                      "}\DecValTok{2}\NormalTok{ Neu}\StringTok{", "}\DecValTok{2}\NormalTok{ Neu Soft}\StringTok{", }
+\StringTok{                      "}\DecValTok{3}\NormalTok{ Neu}\StringTok{", "}\DecValTok{3}\NormalTok{ Neu Soft}\StringTok{", "}\DecValTok{3}\NormalTok{ Neu Decay}\StringTok{", "}\DecValTok{3}\NormalTok{ Neu Soft Decay}\StringTok{", }
+\StringTok{                      "}\DecValTok{5}\NormalTok{ Neu}\StringTok{", "}\DecValTok{5}\NormalTok{ Neu Soft}\StringTok{", "}\DecValTok{5}\NormalTok{ Neu Decay}\StringTok{", "}\DecValTok{5}\NormalTok{ Neu Soft Decay}\StringTok{")}
+\StringTok{      )}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-##     Ent_1Neu Test_1Neu
-## 11 0.6181818 0.5833333
-## 16 0.6909091 0.5833333
-## 17 0.6181818 0.5833333
-## 4  0.6181818 0.5000000
-## 7  0.6727273 0.5000000
-## 9  0.6727273 0.5000000
-\end{verbatim}
+\includegraphics{codigo_files/figure-latex/analisis_resultados_perceptron-1.pdf}
+
+Exporto a PDF este barplot:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_1Neu_soft,     }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{3}\OperatorTok{:}\DecValTok{4}\NormalTok{])}
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/BarplotResultadosPerceptron.pdf"}\NormalTok{)}
+
+\KeywordTok{barplot}\NormalTok{(array.maximos.perceptron,}
+        \DataTypeTok{main =} \StringTok{"Mejores Resultados en Test con Perceptrones"}\NormalTok{,}
+        \DataTypeTok{xlab =} \StringTok{"Tipo de Perceptrón",}
+\StringTok{        ylab = "}\KeywordTok{Acierto}\NormalTok{ (Tanto por }\DecValTok{1}\NormalTok{)}\StringTok{",}
+\StringTok{        names.arg = c("}\DecValTok{1}\NormalTok{ Neu}\StringTok{", "}\DecValTok{1}\NormalTok{ Neu Soft}\StringTok{", }
+\StringTok{                      "}\DecValTok{2}\NormalTok{ Neu}\StringTok{", "}\DecValTok{2}\NormalTok{ Neu Soft}\StringTok{", }
+\StringTok{                      "}\DecValTok{3}\NormalTok{ Neu}\StringTok{", "}\DecValTok{3}\NormalTok{ Neu Soft}\StringTok{", "}\DecValTok{3}\NormalTok{ Neu Decay}\StringTok{", "}\DecValTok{3}\NormalTok{ Neu Soft Decay}\StringTok{", }
+\StringTok{                      "}\DecValTok{5}\NormalTok{ Neu}\StringTok{", "}\DecValTok{5}\NormalTok{ Neu Soft}\StringTok{", "}\DecValTok{5}\NormalTok{ Neu Decay}\StringTok{", "}\DecValTok{5}\NormalTok{ Neu Soft Decay}\StringTok{")}
+\StringTok{      )}
+
+\StringTok{dev.off}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##    Ent_1Neu_soft Test_1Neu_soft
-## 4      0.6000000      0.5833333
-## 20     0.6181818      0.5833333
-## 7      0.6181818      0.5000000
-## 9      0.6181818      0.5000000
-## 13     0.4909091      0.5000000
-## 15     0.6363636      0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_2neu,          }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{5}\OperatorTok{:}\DecValTok{6}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##     Ent_2Neu Test_2neu
-## 10 0.6181818 0.6666667
-## 19 0.4727273 0.6666667
-## 18 0.6000000 0.5833333
-## 2  0.6181818 0.5000000
-## 3  0.8363636 0.5000000
-## 4  0.8181818 0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_2neu_soft,     }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{7}\OperatorTok{:}\DecValTok{8}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##    Ent_2Neu_soft Test_2neu_soft
-## 10     0.5833333      0.5833333
-## 17     0.5833333      0.5833333
-## 2      0.5000000      0.5000000
-## 5      0.5000000      0.5000000
-## 6      0.5000000      0.5000000
-## 8      0.5000000      0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_3neu,          }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{9}\OperatorTok{:}\DecValTok{10}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##     Ent_3Neu Test_3neu
-## 13 0.6363636 0.5833333
-## 15 0.8363636 0.5833333
-## 1  0.6363636 0.5000000
-## 3  0.8181818 0.5000000
-## 5  0.6000000 0.5000000
-## 9  0.8000000 0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_3neu_soft,     }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{11}\OperatorTok{:}\DecValTok{12}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##    Ent_3Neu_soft Test_3neu_soft
-## 2      0.8181818      0.5833333
-## 1      0.8727273      0.5000000
-## 4      0.7818182      0.5000000
-## 6      0.8545455      0.5000000
-## 9      0.8545455      0.5000000
-## 10     0.8363636      0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_3neu_decay,    }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{13}\OperatorTok{:}\DecValTok{14}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##   Ent_3Neu_decay Test_3neu_decay
-## 1      0.6000000             0.5
-## 2      0.6000000             0.5
-## 3      0.6181818             0.5
-## 5      0.6000000             0.5
-## 8      0.6000000             0.5
-## 9      0.6181818             0.5
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_3neu_decay_sf, }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{15}\OperatorTok{:}\DecValTok{16}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##    Ent_3Neu_decay_sf Test_3neu_decay_sf
-## 6          0.8545455          0.5833333
-## 7          0.8545455          0.5833333
-## 4          0.8909091          0.5000000
-## 8          0.8909091          0.5000000
-## 10         0.8909091          0.5000000
-## 12         0.9272727          0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_5neu,          }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{17}\OperatorTok{:}\DecValTok{18}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##     Ent_5Neu Test_5neu
-## 6  0.4727273 0.7500000
-## 10 0.8909091 0.6666667
-## 9  0.4909091 0.5833333
-## 13 0.5272727 0.5833333
-## 2  0.6363636 0.5000000
-## 3  0.9090909 0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_5neu_soft,     }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{19}\OperatorTok{:}\DecValTok{20}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##    Ent_5Neu_soft Test_5neu_soft
-## 5      0.9454545      0.5833333
-## 10     0.9454545      0.5833333
-## 16     0.9636364      0.5833333
-## 1      0.9636364      0.5000000
-## 3      0.8909091      0.5000000
-## 6      0.9454545      0.5000000
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_5neu_decay,    }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{21}\OperatorTok{:}\DecValTok{22}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##    Ent_5Neu_decay Test_5neu_decay
-## 3       0.8545455       0.5833333
-## 6       0.8727273       0.5833333
-## 8       0.8727273       0.5833333
-## 9       0.8727273       0.5833333
-## 11      0.8909091       0.5833333
-## 12      0.8363636       0.5833333
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{head}\NormalTok{(dataframe.resultados.perceptron[}\KeywordTok{order}\NormalTok{(dataframe.resultados.perceptron}\OperatorTok{$}\NormalTok{Test_5neu_decay_sf, }\DataTypeTok{decreasing =}\NormalTok{ T), }\DecValTok{23}\OperatorTok{:}\DecValTok{24}\NormalTok{])}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##    Ent_5Neu_decay_sf Test_5neu_decay_sf
-## 11         0.9636364          0.6666667
-## 7          0.9636364          0.5833333
-## 12         0.9636364          0.5833333
-## 16         0.9636364          0.5833333
-## 4          0.9636364          0.5000000
-## 9          0.9636364          0.5000000
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
 \end{verbatim}
 
 \section{Obtención de Resultados de
@@ -1572,7 +1779,7 @@ Importo los datos:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{dataset.resultados <-}\StringTok{ }\KeywordTok{read.csv2}\NormalTok{(}\StringTok{"Resultados.txt"}\NormalTok{)}
+\NormalTok{dataset.resultados <-}\StringTok{ }\KeywordTok{read.csv2}\NormalTok{(}\StringTok{"Datos/Resultados.txt"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1590,7 +1797,7 @@ Ahora voy a sacar un gráfico interactivo donde comparo los resultados.
 \end{Highlighting}
 \end{Shaded}
 
-\hypertarget{htmlwidget-ad51aea8efa160d5efb0}{}
+\hypertarget{htmlwidget-a81357ce590ddd8ee8c2}{}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1636,13 +1843,15 @@ total de los valores. Por eso, empezaremos por K = 8:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+
 \NormalTok{prediccion.knn.}\DecValTok{8}\NormalTok{ <-}\StringTok{ }\KeywordTok{knn}\NormalTok{(}\DataTypeTok{train =}\NormalTok{ conjuntoEntrenamiento, }\DataTypeTok{test =}\NormalTok{ conjuntoTest, }\DataTypeTok{cl =}\NormalTok{ etiquetasEntrenamiento, }\DataTypeTok{k =} \DecValTok{8}\NormalTok{)}
 \NormalTok{prediccion.knn.}\DecValTok{8}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] 1 2 2 1 2 1 2 2 4 1 2 2
+##  [1] 1 2 2 1 2 1 2 2 2 1 2 2
 ## Levels: 1 2 3 4
 \end{verbatim}
 
@@ -1670,73 +1879,6 @@ Sacamos crosstable:
 ## 
 ##  
 ##               | prediccion.knn.8 
-## etiquetasTest |         1 |         2 |         4 | Row Total | 
-## --------------|-----------|-----------|-----------|-----------|
-##             1 |         1 |         3 |         0 |         4 | 
-##               |     0.250 |     0.750 |     0.000 |     0.333 | 
-##               |     0.250 |     0.429 |     0.000 |           | 
-##               |     0.083 |     0.250 |     0.000 |           | 
-## --------------|-----------|-----------|-----------|-----------|
-##             2 |         1 |         2 |         1 |         4 | 
-##               |     0.250 |     0.500 |     0.250 |     0.333 | 
-##               |     0.250 |     0.286 |     1.000 |           | 
-##               |     0.083 |     0.167 |     0.083 |           | 
-## --------------|-----------|-----------|-----------|-----------|
-##             3 |         0 |         2 |         0 |         2 | 
-##               |     0.000 |     1.000 |     0.000 |     0.167 | 
-##               |     0.000 |     0.286 |     0.000 |           | 
-##               |     0.000 |     0.167 |     0.000 |           | 
-## --------------|-----------|-----------|-----------|-----------|
-##             4 |         2 |         0 |         0 |         2 | 
-##               |     1.000 |     0.000 |     0.000 |     0.167 | 
-##               |     0.500 |     0.000 |     0.000 |           | 
-##               |     0.167 |     0.000 |     0.000 |           | 
-## --------------|-----------|-----------|-----------|-----------|
-##  Column Total |         4 |         7 |         1 |        12 | 
-##               |     0.333 |     0.583 |     0.083 |           | 
-## --------------|-----------|-----------|-----------|-----------|
-## 
-## 
-\end{verbatim}
-
-\subsubsection{Para K = 6}\label{para-k-6}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{prediccion.knn.}\DecValTok{6}\NormalTok{ <-}\StringTok{ }\KeywordTok{knn}\NormalTok{(}\DataTypeTok{train =}\NormalTok{ conjuntoEntrenamiento, }\DataTypeTok{test =}\NormalTok{ conjuntoTest, }\DataTypeTok{cl =}\NormalTok{ etiquetasEntrenamiento, }\DataTypeTok{k =} \DecValTok{6}\NormalTok{)}
-\NormalTok{prediccion.knn.}\DecValTok{6}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##  [1] 1 2 2 1 2 1 2 2 2 1 2 2
-## Levels: 1 2 3 4
-\end{verbatim}
-
-Obtenemos la crosstable:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{CrossTable}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ etiquetasTest , }\DataTypeTok{y =}\NormalTok{ prediccion.knn.}\DecValTok{6}\NormalTok{, }\DataTypeTok{prop.chisq =} \OtherTok{FALSE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## 
-##  
-##    Cell Contents
-## |-------------------------|
-## |                       N |
-## |           N / Row Total |
-## |           N / Col Total |
-## |         N / Table Total |
-## |-------------------------|
-## 
-##  
-## Total Observations in Table:  12 
-## 
-##  
-##               | prediccion.knn.6 
 ## etiquetasTest |         1 |         2 | Row Total | 
 ## --------------|-----------|-----------|-----------|
 ##             1 |         1 |         3 |         4 | 
@@ -1766,17 +1908,88 @@ Obtenemos la crosstable:
 ## 
 \end{verbatim}
 
+\subsubsection{Para K = 6}\label{para-k-6}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{prediccion.knn.}\DecValTok{6}\NormalTok{ <-}\StringTok{ }\KeywordTok{knn}\NormalTok{(}\DataTypeTok{train =}\NormalTok{ conjuntoEntrenamiento, }\DataTypeTok{test =}\NormalTok{ conjuntoTest, }\DataTypeTok{cl =}\NormalTok{ etiquetasEntrenamiento, }\DataTypeTok{k =} \DecValTok{6}\NormalTok{)}
+\NormalTok{prediccion.knn.}\DecValTok{6}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 4 2 2 1 2 1 2 2 2 1 2 2
+## Levels: 1 2 3 4
+\end{verbatim}
+
+Obtenemos la crosstable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{CrossTable}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ etiquetasTest , }\DataTypeTok{y =}\NormalTok{ prediccion.knn.}\DecValTok{6}\NormalTok{, }\DataTypeTok{prop.chisq =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  12 
+## 
+##  
+##               | prediccion.knn.6 
+## etiquetasTest |         1 |         2 |         4 | Row Total | 
+## --------------|-----------|-----------|-----------|-----------|
+##             1 |         0 |         3 |         1 |         4 | 
+##               |     0.000 |     0.750 |     0.250 |     0.333 | 
+##               |     0.000 |     0.375 |     1.000 |           | 
+##               |     0.000 |     0.250 |     0.083 |           | 
+## --------------|-----------|-----------|-----------|-----------|
+##             2 |         1 |         3 |         0 |         4 | 
+##               |     0.250 |     0.750 |     0.000 |     0.333 | 
+##               |     0.333 |     0.375 |     0.000 |           | 
+##               |     0.083 |     0.250 |     0.000 |           | 
+## --------------|-----------|-----------|-----------|-----------|
+##             3 |         0 |         2 |         0 |         2 | 
+##               |     0.000 |     1.000 |     0.000 |     0.167 | 
+##               |     0.000 |     0.250 |     0.000 |           | 
+##               |     0.000 |     0.167 |     0.000 |           | 
+## --------------|-----------|-----------|-----------|-----------|
+##             4 |         2 |         0 |         0 |         2 | 
+##               |     1.000 |     0.000 |     0.000 |     0.167 | 
+##               |     0.667 |     0.000 |     0.000 |           | 
+##               |     0.167 |     0.000 |     0.000 |           | 
+## --------------|-----------|-----------|-----------|-----------|
+##  Column Total |         3 |         8 |         1 |        12 | 
+##               |     0.250 |     0.667 |     0.083 |           | 
+## --------------|-----------|-----------|-----------|-----------|
+## 
+## 
+\end{verbatim}
+
 \subsubsection{Para k = 10}\label{para-k-10}
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+
 \NormalTok{prediccion.knn.}\DecValTok{10}\NormalTok{ <-}\StringTok{ }\KeywordTok{knn}\NormalTok{(}\DataTypeTok{train =}\NormalTok{ conjuntoEntrenamiento, }\DataTypeTok{test =}\NormalTok{ conjuntoTest, }\DataTypeTok{cl =}\NormalTok{ etiquetasEntrenamiento, }\DataTypeTok{k =} \DecValTok{10}\NormalTok{)}
 \NormalTok{prediccion.knn.}\DecValTok{10}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] 1 2 1 1 2 1 2 2 4 1 2 2
+##  [1] 1 2 2 1 2 1 2 2 4 1 2 2
 ## Levels: 1 2 3 4
 \end{verbatim}
 
@@ -1806,28 +2019,28 @@ Obtenemos la crosstable:
 ##               | prediccion.knn.10 
 ## etiquetasTest |         1 |         2 |         4 | Row Total | 
 ## --------------|-----------|-----------|-----------|-----------|
-##             1 |         2 |         2 |         0 |         4 | 
-##               |     0.500 |     0.500 |     0.000 |     0.333 | 
-##               |     0.400 |     0.333 |     0.000 |           | 
-##               |     0.167 |     0.167 |     0.000 |           | 
+##             1 |         1 |         3 |         0 |         4 | 
+##               |     0.250 |     0.750 |     0.000 |     0.333 | 
+##               |     0.250 |     0.429 |     0.000 |           | 
+##               |     0.083 |     0.250 |     0.000 |           | 
 ## --------------|-----------|-----------|-----------|-----------|
 ##             2 |         1 |         2 |         1 |         4 | 
 ##               |     0.250 |     0.500 |     0.250 |     0.333 | 
-##               |     0.200 |     0.333 |     1.000 |           | 
+##               |     0.250 |     0.286 |     1.000 |           | 
 ##               |     0.083 |     0.167 |     0.083 |           | 
 ## --------------|-----------|-----------|-----------|-----------|
 ##             3 |         0 |         2 |         0 |         2 | 
 ##               |     0.000 |     1.000 |     0.000 |     0.167 | 
-##               |     0.000 |     0.333 |     0.000 |           | 
+##               |     0.000 |     0.286 |     0.000 |           | 
 ##               |     0.000 |     0.167 |     0.000 |           | 
 ## --------------|-----------|-----------|-----------|-----------|
 ##             4 |         2 |         0 |         0 |         2 | 
 ##               |     1.000 |     0.000 |     0.000 |     0.167 | 
-##               |     0.400 |     0.000 |     0.000 |           | 
+##               |     0.500 |     0.000 |     0.000 |           | 
 ##               |     0.167 |     0.000 |     0.000 |           | 
 ## --------------|-----------|-----------|-----------|-----------|
-##  Column Total |         5 |         6 |         1 |        12 | 
-##               |     0.417 |     0.500 |     0.083 |           | 
+##  Column Total |         4 |         7 |         1 |        12 | 
+##               |     0.333 |     0.583 |     0.083 |           | 
 ## --------------|-----------|-----------|-----------|-----------|
 ## 
 ## 
@@ -1843,7 +2056,7 @@ Ahora voy a implementar una solución mediante Random Forest:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1000}\NormalTok{) }\CommentTok{#Pongo una seed para reproducibilidad}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{3}\NormalTok{) }\CommentTok{#Pongo una seed para reproducibilidad}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1865,13 +2078,13 @@ Forest, y ejecutarlo\ldots{}
 ##                      Number of trees: 300
 ## No. of variables tried at each split: 4
 ## 
-##         OOB estimate of  error rate: 49.25%
+##         OOB estimate of  error rate: 50.75%
 ## Confusion matrix:
 ##   1  2 3 4 class.error
-## 1 5  8 1 3   0.7058824
-## 2 1 26 1 2   0.1333333
+## 1 5  9 1 2   0.7058824
+## 2 4 26 0 0   0.1333333
 ## 3 2  5 0 1   1.0000000
-## 4 6  3 0 3   0.7500000
+## 4 7  3 0 2   0.8333333
 \end{verbatim}
 
 Aquí podemos ver la matriz de confusión, de la que obtenemos también el
@@ -1907,6 +2120,31 @@ importancia de las variables en este modelo:
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/importance_graphs_RF-2.pdf}
+
+Exporto a PDF los gráficos obtenidos:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/ResultadosRandomForest.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(model, }\DataTypeTok{main=}\StringTok{"Random Forest"}\NormalTok{)}
+\KeywordTok{varImpPlot}\NormalTok{(model, }\DataTypeTok{main =} \StringTok{"Random Forest - MDA y Gini"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 Vamos a interpretar estos datos del modelo:
 
@@ -1954,6 +2192,8 @@ Ahora entrenamos el nuevo modelo:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+
 \NormalTok{model_centscal <-}\StringTok{ }\KeywordTok{randomForest}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(grupo) }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.centscal.grupo, }\DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{ntree =} \DecValTok{200}\NormalTok{)}
 \NormalTok{model_centscal}
 \end{Highlighting}
@@ -1967,12 +2207,12 @@ Ahora entrenamos el nuevo modelo:
 ##                      Number of trees: 200
 ## No. of variables tried at each split: 4
 ## 
-##         OOB estimate of  error rate: 50.75%
+##         OOB estimate of  error rate: 49.25%
 ## Confusion matrix:
 ##   1  2 3 4 class.error
-## 1 5  9 0 3   0.7058824
-## 2 4 25 1 0   0.1666667
-## 3 1  6 0 1   1.0000000
+## 1 5  9 1 2   0.7058824
+## 2 4 26 0 0   0.1333333
+## 3 2  5 0 1   1.0000000
 ## 4 6  3 0 3   0.7500000
 \end{verbatim}
 
@@ -1994,6 +2234,33 @@ mismo en los grafos de importancia:
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/importance_graphs_RF_centscal-2.pdf}
+
+Exporto a PDF estos resultados:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lo exporto de nuevo a PDF}
+
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/ResultadosRandomForestCentScal.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(model_centscal, }\DataTypeTok{main=}\StringTok{"Random Forest Con Centrado y Escalado"}\NormalTok{)}
+\KeywordTok{varImpPlot}\NormalTok{(model_centscal, }\DataTypeTok{main=}\StringTok{"Random Forest con Centrado y Escalado - MDA y Gini"}\NormalTok{)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
 
 En este caso, el MDA me dice que el sexo es la gran lacra de este
 modelo, mientras que la impulsividad sigue siendo el factor más
@@ -2035,6 +2302,8 @@ nuevo:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+
 \NormalTok{model_new <-}\StringTok{ }\KeywordTok{randomForest}\NormalTok{(}\KeywordTok{as.factor}\NormalTok{(grupo) }\OperatorTok{~}\StringTok{ }\NormalTok{., }\DataTypeTok{data =}\NormalTok{ dataset.randomforest, }\DataTypeTok{importance =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{ntree =} \DecValTok{200}\NormalTok{)}
 \NormalTok{model_new}
 \end{Highlighting}
@@ -2051,10 +2320,10 @@ nuevo:
 ##         OOB estimate of  error rate: 46.27%
 ## Confusion matrix:
 ##   1  2 3 4 class.error
-## 1 6  7 0 4   0.6470588
-## 2 3 27 0 0   0.1000000
-## 3 1  6 0 1   1.0000000
-## 4 6  3 0 3   0.7500000
+## 1 4  9 0 4   0.7647059
+## 2 2 27 0 1   0.1000000
+## 3 2  5 0 1   1.0000000
+## 4 4  3 0 5   0.5833333
 \end{verbatim}
 
 Vamos a ver ahora ls gráficos\ldots{}
@@ -2075,6 +2344,31 @@ Vamos a ver ahora ls gráficos\ldots{}
 
 \includegraphics{codigo_files/figure-latex/importance_graphs_RF_new-2.pdf}
 
+Exporto a PDF estos resultados del Random Forest corregido:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/ResultadosRandomForestMejorado.pdf"}\NormalTok{)}
+
+\KeywordTok{plot}\NormalTok{(model_new, }\DataTypeTok{main=}\StringTok{"Random Forest Nuevo"}\NormalTok{)}
+\KeywordTok{varImpPlot}\NormalTok{(model_new, }\DataTypeTok{main =} \StringTok{"Random Forest Nuevo - MDA y Gini"}\NormalTok{) }
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
 Como se puede observar, ahora hay nuevas variables que ``lastran'' el
 resultado del Random Forest. De todas maneras, hemos conseguido una
 bajada del 50\% de media en OOB Error al 45\% de media en OOB Error
@@ -2085,6 +2379,8 @@ Ahora lo voy a hacer con 10 fold X Validation:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{4}\NormalTok{)}
+
 \NormalTok{result <-}\StringTok{ }\KeywordTok{rfcv}\NormalTok{(dataset[, }\DecValTok{2}\OperatorTok{:}\DecValTok{26}\NormalTok{], }\KeywordTok{as.factor}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{grupo), }\DataTypeTok{cv.fold=}\DecValTok{10}\NormalTok{)}
 \KeywordTok{head}\NormalTok{(result)}
 \end{Highlighting}
@@ -2095,28 +2391,28 @@ Ahora lo voy a hacer con 10 fold X Validation:
 ## [1] 25 12  6  3  1
 ## 
 ## $error.cv
-##         25         12          6          3          1 
-## 0.17910448 0.14925373 0.08955224 0.17910448 0.00000000 
+##        25        12         6         3         1 
+## 0.1940299 0.1492537 0.1194030 0.1343284 0.0000000 
 ## 
 ## $predicted
 ## $predicted$`25`
-##  [1] 2 2 2 4 2 4 2 2 2 2 2 1 2 1 1 4 2 2 2 2 2 2 1 4 1 2 4 2 2 2 2 4 2 2 2 2 2 4 2 1 2 1 1 2 2 2 4 2
-## [49] 1 2 4 1 2 2 1 1 3 1 4 2 1 1 3 2 4 2 1
+##  [1] 2 2 2 4 2 4 2 2 2 2 2 1 2 1 2 4 2 2 2 2 2 2 1 4 1 2 4 4 2 2 2 4 2 2 2 2 2 4 2 1 2 1 1 2 2 2 4 2
+## [49] 1 2 4 1 2 2 1 1 2 1 4 2 1 1 3 2 4 2 1
 ## Levels: 1 2 3 4
 ## 
 ## $predicted$`12`
-##  [1] 2 2 2 4 2 4 2 1 2 2 2 1 2 1 1 4 2 2 2 2 2 2 1 4 2 2 4 4 2 2 2 4 2 2 2 2 2 4 2 1 2 1 1 2 2 2 4 2
-## [49] 1 2 4 1 2 3 1 1 3 1 4 2 1 1 3 2 4 2 1
+##  [1] 1 2 2 4 2 4 2 1 2 2 2 1 2 1 1 4 4 2 2 2 2 2 1 4 1 2 4 4 2 2 2 4 2 2 2 2 2 4 2 1 2 1 1 2 2 2 4 2
+## [49] 1 2 4 1 2 3 1 1 2 1 4 2 1 2 2 2 4 2 1
 ## Levels: 1 2 3 4
 ## 
 ## $predicted$`6`
 ##  [1] 1 2 2 4 2 4 2 1 2 2 2 1 2 1 1 4 2 2 2 2 2 2 1 4 1 3 4 4 2 2 2 4 2 2 2 2 2 4 2 1 2 1 1 2 2 2 4 2
-## [49] 1 2 4 1 2 3 1 1 3 1 4 2 2 1 3 2 4 2 1
+## [49] 1 2 4 1 2 3 1 1 2 1 4 2 1 1 3 2 4 2 1
 ## Levels: 1 2 3 4
 ## 
 ## $predicted$`3`
-##  [1] 1 2 2 4 2 4 2 2 2 2 2 1 2 1 2 4 4 2 2 2 2 2 2 4 1 2 4 2 2 2 2 4 2 2 2 2 2 4 2 1 2 1 1 2 2 2 4 2
-## [49] 1 2 4 1 2 2 1 1 2 1 4 2 2 1 3 2 4 2 1
+##  [1] 1 2 2 4 2 4 2 1 2 2 2 1 2 1 1 4 4 2 2 2 2 2 1 4 1 2 4 4 2 2 2 2 2 2 2 2 2 2 2 1 2 1 1 2 2 2 4 2
+## [49] 1 2 4 1 2 2 1 1 2 1 4 2 2 1 2 2 4 2 1
 ## Levels: 1 2 3 4
 ## 
 ## $predicted$`1`
@@ -2140,6 +2436,8 @@ Ahora que hemos instalado la librería, vamos a crear el SVM:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
 \NormalTok{modelo.svm <-}\StringTok{ }\KeywordTok{svm}\NormalTok{(matriz.pacientes.datos.centscal, }\KeywordTok{as.factor}\NormalTok{(dataset[, }\DecValTok{26}\NormalTok{]), }\DataTypeTok{kernel =} \StringTok{"linear"}\NormalTok{) }\CommentTok{# Al poner los grupos como factor, estoy consiguiendo que no sean continuos para el modelo, sino "discretos", ya que los factor no son valores que puedan ser continuos. Con esto consigo una clasificación.}
 \KeywordTok{summary}\NormalTok{(modelo.svm)}
 \end{Highlighting}
@@ -2175,6 +2473,8 @@ Ahora que tenemos creado este primer modelo, toca predecir:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
 \NormalTok{prediccion <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(modelo.svm, matriz.pacientes.datos.centscal)}
 \NormalTok{prediccion}
 \end{Highlighting}
@@ -2222,6 +2522,8 @@ Ahora que hemos predicho, tenemos que sacar la matriz de confusión:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
 \NormalTok{modelo_svm.radial <-}\StringTok{ }\KeywordTok{svm}\NormalTok{(matriz.pacientes.datos.centscal, }\KeywordTok{as.factor}\NormalTok{(dataset[, }\DecValTok{26}\NormalTok{]), }\DataTypeTok{kernel=}\StringTok{"radial"}\NormalTok{)}
 \KeywordTok{summary}\NormalTok{(modelo_svm.radial)}
 \end{Highlighting}
@@ -2257,6 +2559,8 @@ Ahora que tenemos creado este primer modelo, toca predecir:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+
 \NormalTok{prediccion.radial <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(modelo_svm.radial, matriz.pacientes.datos.centscal)}
 \NormalTok{prediccion.radial}
 \end{Highlighting}
@@ -2323,13 +2627,23 @@ con los 4 grupos de trastornos que tengo.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+
 \NormalTok{dd <-}\StringTok{ }\KeywordTok{dist}\NormalTok{(}\KeywordTok{scale}\NormalTok{(dataset[,}\DecValTok{2}\OperatorTok{:}\DecValTok{25}\NormalTok{]), }\DataTypeTok{method =} \StringTok{"euclidean"}\NormalTok{) }\CommentTok{#Nos basamos en la distancia euclídea}
 \NormalTok{hier.clust <-}\StringTok{ }\KeywordTok{hclust}\NormalTok{(dd, }\DataTypeTok{method =} \StringTok{"ward.D2"}\NormalTok{)}
 \NormalTok{colores.dendrograma <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"orange"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"black"}\NormalTok{) }\CommentTok{# Creamos los colores con los que queremos el cluster}
 \NormalTok{cluster.}\DecValTok{4}\NormalTok{ <-}\StringTok{ }\KeywordTok{cutree}\NormalTok{(hier.clust, }\DecValTok{4}\NormalTok{) }\CommentTok{# Cluster jerárquico de 4...}
+\end{Highlighting}
+\end{Shaded}
 
-\KeywordTok{png}\NormalTok{(}\StringTok{"dendrograma_pacientes.png"}\NormalTok{)}
+Exporto a PDF el dendrograma obtenido:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/dendrograma_pacientes.pdf"}\NormalTok{)}
+
 \KeywordTok{plot}\NormalTok{(}\KeywordTok{as.phylo}\NormalTok{(hier.clust), }\DataTypeTok{type =} \StringTok{"fan"}\NormalTok{, }\DataTypeTok{tip.color =}\NormalTok{ colores.dendrograma[cluster.}\DecValTok{4}\NormalTok{], }\DataTypeTok{label.offset =} \FloatTok{0.3}\NormalTok{, }\DataTypeTok{cex =} \FloatTok{0.8}\NormalTok{) }\CommentTok{#Lo pintamos}
+
 \KeywordTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -2352,6 +2666,8 @@ escalado, de tal manera que veamos a ver si hay diferencias:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+
 \NormalTok{dd <-}\StringTok{ }\KeywordTok{dist}\NormalTok{(}\KeywordTok{scale}\NormalTok{(matriz.pacientes.datos.centscal), }\DataTypeTok{method =} \StringTok{"euclidean"}\NormalTok{)}
 \NormalTok{hier.clust <-}\StringTok{ }\KeywordTok{hclust}\NormalTok{(dd, }\DataTypeTok{method =} \StringTok{"ward.D2"}\NormalTok{)}
 \NormalTok{colores.dendrograma <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"orange"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"black"}\NormalTok{)}
@@ -2362,11 +2678,14 @@ escalado, de tal manera que veamos a ver si hay diferencias:
 
 \includegraphics{codigo_files/figure-latex/creacion_clusters_dendrograma_centradoEscalado-1.pdf}
 
+Lo exportamos a PDF tras la creación:
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Ahora la exporto a pdf}
-\KeywordTok{pdf}\NormalTok{(}\StringTok{"dendrograma_pacientes.pdf"}\NormalTok{)}
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/dendrograma_pacientes_centscal.pdf"}\NormalTok{)}
+
 \KeywordTok{plot}\NormalTok{(}\KeywordTok{as.phylo}\NormalTok{(hier.clust), }\DataTypeTok{type =} \StringTok{"fan"}\NormalTok{, }\DataTypeTok{tip.color =}\NormalTok{ colores.dendrograma[cluster.}\DecValTok{4}\NormalTok{], }\DataTypeTok{label.offset =} \FloatTok{0.3}\NormalTok{, }\DataTypeTok{cex =} \FloatTok{0.8}\NormalTok{)}
+
 \KeywordTok{dev.off}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -2392,6 +2711,8 @@ Hacemos el clustering y vemos algunos resultados:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{7}\NormalTok{)}
+
 \NormalTok{datos.kmeans <-}\StringTok{ }\NormalTok{matriz.pacientes.datos }\CommentTok{# Sin la clasificación dentro del dataset}
 
 \NormalTok{clusters <-}\StringTok{ }\KeywordTok{kmeans}\NormalTok{(datos.kmeans, }\DataTypeTok{centers=}\DecValTok{4}\NormalTok{)}
@@ -2401,31 +2722,32 @@ Hacemos el clustering y vemos algunos resultados:
 
 \begin{verbatim}
 ##       edad       sex rel_ctxo_rel_mala rel_ctxo_trauma rel_ctxo_buena    ed_perm   ed_norm
-## 1 30.94118 0.1176471        0.17647059       0.3529412      0.4705882 0.11764706 0.6470588
+## 1 23.82609 0.1739130        0.08695652       0.3043478      0.6086957 0.08695652 0.6956522
 ## 2 16.61111 0.2777778        0.05555556       0.3888889      0.5555556 0.61111111 0.1666667
-## 3 23.82609 0.1739130        0.08695652       0.3043478      0.6086957 0.08695652 0.6956522
+## 3 30.94118 0.1176471        0.17647059       0.3529412      0.4705882 0.11764706 0.6470588
 ## 4 44.44444 0.3333333        0.33333333       0.4444444      0.2222222 0.44444444 0.3333333
 ##     ed_estr  resil_ba   resil_me  resil_al   pen_dic    gen_ex      etiq   fil_men   max_min
-## 1 0.2352941 0.4705882 0.52941176 0.0000000 0.9411765 1.0000000 0.5882353 0.8235294 1.0000000
+## 1 0.2173913 0.4782609 0.52173913 0.0000000 0.9130435 0.9565217 1.0000000 0.7826087 0.9565217
 ## 2 0.2222222 0.9444444 0.05555556 0.0000000 0.8333333 0.9444444 0.7777778 0.7222222 0.9444444
-## 3 0.2173913 0.4782609 0.52173913 0.0000000 0.9130435 0.9565217 1.0000000 0.7826087 0.9565217
+## 3 0.2352941 0.4705882 0.52941176 0.0000000 0.9411765 1.0000000 0.5882353 0.8235294 1.0000000
 ## 4 0.2222222 0.2222222 0.66666667 0.1111111 0.8888889 0.8888889 0.3333333 0.8888889 1.0000000
 ##    conc_arb  pseu_res       deb   raz_emo     inhib      asert     agres    impuls
-## 1 1.0000000 0.6470588 1.0000000 0.7058824 0.5294118 0.23529412 0.2352941 0.7647059
+## 1 1.0000000 0.6956522 1.0000000 0.9130435 0.7826087 0.08695652 0.1304348 0.5652174
 ## 2 0.9444444 0.2222222 0.7777778 0.8333333 0.6666667 0.00000000 0.3333333 0.5000000
-## 3 1.0000000 0.6956522 1.0000000 0.9130435 0.7826087 0.08695652 0.1304348 0.5652174
+## 3 1.0000000 0.6470588 1.0000000 0.7058824 0.5294118 0.23529412 0.2352941 0.7647059
 ## 4 1.0000000 0.3333333 1.0000000 0.5555556 0.5555556 0.33333333 0.1111111 0.6666667
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{clusters}\OperatorTok{$}\NormalTok{cluster}
+\NormalTok{prediccion.kmeans <-}\StringTok{ }\NormalTok{clusters}\OperatorTok{$}\NormalTok{cluster}
+\NormalTok{prediccion.kmeans}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##  [1] 2 2 3 2 3 3 3 3 3 2 1 2 3 2 2 2 4 3 3 3 3 2 4 3 4 2 2 3 4 2 1 3 1 3 2 3 2 1 1 1 1 3 3 2 4 4 1 3
-## [49] 1 1 1 1 4 2 2 4 1 1 2 3 3 1 1 3 1 4 3
+##  [1] 2 2 1 2 1 1 1 1 1 2 3 2 1 2 2 2 4 1 1 1 1 2 4 1 4 2 2 1 4 2 3 1 3 1 2 1 2 3 3 3 3 1 1 2 4 4 3 1
+## [49] 3 3 3 3 4 2 2 4 3 3 2 1 1 3 3 1 3 4 1
 \end{verbatim}
 
 Interpretando estos resultados, obtenemos:
@@ -2485,6 +2807,503 @@ dos componentes principales artificiales:
 \end{Shaded}
 
 \includegraphics{codigo_files/figure-latex/plots_k-means-2.pdf}
+
+Exportamos a PDF los gráficos obtenidos del KMeans:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\StringTok{"Imágenes Obtenidas/ResultadosKmeans.pdf"}\NormalTok{)}
+
+\KeywordTok{clusplot}\NormalTok{(datos.kmeans, clusters}\OperatorTok{$}\NormalTok{cluster, }\DataTypeTok{color =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{main =} \StringTok{"Representación 2D con Clusplot"}\NormalTok{, }\DataTypeTok{labels =} \DecValTok{4}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Comp 1"}\NormalTok{, }\DataTypeTok{ylab =} \StringTok{"Comp 2"}\NormalTok{) }
+\KeywordTok{plotcluster}\NormalTok{(datos.kmeans, clusters}\OperatorTok{$}\NormalTok{cluster)}
+
+\NormalTok{dev.off}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## function (which = dev.cur()) 
+## {
+##     if (which == 1) 
+##         stop("cannot shut down device 1 (the null device)")
+##     .External(C_devoff, as.integer(which))
+##     dev.cur()
+## }
+## <bytecode: 0x0000000015754360>
+## <environment: namespace:grDevices>
+\end{verbatim}
+
+\subsection{Minería de Reglas - Rules}\label{mineria-de-reglas---rules}
+
+Para esto usaremos la librería RWeka, que es la implementación en R de
+Weka. Como matriz de inicio, usaremos la matriz.pacientes.datos, que
+está ya limpia.
+
+\subsubsection{Reglas de Sexo}\label{reglas-de-sexo}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es}
+
+\NormalTok{matriz.pacientes.datos.rm =}\StringTok{ }\NormalTok{matriz.pacientes.datos}
+
+\NormalTok{matriz.pacientes.datos.rm}\OperatorTok{$}\NormalTok{sex <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(matriz.pacientes.datos.rm}\OperatorTok{$}\NormalTok{sex)}
+
+\NormalTok{part_sex <-}\StringTok{ }\KeywordTok{PART}\NormalTok{(sex}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{oneR_sex <-}\StringTok{ }\KeywordTok{OneR}\NormalTok{(sex}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{jrip_sex <-}\StringTok{ }\KeywordTok{JRip}\NormalTok{(sex}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas sexo PART"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas sexo PART"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{part_sex}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## PART decision list
+## ------------------
+## 
+## agres <= 0 AND
+## pen_dic > 0 AND
+## rel_ctxo_trauma <= 0: 0 (34.0/4.0)
+## 
+## gen_ex > 0 AND
+## pen_dic > 0 AND
+## ed_estr <= 0 AND
+## edad <= 32 AND
+## impuls > 0 AND
+## raz_emo > 0 AND
+## edad > 15: 0 (9.0/2.0)
+## 
+## gen_ex > 0 AND
+## agres <= 0 AND
+## ed_norm <= 0: 0 (8.0)
+## 
+## gen_ex > 0 AND
+## pen_dic > 0 AND
+## pseu_res <= 0: 1 (6.0/1.0)
+## 
+## resil_ba <= 0: 0 (8.0/1.0)
+## 
+## : 1 (2.0)
+## 
+## Number of Rules  :   6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Regla sexo OneR"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Regla sexo OneR"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oneR_sex}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## edad:
+##  < 49.5  -> 0
+##  >= 49.5 -> 1
+## (54/67 instances correct)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas sexo JRip"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas sexo JRip"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jrip_sex}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## JRIP rules:
+## ===========
+## 
+##  => sex=0 (67.0/14.0)
+## 
+## Number of Rules : 1
+\end{verbatim}
+
+Como podemos ver, del sexo no podemos sacar ninguna regla demasiado
+fiable, por lo que no podemos predecirlo demasiado bien.
+
+\subsubsection{Reglas de impulsividad}\label{reglas-de-impulsividad}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es}
+
+\NormalTok{matriz.pacientes.datos.rm =}\StringTok{ }\NormalTok{matriz.pacientes.datos}
+
+\NormalTok{matriz.pacientes.datos.rm}\OperatorTok{$}\NormalTok{impuls <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(matriz.pacientes.datos.rm}\OperatorTok{$}\NormalTok{impuls)}
+
+\NormalTok{part_imp <-}\StringTok{ }\KeywordTok{PART}\NormalTok{(impuls}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{oneR_imp <-}\StringTok{ }\KeywordTok{OneR}\NormalTok{(impuls}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{jrip_imp <-}\StringTok{ }\KeywordTok{JRip}\NormalTok{(impuls}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas impulsividad PART"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas impulsividad PART"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{part_imp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## PART decision list
+## ------------------
+## 
+## agres > 0: 1 (14.0)
+## 
+## rel_ctxo_rel_mala <= 0 AND
+## pen_dic > 0 AND
+## ed_perm > 0: 0 (7.0/1.0)
+## 
+## pen_dic > 0 AND
+## rel_ctxo_rel_mala > 0: 1 (6.0)
+## 
+## pen_dic <= 0: 0 (5.0)
+## 
+## sex > 0 AND
+## pseu_res <= 0: 0 (3.0)
+## 
+## rel_ctxo_trauma <= 0 AND
+## etiq > 0 AND
+## inhib > 0 AND
+## pseu_res <= 0: 1 (8.0/1.0)
+## 
+## rel_ctxo_trauma > 0: 1 (8.0/1.0)
+## 
+## etiq > 0 AND
+## inhib > 0 AND
+## edad <= 26: 0 (7.0)
+## 
+## etiq > 0: 1 (7.0/1.0)
+## 
+## : 0 (2.0)
+## 
+## Number of Rules  :   10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Regla impulsividad OneR"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Regla impulsividad OneR"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oneR_imp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## edad:
+##  < 22.5  -> 1
+##  < 25.5  -> 0
+##  < 46.0  -> 1
+##  >= 46.0 -> 0
+## (46/67 instances correct)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas impulsividad JRip"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas impulsividad JRip"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jrip_imp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## JRIP rules:
+## ===========
+## 
+## (agres <= 0) and (edad <= 25) => impuls=0 (29.0/10.0)
+##  => impuls=1 (38.0/7.0)
+## 
+## Number of Rules : 2
+\end{verbatim}
+
+De la impulsividad vemos que es un poco más predecible, pero tampoco
+obtenemos numerosas reglas generales.
+
+\subsubsection{Reglas de agresividad}\label{reglas-de-agresividad}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es}
+
+\NormalTok{matriz.pacientes.datos.rm =}\StringTok{ }\NormalTok{matriz.pacientes.datos}
+
+\NormalTok{matriz.pacientes.datos.rm}\OperatorTok{$}\NormalTok{agres <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(matriz.pacientes.datos.rm}\OperatorTok{$}\NormalTok{agres)}
+
+\NormalTok{part_agr <-}\StringTok{ }\KeywordTok{PART}\NormalTok{(agres}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{oneR_agr <-}\StringTok{ }\KeywordTok{OneR}\NormalTok{(agres}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{jrip_agr <-}\StringTok{ }\KeywordTok{JRip}\NormalTok{(agres}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas agresividad PART"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas agresividad PART"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{part_agr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## PART decision list
+## ------------------
+## 
+## inhib > 0: 0 (44.0)
+## 
+## asert <= 0: 1 (14.0/1.0)
+## 
+## : 0 (9.0/1.0)
+## 
+## Number of Rules  :   3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Regla Agresividad OneR"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Regla Agresividad OneR"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oneR_agr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## inhib:
+##  < 0.5   -> 1
+##  >= 0.5  -> 0
+## (58/67 instances correct)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas agresividad JRip"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas agresividad JRip"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jrip_agr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## JRIP rules:
+## ===========
+## 
+## (inhib <= 0) and (asert <= 0) => agres=1 (14.0/1.0)
+##  => agres=0 (53.0/1.0)
+## 
+## Number of Rules : 2
+\end{verbatim}
+
+\subsubsection{Reglas de grupo}\label{reglas-de-grupo}
+
+Las más importantes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es}
+
+\NormalTok{matriz.pacientes.datos.rm =}\StringTok{ }\NormalTok{matriz.pacientes.datos}
+\NormalTok{matriz.pacientes.datos.rm <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(matriz.pacientes.datos.rm, dataset}\OperatorTok{$}\NormalTok{grupo)}
+
+\NormalTok{matriz.pacientes.datos.rm}\OperatorTok{$}\StringTok{`}\DataTypeTok{dataset$grupo}\StringTok{`}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(matriz.pacientes.datos.rm}\OperatorTok{$}\StringTok{`}\DataTypeTok{dataset$grupo}\StringTok{`}\NormalTok{)}
+
+\NormalTok{part_gru <-}\StringTok{ }\KeywordTok{PART}\NormalTok{(}\StringTok{`}\DataTypeTok{dataset$grupo}\StringTok{`}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{oneR_gru <-}\StringTok{ }\KeywordTok{OneR}\NormalTok{(}\StringTok{`}\DataTypeTok{dataset$grupo}\StringTok{`}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+\NormalTok{jrip_gru <-}\StringTok{ }\KeywordTok{JRip}\NormalTok{(}\StringTok{`}\DataTypeTok{dataset$grupo}\StringTok{`}\OperatorTok{~}\NormalTok{., }\DataTypeTok{data =}\NormalTok{ matriz.pacientes.datos.rm)}
+
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas grupo PART"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas grupo PART"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{part_gru}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## PART decision list
+## ------------------
+## 
+## impuls <= 0 AND
+## fil_men > 0 AND
+## pen_dic > 0 AND
+## resil_me <= 0 AND
+## rel_ctxo_trauma <= 0: 2 (9.0/3.0)
+## 
+## impuls <= 0 AND
+## fil_men <= 0: 2 (6.0)
+## 
+## impuls <= 0 AND
+## resil_ba <= 0 AND
+## pseu_res <= 0: 2 (4.0)
+## 
+## impuls <= 0 AND
+## ed_estr <= 0: 3 (5.0/1.0)
+## 
+## impuls > 0 AND
+## deb > 0 AND
+## resil_ba <= 0 AND
+## ed_estr <= 0 AND
+## sex <= 0 AND
+## ed_perm <= 0 AND
+## pseu_res > 0: 2 (6.0)
+## 
+## impuls > 0 AND
+## gen_ex > 0 AND
+## etiq > 0 AND
+## fil_men > 0 AND
+## rel_ctxo_rel_mala <= 0 AND
+## pseu_res > 0 AND
+## rel_ctxo_trauma <= 0: 1 (5.0/1.0)
+## 
+## impuls > 0 AND
+## gen_ex > 0 AND
+## etiq > 0 AND
+## fil_men <= 0: 4 (3.0)
+## 
+## impuls > 0 AND
+## fil_men <= 0: 1 (3.0/1.0)
+## 
+## impuls <= 0: 2 (2.0)
+## 
+## rel_ctxo_rel_mala > 0 AND
+## edad <= 37: 1 (2.0)
+## 
+## rel_ctxo_rel_mala <= 0 AND
+## max_min > 0 AND
+## raz_emo > 0 AND
+## inhib > 0: 4 (6.0/3.0)
+## 
+## rel_ctxo_rel_mala <= 0 AND
+## rel_ctxo_trauma > 0 AND
+## ed_norm <= 0: 4 (7.0/2.0)
+## 
+## rel_ctxo_rel_mala <= 0 AND
+## raz_emo > 0: 2 (4.0/1.0)
+## 
+## rel_ctxo_rel_mala <= 0: 1 (3.0/1.0)
+## 
+## : 2 (2.0)
+## 
+## Number of Rules  :   15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Regla grupo OneR"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Regla grupo OneR"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oneR_gru}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## agres:
+##  < 0.5   -> 2
+##  >= 0.5  -> 1
+## (32/67 instances correct)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(}\StringTok{"Reglas grupo JRip"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Reglas grupo JRip"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jrip_gru}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## JRIP rules:
+## ===========
+## 
+## (edad >= 37) and (pseu_res >= 1) => dataset$grupo=1 (4.0/0.0)
+##  => dataset$grupo=2 (63.0/33.0)
+## 
+## Number of Rules : 2
+\end{verbatim}
 
 
 \end{document}
