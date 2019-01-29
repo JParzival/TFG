@@ -1,7 +1,7 @@
 "0","# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es"
 "0","matriz.pacientes.datos.rm = matriz.pacientes.datos"
 "0","matriz.pacientes.datos.rm$agres <- as.factor(matriz.pacientes.datos.rm$agres)"
-"0","part_agr <- PART(agres~., data = matriz.pacientes.datos.rm)"
+"0","part_agr <- PART(agres~., data = matriz.pacientes.datos.rm, control = Weka_control(C = 0.5))"
 "0","oneR_agr <- OneR(agres~., data = matriz.pacientes.datos.rm)"
 "0","jrip_agr <- JRip(agres~., data = matriz.pacientes.datos.rm)"
 "0","print(""Reglas agresividad PART"")"

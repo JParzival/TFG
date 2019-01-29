@@ -1,5 +1,5 @@
-"0","multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion )
-"
+"0","prediccion <- c(prediccion)"
+"0","multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion )"
 "1","
 Call:
 "

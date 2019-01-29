@@ -1,0 +1,19 @@
+"0","dev.off"
+"1","function (which = dev.cur()) 
+"
+"1","{
+"
+"1","    if (which == 1) 
+"
+"1","        stop(""cannot shut down device 1 (the null device)"")
+"
+"1","    .External(C_devoff, as.integer(which))
+"
+"1","    dev.cur()
+"
+"1","}
+"
+"1","<bytecode: 0x0000000013a75f50>
+"
+"1","<environment: namespace:grDevices>
+"

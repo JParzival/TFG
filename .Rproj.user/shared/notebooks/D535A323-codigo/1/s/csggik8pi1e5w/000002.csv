@@ -1,7 +1,7 @@
 "0","# Lo primero que tengo que hacer es convertir el sexo en un factor si no lo es"
 "0","matriz.pacientes.datos.rm = matriz.pacientes.datos"
 "0","matriz.pacientes.datos.rm$impuls <- as.factor(matriz.pacientes.datos.rm$impuls)"
-"0","part_imp <- PART(impuls~., data = matriz.pacientes.datos.rm)"
+"0","part_imp <- PART(impuls~., data = matriz.pacientes.datos.rm, control = Weka_control(C = 0.5))"
 "0","oneR_imp <- OneR(impuls~., data = matriz.pacientes.datos.rm)"
 "0","jrip_imp <- JRip(impuls~., data = matriz.pacientes.datos.rm)"
 "0","print(""Reglas impulsividad PART"")"

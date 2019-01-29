@@ -3,12 +3,12 @@ title: "TFG: La Inteligencia Artificial aplicada a la Inteligencia Emocional"
 author: "Jorge de Andrés"
 date: "8 de Junio de 2019"
 output:
+  html_document:
+    df_print: paged
+  pdf_document: default
   word_document: 
     fig_height: 6
     fig_width: 8
-  pdf_document: default
-  html_document:
-    df_print: paged
 always_allow_html: yes
 ---
 
@@ -532,20 +532,27 @@ Lo que voy a hacer ahora es entrenar la red neuronal con diferente cantidad de n
 
 ###################### SIN SOFTMAX #############################
 
-```{r 1_neurona, echo=TRUE, results='hide'}
+```{r 1_neurona}
 
 set.seed(1)
 
 dataframe.resultados.1neu <- data.frame(Ent_1Neu = numeric(),
                                         Test_1Neu = numeric())
 
-for(i in 1:20)
+conf.1neu <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
-  pacientes.1neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, trace = F)
+  pacientes.1neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], 
+                          class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ), 
+                          size=1, 
+                          trace = F)
 
   #Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
   
-  pacientes.prediccion.1neu <- predict( pacientes.1neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.1neu <- predict( pacientes.1neu, 
+                                        matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], 
+                                        type="raw" )
   head(pacientes.prediccion.1neu) # Vemos las probabilidades de pertenencia de cada valor
   
   # Ahora que los tengo todos entrenados, Determinamos cual es la máxima, es decir, la clase a la que hay que asignar los objetos
@@ -563,43 +570,61 @@ for(i in 1:20)
   
   #TEST
   
-  pacientes.prediccion.test.1neu <- predict( pacientes.1neu, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.test.1neu <- predict( pacientes.1neu, 
+                                             matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], 
+                                             type="raw" )
   pacientes.prediccion.test.1neu
   
   pacientes.prediccion.test.1neu.class <- apply( pacientes.prediccion.test.1neu, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.1neu.class
   
-  table( pacientes.prediccion.test.1neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.1neu[[i]] <- table( pacientes.prediccion.test.1neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.test.teorico.1neu <- sum( diag( table( pacientes.prediccion.test.1neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   dataframe.pasada <- data.frame(Ent_1Neu = acierto.ent.teorico.1neu,
                                  Test_1Neu = acierto.test.teorico.1neu)
   
   dataframe.resultados.1neu <- rbind(dataframe.resultados.1neu, dataframe.pasada)
+  
+  
 
 }
 
+head(dataframe.resultados.1neu[order(dataframe.resultados.1neu$Test_1Neu, decreasing = T), ])
+
+# Como vemos, el mejor resultado lo obtenemos en el entrenamiento #48
+# Lo automatizamos y sacamos la matriz de confusión:
+
+conf.1neu[[which.max(dataframe.resultados.1neu$Test_1Neu)]]
 
 ```
 
 
 Lo voy a entrenar también con el SOFTMAX = true. Esto optimiza la verosimilitud, no el error cuadrático medio...
+
 ###################### CON SOFTMAX ##############################
 
-```{r 1_neurona_SOFTMAX, echo=TRUE, results='hide'}
+```{r 1_neurona_SOFTMAX}
 
 set.seed(1)
 
 dataframe.resultados.1neu.soft <- data.frame(Ent_1Neu_soft = numeric(),
                                              Test_1Neu_soft = numeric())
+conf.1neu.s <- vector(mode = "list", length = 50)
 
-for(i in 1:20)
+for(i in 1:50)
 {
-  pacientes.1neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, softmax = T , trace = F)
+  pacientes.1neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                  class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                  size=1,
+                                  softmax = T,
+                                  trace = F)
 
   #Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
   
-  pacientes.prediccion.1neu.softmax <- predict( pacientes.1neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.1neu.softmax <- predict( pacientes.1neu.softmax, 
+                                                matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], 
+                                                type="raw" )
   head(pacientes.prediccion.1neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
   
   # Ahora que los tengo todos entrenados, Determinamos cual es la máxima, es decir, la clase a la que hay que asignar los objetos
@@ -617,14 +642,16 @@ for(i in 1:20)
   
   #TEST
   
-  pacientes.prediccion.test.1neu.softmax <- predict( pacientes.1neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.test.1neu.softmax <- predict( pacientes.1neu.softmax,
+                                                     matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], 
+                                                     type="raw" )
   pacientes.prediccion.test.1neu.softmax
   
   pacientes.prediccion.test.1neu.class.softmax <- apply( pacientes.prediccion.test.1neu.softmax, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.1neu.class.softmax
   
-  table( pacientes.prediccion.test.1neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
-  acierto.test.teorico.1neu.soft <- sum( diag( table( pacientes.prediccion.test.1neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+  conf.1neu.s[[i]] <- table( pacientes.prediccion.test.1neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  acierto.test.teorico.1neu.soft <- sum(diag(table(pacientes.prediccion.test.1neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25])))/12
   
   dataframe.pasada <- data.frame(Ent_1Neu_soft = acierto.ent.teorico.1neu.soft,
                                  Test_1Neu_soft = acierto.test.teorico.1neu.soft)
@@ -633,6 +660,11 @@ for(i in 1:20)
   
 }
 
+head(dataframe.resultados.1neu.soft[order(dataframe.resultados.1neu.soft$Test_1Neu_soft, decreasing = T), ])
+
+# El mejor resultado ha sido en el entrenamiento #27
+
+conf.1neu.s[[27]]
 
 ```
 
@@ -646,19 +678,25 @@ A partir de ahora voy a hacer exactamente lo mismo, por lo que haré chunks más
 
 ###################### SIN SOFTMAX #############################
 
-```{r 2_neuronas, echo=TRUE, results='hide'}
+```{r 2_neuronas}
 
 set.seed(1)
 
 dataframe.resultados.2neu <- data.frame(Ent_2Neu = numeric(),
                                         Test_2Neu = numeric())
-
-for(i in 1:20)
+conf.2neu <- vector(mode = "list", length = 50)
+  
+for(i in 1:50)
 {
 
-  pacientes.2neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, trace = F )
+  pacientes.2neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                          class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                          size=2,
+                          trace = F )
   
-  pacientes.prediccion.2neu <- predict( pacientes.2neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.2neu <- predict( pacientes.2neu,
+                                        matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                        type="raw" )
   head(pacientes.prediccion.2neu) # Vemos las probabilidades de pertenencia de cada valor
   
   pacientes.prediccion.2neu.class <- apply( pacientes.prediccion.2neu, MARGIN=1, FUN='which.is.max')
@@ -671,13 +709,15 @@ for(i in 1:20)
   
   # TEST
   
-  pacientes.prediccion.test.2neu <- predict( pacientes.2neu, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.test.2neu <- predict( pacientes.2neu,
+                                             matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24],
+                                             type="raw" )
   pacientes.prediccion.test.2neu
   
   pacientes.prediccion.test.2neu.class <- apply( pacientes.prediccion.test.2neu, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.2neu.class
   
-  table( pacientes.prediccion.test.2neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.2neu[[i]] <- table( pacientes.prediccion.test.2neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.2neu <- sum( diag( table( pacientes.prediccion.test.2neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -689,41 +729,59 @@ for(i in 1:20)
   
 }
 
+head(dataframe.resultados.2neu[order(dataframe.resultados.2neu$Test_2neu, decreasing = T), ])
+
+# El mejor entrenamiento ha sido en la pasada #9, 18 y 38
+
+conf.2neu[[9]]
+conf.2neu[[18]]
+conf.2neu[[38]]
+
 ```
 
 
 ###################### CON SOFTMAX ##############################
 
-```{r 2_neuronas_SOFTMAX, echo=TRUE, results='hide'}
+```{r 2_neuronas_SOFTMAX}
 
 set.seed(1)
 
 dataframe.resultados.2neu.soft <- data.frame(Ent_2Neu_soft = numeric(),
                                              Test_2Neu_soft = numeric())
 
-for(i in 1:20)
+conf.2neu.s <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.2neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, softmax = T, trace = F )
+  pacientes.2neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                  class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                  size=2,
+                                  softmax = T,
+                                  trace = F )
   
-  pacientes.prediccion.test.2neu.softmax <- predict( pacientes.2neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
-  head(pacientes.prediccion.test.2neu.softmax)
+  pacientes.prediccion.ent.2neu.softmax <- predict( pacientes.2neu.softmax, 
+                                                    matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], 
+                                                    type="raw" )
+  head(pacientes.prediccion.ent.2neu.softmax)
   
-  pacientes.prediccion.test.2neu.class.softmax <- apply( pacientes.prediccion.test.2neu.softmax, MARGIN=1, FUN='which.is.max')
-  pacientes.prediccion.test.2neu.class.softmax
+  pacientes.prediccion.ent.2neu.class.softmax <- apply( pacientes.prediccion.ent.2neu.softmax, MARGIN=1, FUN='which.is.max')
+  pacientes.prediccion.ent.2neu.class.softmax
   
-  table( pacientes.prediccion.test.2neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
-  acierto.teorico.ent.2neu.softmax <- sum( diag( table( pacientes.prediccion.test.2neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
+  table( pacientes.prediccion.ent.2neu.class.softmax , matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] )
+  acierto.teorico.ent.2neu.softmax <- sum( diag( table( pacientes.prediccion.ent.2neu.class.softmax, matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ) )/55
   
   # TEST
   
-  pacientes.prediccion.test.2neu.softmax <- predict( pacientes.2neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
+  pacientes.prediccion.test.2neu.softmax <- predict( pacientes.2neu.softmax, 
+                                                     matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24],
+                                                     type="raw" )
   pacientes.prediccion.test.2neu.softmax
   
   pacientes.prediccion.test.2neu.class.softmax <- apply( pacientes.prediccion.test.2neu.softmax, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.2neu.class.softmax
   
-  table( pacientes.prediccion.test.2neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.2neu.s[[i]] <- table( pacientes.prediccion.test.2neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.2neu.softmax <- sum(diag(table(pacientes.prediccion.test.2neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -732,6 +790,13 @@ for(i in 1:20)
   
   dataframe.resultados.2neu.soft <- rbind(dataframe.resultados.2neu.soft, dataframe.pasada)
 }
+
+head(dataframe.resultados.2neu.soft[order(dataframe.resultados.2neu.soft$Test_2neu_soft, decreasing = T), ])
+
+# El mejor entrenamiento ha sido en la pasada 9, 10...
+
+conf.2neu.s[[9]]
+conf.2neu.s[[10]]
 
 ```
 
@@ -743,17 +808,22 @@ for(i in 1:20)
 
 ###################### SIN SOFTMAX #############################
 
-```{r 3_neuronas, echo=TRUE, results='hide'}
+```{r 3_neuronas}
 
 set.seed(1)
 
 dataframe.resultados.3neu <- data.frame(Ent_3Neu = numeric(),
                                         Test_3Neu = numeric())
 
-for(i in 1:20)
+conf.3neu <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.3neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, trace = F)
+  pacientes.3neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                          class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                          size=3,
+                          trace = F)
   
   pacientes.prediccion.3neu <- predict( pacientes.3neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu) # Vemos las probabilidades de pertenencia de cada valor
@@ -776,7 +846,7 @@ for(i in 1:20)
   pacientes.prediccion.test.3neu.class <- apply( pacientes.prediccion.test.3neu, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.3neu.class
   
-  table( pacientes.prediccion.test.3neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.3neu[[i]] <- table( pacientes.prediccion.test.3neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.3neu <- sum( diag( table( pacientes.prediccion.test.3neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -786,22 +856,34 @@ for(i in 1:20)
   dataframe.resultados.3neu <- rbind(dataframe.resultados.3neu, dataframe.pasada)
 }
 
+head(dataframe.resultados.3neu[order(dataframe.resultados.3neu$Test_3neu, decreasing = T), ])
+
+# El mejor entrenamiento ha sido en la pasada 44
+
+conf.3neu[[44]]
+
 ```
 
 
 ###################### CON SOFTMAX ##############################
 
-```{r 3_neuronas_SOFTMAX, echo=TRUE, results='hide'}
+```{r 3_neuronas_SOFTMAX}
 
 set.seed(1)
 
 dataframe.resultados.3neu.soft <- data.frame(Ent_3Neu_soft = numeric(),
                                              Test_3Neu_soft = numeric())
 
-for(i in 1:20)
+conf.3neu.s <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.3neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, trace = F)
+  pacientes.3neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                  class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                  size=3, 
+                                  softmax = T, 
+                                  trace = F)
   
   pacientes.prediccion.3neu.softmax <- predict( pacientes.3neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -824,7 +906,7 @@ for(i in 1:20)
   pacientes.prediccion.test.3neu.class.softmax <- apply( pacientes.prediccion.test.3neu.softmax, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.3neu.class.softmax
   
-  table( pacientes.prediccion.test.3neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.3neu.s[[i]] <- table( pacientes.prediccion.test.3neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.3neu.softmax <- sum( diag( table( pacientes.prediccion.test.3neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -833,6 +915,15 @@ for(i in 1:20)
   
   dataframe.resultados.3neu.soft <- rbind(dataframe.resultados.3neu.soft, dataframe.pasada)
 }
+
+head(dataframe.resultados.3neu.soft[order(dataframe.resultados.3neu.soft$Test_3neu_soft, decreasing = T), ])
+
+# El mejor entrenamieno ha sido en la pasada 13, 38, 39, 48
+
+conf.3neu.s[[13]]
+conf.3neu.s[[38]]
+conf.3neu.s[[39]]
+conf.3neu.s[[48]]
 
 ```
 
@@ -845,17 +936,23 @@ for(i in 1:20)
 
 ###################### SIN SOFTMAX #############################
 
-```{r 3_neuronas_decay, echo=TRUE, results='hide'}
+```{r 3_neuronas_decay}
 
 set.seed(1)
 
 dataframe.resultados.3neu.decay <- data.frame(Ent_3Neu_decay = numeric(),
                                               Test_3Neu_decay = numeric())
 
-for(i in 1:20)
+conf.3neu.d <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.3neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, decay = 0.2, trace = F)
+  pacientes.3neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                size=3,
+                                decay = 0.2, 
+                                trace = F)
   
   pacientes.prediccion.3neu.decay <- predict( pacientes.3neu.decay, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu.decay) # Vemos las probabilidades de pertenencia de cada valor
@@ -878,7 +975,7 @@ for(i in 1:20)
   pacientes.prediccion.test.3neu.class.decay <- apply( pacientes.prediccion.test.3neu.decay, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.3neu.class.decay
   
-  table( pacientes.prediccion.test.3neu.class.decay , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.3neu.d[[i]] <- table( pacientes.prediccion.test.3neu.class.decay , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.3neu.decay <- sum( diag( table( pacientes.prediccion.test.3neu.class.decay, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -889,24 +986,36 @@ for(i in 1:20)
   
 }
   
-  
+head(dataframe.resultados.3neu.decay[order(dataframe.resultados.3neu.decay$Test_3neu_decay, decreasing = T), ])
+
+# El mejor entenamiento ha sido en la pasada 7, 29, 36
+
+conf.3neu.d[[7]]
+conf.3neu.d[[29]]
+conf.3neu.d[[36]]
 
 ```
 
 
 ###################### CON SOFTMAX ##############################
 
-```{r 3_neuronas_decay_SOFTMAX, echo=TRUE, results='hide'}
+```{r 3_neuronas_decay_SOFTMAX}
 
 set.seed(1)
 
 dataframe.resultados.3neu.decay.softmax <- data.frame(Ent_3Neu_decay_sf = numeric(),
                                                       Test_3Neu_decay_sf = numeric())
+conf.3neu.d.s <- vector(mode = "list", length = 50)
 
-for(i in 1:20)
+for(i in 1:50)
 {
 
-  pacientes.3neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, decay = 0.03, trace = F)
+  pacientes.3neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                        class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                        size=3, 
+                                        softmax = T,
+                                        decay = 0.03, 
+                                        trace = F)
   
   pacientes.prediccion.3neu.decay.softmax <- predict( pacientes.3neu.decay.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu.decay.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -929,7 +1038,8 @@ for(i in 1:20)
   pacientes.prediccion.test.3neu.class.decay.softmax <- apply( pacientes.prediccion.test.3neu.decay.softmax, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.3neu.class.decay.softmax
   
-  table( pacientes.prediccion.test.3neu.class.decay.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.3neu.d.s[[i]] <- table( pacientes.prediccion.test.3neu.class.decay.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  
   acierto.teorico.test.3neu.decay.sf <- sum( diag( table( pacientes.prediccion.test.3neu.class.decay.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -939,6 +1049,11 @@ for(i in 1:20)
   dataframe.resultados.3neu.decay.softmax <- rbind(dataframe.resultados.3neu.decay.softmax, dataframe.pasada)
 }
   
+head(dataframe.resultados.3neu.decay.softmax[order(dataframe.resultados.3neu.decay.softmax$Test_3neu_decay_sf, decreasing = T), ])
+
+# El mejor entrenamiento ha sido en la pasada 33
+
+conf.3neu.d.s[[33]]
 
 ```
 
@@ -949,17 +1064,22 @@ for(i in 1:20)
 
 ###################### SIN SOFTMAX #############################
 
-```{r 5_neuronas, echo=TRUE, results='hide'}
+```{r 5_neuronas}
 
 set.seed(1)
 
 dataframe.resultados.5neu <- data.frame(Ent_5Neu = numeric(),
                                         Test_5Neu = numeric())
 
-for(i in 1:20)
+conf.5neu <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.5neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, trace = F )
+  pacientes.5neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                          class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                          size=5,
+                          trace = F )
   
   pacientes.prediccion.5neu <- predict( pacientes.5neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu) # Vemos las probabilidades de pertenencia de cada valor
@@ -979,7 +1099,7 @@ for(i in 1:20)
   pacientes.prediccion.test.5neu.class <- apply( pacientes.prediccion.test.5neu, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.5neu.class
   
-  table( pacientes.prediccion.test.5neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.5neu[[i]] <- table( pacientes.prediccion.test.5neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.5neu <- sum( diag( table( pacientes.prediccion.test.5neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -990,24 +1110,35 @@ for(i in 1:20)
   
 }
 
+head(dataframe.resultados.5neu[order(dataframe.resultados.5neu$Test_5neu, decreasing = T), ])
 
+# El mejor entrenamiento ha sido en la pasada 4 y 35
+
+conf.5neu[[4]]
+conf.5neu[[35]]
 
 ```
 
 
 ###################### CON SOFTMAX ##############################
 
-```{r 5_neuronas_SOFTMAX, echo=TRUE, results='hide'}
+```{r 5_neuronas_SOFTMAX}
 
 set.seed(1)
 
 dataframe.resultados.5neu.soft <- data.frame(Ent_5Neu_soft = numeric(),
                                              Test_5Neu_soft = numeric())
 
-for(i in 1:20)
+conf.5neu.s <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.5neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, trace = F )
+  pacientes.5neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                  class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                  size=5,
+                                  softmax = T,
+                                  trace = F )
   
   pacientes.prediccion.5neu.softmax <- predict( pacientes.5neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -1027,7 +1158,7 @@ for(i in 1:20)
   pacientes.prediccion.test.5neu.class.softmax <- apply( pacientes.prediccion.test.5neu.softmax, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.5neu.class.softmax
   
-  table( pacientes.prediccion.test.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.5neu.s[[i]] <-table( pacientes.prediccion.test.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.5neu.softmax <- sum( diag( table( pacientes.prediccion.test.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -1037,6 +1168,11 @@ for(i in 1:20)
   dataframe.resultados.5neu.soft <- rbind(dataframe.resultados.5neu.soft, dataframe.pasada)
 }
 
+head(dataframe.resultados.5neu.soft[order(dataframe.resultados.5neu.soft$Test_5neu_soft, decreasing = T), ])
+
+# El mejor entrenamiento ha sido en la pasada 39
+
+conf.5neu.s[[39]]
 
 ```
 
@@ -1049,17 +1185,23 @@ for(i in 1:20)
 
 ###################### SIN SOFTMAX #############################
 
-```{r 5_neuronas_decay, echo=TRUE, results='hide'}
+```{r 5_neuronas_decay}
 
 set.seed(1)
 
 dataframe.resultados.5neu.decay <- data.frame(Ent_5Neu_decay = numeric(),
                                               Test_5Neu_decay = numeric())
 
-for(i in 1:20)
+conf.5neu.d <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
-  pacientes.5neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, decay=0.1, trace = F)
+  pacientes.5neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ),
+                                size=5,
+                                decay=0.1,
+                                trace = F)
   
   pacientes.prediccion.5neu.decay <- predict( pacientes.5neu.decay, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu.decay) # Vemos las probabilidades de pertenencia de cada valor
@@ -1079,7 +1221,7 @@ for(i in 1:20)
   pacientes.prediccion.test.decay.5neu.class <- apply( pacientes.prediccion.test.decay.5neu, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.decay.5neu.class
   
-  table( pacientes.prediccion.test.decay.5neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.5neu.d[[i]] <- table( pacientes.prediccion.test.decay.5neu.class , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.5neu.decay <- sum( diag( table( pacientes.prediccion.test.decay.5neu.class, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -1090,25 +1232,36 @@ for(i in 1:20)
   
 }
 
+head(dataframe.resultados.5neu.decay[order(dataframe.resultados.5neu.decay$Test_5neu_decay, decreasing = T), ])
 
+# El mejor entrenamiento ha sido en la pasada # 3
+
+conf.5neu.d[[3]]
 
 ```
 
 
 ###################### CON SOFTMAX ##############################
 
-```{r 5_neuronas_decay_SOFTMAX, echo=TRUE, results='hide'}
+```{r 5_neuronas_decay_SOFTMAX}
 
 set.seed(1)
 
 dataframe.resultados.5neu.decay.softmax <- data.frame(Ent_5Neu_decay_sf = numeric(),
                                                       Test_5Neu_decay_sf = numeric())
 
-for(i in 1:20)
+conf.5neu.d.s <- vector(mode = "list", length = 50)
+
+for(i in 1:50)
 {
 
 
-  pacientes.5neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, decay = 0.05, trace = F)
+  pacientes.5neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24],
+                                        class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) ,
+                                        size=5,
+                                        softmax = T, 
+                                        decay = 0.05,
+                                        trace = F)
   
   pacientes.prediccion.5neu.decay.softmax <- predict( pacientes.5neu.decay.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu.decay.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -1128,7 +1281,7 @@ for(i in 1:20)
   pacientes.prediccion.test.decay.5neu.class.softmax <- apply( pacientes.prediccion.test.decay.5neu.softmax, MARGIN=1, FUN='which.is.max')
   pacientes.prediccion.test.decay.5neu.class.softmax
   
-  table( pacientes.prediccion.test.decay.5neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
+  conf.5neu.d.s[[i]] <- table( pacientes.prediccion.test.decay.5neu.class.softmax , matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] )
   acierto.teorico.test.5neu.decay.sf <- sum( diag( table( pacientes.prediccion.test.decay.5neu.class.softmax, matriz.pacientes.etiquetas[-conjuntoEntrenamiento, 25] ) ) )/12
   
   
@@ -1138,6 +1291,14 @@ for(i in 1:20)
   dataframe.resultados.5neu.decay.softmax <- rbind(dataframe.resultados.5neu.decay.softmax, dataframe.pasada)
   
 }
+
+head(dataframe.resultados.5neu.decay.softmax[order(dataframe.resultados.5neu.decay.softmax$Test_5neu_decay_sf, decreasing = T), ])
+
+# El mejor entrenamiento ha sido en la pasada 12, 25, 27
+
+conf.5neu.d.s[[12]]
+conf.5neu.d.s[[25]]
+conf.5neu.d.s[[27]]
 
 ```
 

@@ -1,6 +1,7 @@
-"0","matriz.conf.radial.cv <- table(prediccion.radial.cv, dataset[,26])
-matriz.conf.radial.cv
-"
+"0","set.seed(5)"
+"0","prediccion.radial.cv <- predict(modelo_svm.radial.cv, matriz.pacientes.datos.centscal)"
+"0","matriz.conf.radial.cv <- table(prediccion.radial.cv, dataset[,26])"
+"0","matriz.conf.radial.cv"
 "1","                    
 "
 "1","prediccion.radial.cv"

@@ -1,6 +1,5 @@
-"0","prediccion.radial <- c(prediccion.radial)
-multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion.radial )
-"
+"0","prediccion.radial <- c(prediccion.radial)"
+"0","multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion.radial )"
 "1","
 Call:
 "
