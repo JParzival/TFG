@@ -1,0 +1,7 @@
+"0","rf.roc.centscal<-multiclass.roc(as.factor(dataset$grupo), model_centscal$votes[,2])
+auc(rf.roc.centscal)
+"
+"1","Multi-class area under the curve: "
+"1","0.6646"
+"1","
+"

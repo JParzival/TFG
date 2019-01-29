@@ -1,7 +1,7 @@
 ---
-title: "codigoTFG"
+title: "TFG: La Inteligencia Artificial aplicada a la Inteligencia Emocional"
 author: "Jorge de Andrés"
-date: "12 de enero de 2019"
+date: "8 de Junio de 2019"
 output:
   word_document: 
     fig_height: 6
@@ -541,7 +541,7 @@ dataframe.resultados.1neu <- data.frame(Ent_1Neu = numeric(),
 
 for(i in 1:20)
 {
-  pacientes.1neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1)
+  pacientes.1neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, trace = F)
 
   #Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
   
@@ -595,7 +595,7 @@ dataframe.resultados.1neu.soft <- data.frame(Ent_1Neu_soft = numeric(),
 
 for(i in 1:20)
 {
-  pacientes.1neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, softmax = T )
+  pacientes.1neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=1, softmax = T , trace = F)
 
   #Una vez que lo tengo entrenado, lo que voy a hacer es calcular el error tanto en el entrenamiento como en el test de cada uno
   
@@ -656,7 +656,7 @@ dataframe.resultados.2neu <- data.frame(Ent_2Neu = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.2neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2 )
+  pacientes.2neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, trace = F )
   
   pacientes.prediccion.2neu <- predict( pacientes.2neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.2neu) # Vemos las probabilidades de pertenencia de cada valor
@@ -704,7 +704,7 @@ dataframe.resultados.2neu.soft <- data.frame(Ent_2Neu_soft = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.2neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, softmax = T )
+  pacientes.2neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=2, softmax = T, trace = F )
   
   pacientes.prediccion.test.2neu.softmax <- predict( pacientes.2neu.softmax, matriz.pacientes.datos.centscal[-conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.test.2neu.softmax)
@@ -753,7 +753,7 @@ dataframe.resultados.3neu <- data.frame(Ent_3Neu = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.3neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3)
+  pacientes.3neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, trace = F)
   
   pacientes.prediccion.3neu <- predict( pacientes.3neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu) # Vemos las probabilidades de pertenencia de cada valor
@@ -801,7 +801,7 @@ dataframe.resultados.3neu.soft <- data.frame(Ent_3Neu_soft = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.3neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T)
+  pacientes.3neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, trace = F)
   
   pacientes.prediccion.3neu.softmax <- predict( pacientes.3neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -855,7 +855,7 @@ dataframe.resultados.3neu.decay <- data.frame(Ent_3Neu_decay = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.3neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, decay = 0.2)
+  pacientes.3neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, decay = 0.2, trace = F)
   
   pacientes.prediccion.3neu.decay <- predict( pacientes.3neu.decay, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu.decay) # Vemos las probabilidades de pertenencia de cada valor
@@ -906,7 +906,7 @@ dataframe.resultados.3neu.decay.softmax <- data.frame(Ent_3Neu_decay_sf = numeri
 for(i in 1:20)
 {
 
-  pacientes.3neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, decay = 0.03)
+  pacientes.3neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=3, softmax = T, decay = 0.03, trace = F)
   
   pacientes.prediccion.3neu.decay.softmax <- predict( pacientes.3neu.decay.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.3neu.decay.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -959,7 +959,7 @@ dataframe.resultados.5neu <- data.frame(Ent_5Neu = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.5neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5 )
+  pacientes.5neu <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, trace = F )
   
   pacientes.prediccion.5neu <- predict( pacientes.5neu, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu) # Vemos las probabilidades de pertenencia de cada valor
@@ -1007,7 +1007,7 @@ dataframe.resultados.5neu.soft <- data.frame(Ent_5Neu_soft = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.5neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T )
+  pacientes.5neu.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, trace = F )
   
   pacientes.prediccion.5neu.softmax <- predict( pacientes.5neu.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -1059,7 +1059,7 @@ dataframe.resultados.5neu.decay <- data.frame(Ent_5Neu_decay = numeric(),
 for(i in 1:20)
 {
 
-  pacientes.5neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, decay=0.1)
+  pacientes.5neu.decay <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, decay=0.1, trace = F)
   
   pacientes.prediccion.5neu.decay <- predict( pacientes.5neu.decay, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu.decay) # Vemos las probabilidades de pertenencia de cada valor
@@ -1108,7 +1108,7 @@ for(i in 1:20)
 {
 
 
-  pacientes.5neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, decay = 0.05)
+  pacientes.5neu.decay.softmax <- nnet( matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], class.ind( matriz.pacientes.etiquetas[conjuntoEntrenamiento, 25] ) , size=5, softmax = T, decay = 0.05, trace = F)
   
   pacientes.prediccion.5neu.decay.softmax <- predict( pacientes.5neu.decay.softmax, matriz.pacientes.datos.centscal[conjuntoEntrenamiento, 1:24], type="raw" )
   head(pacientes.prediccion.5neu.decay.softmax) # Vemos las probabilidades de pertenencia de cada valor
@@ -1421,6 +1421,16 @@ Debido a esto, estamos viendo que la edad, la impulsividad y la pseudo-responsab
 
 Un elemento que me gustaría destacar es que el modelo está bastante regularizado y es bastante robusto, ya que casi todas las variables son bastante resistentes a las permutaciones, y por lo tanto no tienen un peso extremo a la hora de tomar decisiones, a excepción de la impulsividad.
 
+Obtego ROC:
+
+```{r ROC_RandomForest}
+
+rf.roc<-multiclass.roc(as.factor(dataset$grupo), model$votes[,2])
+auc(rf.roc)
+
+```
+
+
 
 Ahora, para probar a ver si hay diferencia, en vez del dataset normal voy a usar el dataset centrado y escalado, para ver si el OOB desciende:
 
@@ -1470,6 +1480,14 @@ dev.off
 
 ```
 
+ROC:
+
+```{r ROC_RandomForest_Centscal}
+
+rf.roc.centscal<-multiclass.roc(as.factor(dataset$grupo), model_centscal$votes[,2])
+auc(rf.roc.centscal)
+
+```
 
 En este caso, el MDA me dice que el sexo es la gran lacra de este modelo, mientras que la impulsividad sigue siendo el factor más determinante para acertar.
 Del Gini obtengo resultados similares.
@@ -1520,9 +1538,16 @@ dev.off
 
 ```
 
+Obtengo ROC:
+
+```{r ROC_RandomForest_new}
+
+rf.roc.new<-multiclass.roc(as.factor(dataset$grupo), model_new$votes[,2])
+auc(rf.roc.new)
+
+```
 
 Como se puede observar, ahora hay nuevas variables que "lastran" el resultado del Random Forest.
-De todas maneras, hemos conseguido una bajada del 50% de media en OOB Error al 45% de media en OOB Error (entrenando), lo cual es una disminución menos notable de lo esperado, pero es una disminución.
 
 
 Ahora lo voy a hacer con 10 fold X Validation:
@@ -1848,15 +1873,12 @@ oneR_sex <- OneR(sex~., data = matriz.pacientes.datos.rm)
 jrip_sex <- JRip(sex~., data = matriz.pacientes.datos.rm)
 
 print("Reglas sexo PART")
-
 part_sex
 
 print("Regla sexo OneR")
-
 oneR_sex
 
 print("Reglas sexo JRip")
-
 jrip_sex
 
 ```
@@ -1878,15 +1900,12 @@ oneR_imp <- OneR(impuls~., data = matriz.pacientes.datos.rm)
 jrip_imp <- JRip(impuls~., data = matriz.pacientes.datos.rm)
 
 print("Reglas impulsividad PART")
-
 part_imp
 
 print("Regla impulsividad OneR")
-
 oneR_imp
 
 print("Reglas impulsividad JRip")
-
 jrip_imp
 
 ```
@@ -1908,15 +1927,12 @@ oneR_agr <- OneR(agres~., data = matriz.pacientes.datos.rm)
 jrip_agr <- JRip(agres~., data = matriz.pacientes.datos.rm)
 
 print("Reglas agresividad PART")
-
 part_agr
 
 print("Regla Agresividad OneR")
-
 oneR_agr
 
 print("Reglas agresividad JRip")
-
 jrip_agr
 
 ```
@@ -1940,15 +1956,12 @@ oneR_gru <- OneR(`dataset$grupo`~., data = matriz.pacientes.datos.rm)
 jrip_gru <- JRip(`dataset$grupo`~., data = matriz.pacientes.datos.rm)
 
 print("Reglas grupo PART")
-
 part_gru
 
 print("Regla grupo OneR")
-
 oneR_gru
 
 print("Reglas grupo JRip")
-
 jrip_gru
 
 ```
