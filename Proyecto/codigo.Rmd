@@ -52,6 +52,8 @@ Importamos todas las librerías que vamos a ir necesitando:
 #install.packages("RWeka")
 #install.packages("devtools")
 #devtools::install_github("vqv/ggbiplot")
+#install.packages("party")
+#install.packages("pROC")
 
 library("ggplot2")
 library("caret")
@@ -74,6 +76,8 @@ library("fpc")
 library("RWeka")
 library("devtools")
 library("ggbiplot")
+library("party")
+library("pROC")
 
 ```
 
@@ -1574,6 +1578,16 @@ sum(diag(matriz.conf))/67
 
 ```
 
+Veamos el área bajo la curva ROC que obtenemos:
+
+```{r ROC_lineal}
+
+prediccion <- c(prediccion)
+multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion )
+
+```
+
+
 ## SVM de Kernel RBF
 
 ```{r creacion_modelo_svm_RBF}
@@ -1607,10 +1621,60 @@ sum(diag(matriz.conf.radial))/67
 
 ```
 
- 
+Vemos el área bajo la ROC: 
+
+```{r ROC_Radial}
+
+prediccion.radial <- c(prediccion.radial)
+multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion.radial )
+
+```
+
+## SVM Radial CV
+
+Usaré CV para ver si tengo overfitting, y en ese caso evitarlo y comprobar si mejoramos la predicción:
+
+```{r SVM_Radial_CV}
+
+set.seed(5)
+
+modelo_svm.radial.cv <- svm(matriz.pacientes.datos.centscal, as.factor(dataset[, 26]), kernel="radial", cross = 5)
+summary(modelo_svm.radial.cv)
+
+
+```
+
+Ahora predecimos y vemos el acierto:
+
+```{r prediccionYAcierto_SVM_CV}
+
+set.seed(5)
+
+prediccion.radial.cv <- predict(modelo_svm.radial.cv, matriz.pacientes.datos.centscal)
+
+matriz.conf.radial.cv <- table(prediccion.radial.cv, dataset[,26])
+matriz.conf.radial.cv
+sum(diag(matriz.conf.radial.cv))/67
+
+```
+
+Como podemos ver, no hemos mejorado, lo que indica que no estabamos cayendo en overfitting.
+
 ### Como vemos, nos movemos en valores superiores al 75% de acierto
 
 Por lo tanto, SVM es una buena técnica para la predicción en este problema.
+
+Vemos el área bajo la ROC: 
+
+```{r ROC_CV}
+
+prediccion.radial.cv <- c(prediccion.radial.cv)
+multiclass.roc(response = as.factor(matriz.pacientes.datos.centscal.grupo$grupo), predictor = prediccion.radial.cv )
+
+```
+
+Como se puede apreciar, esta tampoco ha cambiado.
+
 
 ***
 
@@ -1669,7 +1733,7 @@ plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster
 
 Lo exportamos a PDF tras la creación:
 
-```{r export_PDF_dendrograma_centscal}
+```{r export_PDF_dendrograma_centscal, results='hide', echo=T}
 
 pdf("Imágenes Obtenidas/dendrograma_pacientes_centscal.pdf")
 
