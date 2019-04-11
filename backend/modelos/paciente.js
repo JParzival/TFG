@@ -14,7 +14,7 @@ const PacienteSchema = new Schema({
     rel_ctxo_trauma: Number,
     rel_ctxo_buena: Number,
     ed_perm: Number,
-    ed_normal: Number,
+    ed_norm: Number,
     ed_estr: Number,
     resil_ba: Number,
     resil_me: Number,
@@ -36,4 +36,4 @@ const PacienteSchema = new Schema({
 
 })
 
-module.exports = mongoose.model('Paciente', PacienteSchema)
+module.exports = mongoose.model('Tfg', PacienteSchema)
