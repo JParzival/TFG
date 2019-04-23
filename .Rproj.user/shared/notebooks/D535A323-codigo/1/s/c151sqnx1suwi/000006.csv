@@ -1,6 +1,0 @@
-"0","rf.roc<-multiclass.roc(as.factor(dataset$grupo), model$votes[,2])"
-"0","auc(rf.roc)"
-"1","Multi-class area under the curve: "
-"1","0.6832"
-"1","
-"

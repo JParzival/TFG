@@ -1,2 +1,0 @@
-"0","datos.kmeans <- matriz.pacientes.datos # Sin la clasificación dentro del dataset"
-"0","fviz_nbclust(datos.kmeans, kmeans, method = ""wss"")"

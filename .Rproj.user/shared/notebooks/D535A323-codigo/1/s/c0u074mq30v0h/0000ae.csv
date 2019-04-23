@@ -1,7 +1,0 @@
-"0","fviz_pca_biplot(resultado.pca, repel = TRUE,"
-"0","                    col.var = ""#FF0040"", # Color de las variables (vectores)"
-"0","                    col.ind = ""#21610B"", # Color de cada individuo (puntos)"
-"0","                    label = ""var"","
-"0","                    title = ""Plot Binario - Elementos / Dimensiones"","
-"0","                    geom.ind = ""point"","
-"0","                    pointshape = 4)  "

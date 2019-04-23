@@ -1,3 +1,0 @@
-"0","# Lo primero que tengo que hacer es contar la frecuencia de los nombres"
-"0","dataNombres <- ddply(dataset,.(nom),nrow)"
-"0","dataNombres <- dataNombres[order(dataNombres$V1, decreasing = TRUE), ]"
