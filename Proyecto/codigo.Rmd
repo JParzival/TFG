@@ -3,12 +3,12 @@ title: "TFG: La Inteligencia Artificial aplicada a la Inteligencia Emocional"
 author: "Jorge de Andrés"
 date: "8 de Junio de 2019"
 output:
-  html_document:
-    df_print: paged
   pdf_document: default
   word_document: 
     fig_height: 6
     fig_width: 8
+  html_document:
+    df_print: paged
 always_allow_html: yes
 ---
 
@@ -78,6 +78,7 @@ library("devtools")
 library("ggbiplot")
 library("party")
 library("pROC")
+library("ade4")
 
 ```
 
@@ -1371,10 +1372,10 @@ barplot(array.maximos.perceptron,
         main = "Mejores Resultados en Test con Perceptrones",
         xlab = "Tipo de Perceptrón",
         ylab = "Acierto (Tanto por 1)",
-        names.arg = c("1 Neu", "1 Neu Soft", 
-                      "2 Neu", "2 Neu Soft", 
-                      "3 Neu", "3 Neu Soft", "3 Neu Decay", "3 Neu Soft Decay", 
-                      "5 Neu", "5 Neu Soft", "5 Neu Decay", "5 Neu Soft Decay")
+        names.arg = c("1N", "1NS", 
+                      "2N", "2NS", 
+                      "3N", "3NS", "3ND", "3NSD", 
+                      "5N", "5NS", "5ND", "5NSD")
       )
 
 ```
@@ -1400,48 +1401,32 @@ dev.off
 ```
 
 
-# Obtención de Resultados de Perceptrón
 
-Importo los datos:
+Ahora voy a hacer el mismo dendrograma pero con el DataSet de centrado y escalado:
 
-```{r importacion_datos_resultados_finales}
+```{r creacion_clusters_dendrograma_centradoEscalado}
 
-dataset.resultados <- read.csv2("Datos/Resultados.txt")
+set.seed(6)
 
-```
-
-Ahora voy a sacar un gráfico interactivo donde comparo los resultados.
-
-
-```{r grafico_resultados_interactivo}
-
-tipos = dataset.resultados[, 1]
-real = dataset.resultados[, 2]
-practico = dataset.resultados[, 3]
-
-p <- plot_ly(dataset.resultados, x = ~tipos, y = ~real, type = 'bar', name = 'Real') %>% add_trace(y = ~practico, name = 'Práctico') %>% layout(yaxis = list(title = 'Porcentaje'), barmode = 'group')
-
-p 
-#Mostramos el gráfico interactivo
+dd <- dist(scale(matriz.pacientes.datos.centscal), method = "euclidean")
+hier.clust <- hclust(dd, method = "ward.D2")
+colores.dendrograma <- c("red", "orange", "green", "black")
+cluster.4 <- cutree(hier.clust, 4)
+plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
 
 ```
 
+Lo exportamos a PDF tras la creación:
 
+```{r export_PDF_dendrograma_centscal, results='hide', echo=T}
 
+pdf("Imágenes Obtenidas/dendrograma_pacientes_centscal.pdf")
 
+plot(as.phylo(hier.clust), type = "fan", tip.color = colores.dendrograma[cluster.4], label.offset = 0.3, cex = 0.8)
 
-
-
-
-Dendrograma:
-
-```{r dendrograma}
-
-matriz.dendrograma = lapply(matriz.pacientes.datos, as.numeric)
-dendrograma = hclust(dist(as.matrix(unlist(matriz.dendrograma))) )
-
-plot(dendrograma)
+dev.off()
 
 ```
+
 
 
