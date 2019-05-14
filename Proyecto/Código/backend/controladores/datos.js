@@ -4,7 +4,7 @@ const Paciente = require("../modelos/paciente")
 
 function obtenerPacientes(req, res)
 {
-    Paciente.find({}).exec((err, listadoPacientes) => {
+    Paciente.find({}, {'_id':0}).exec((err, listadoPacientes) => {
         if(err)
         {
             res.status(500).send(
