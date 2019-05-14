@@ -3,12 +3,12 @@ title: "TFG: La Inteligencia Artificial aplicada a la Inteligencia Emocional"
 author: "Jorge de Andrés"
 date: "8 de Junio de 2019"
 output:
-  pdf_document: default
+  html_document:
+    df_print: paged
   word_document: 
     fig_height: 6
     fig_width: 8
-  html_document:
-    df_print: paged
+  pdf_document: default
 always_allow_html: yes
 ---
 
